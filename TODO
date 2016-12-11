@@ -1,0 +1,6 @@
+- Generate ES results dicts for tests:
+    - Use ES5 in docker
+    - Use fixtures to bootstrap data
+    - Generate queries and store output
+
+- Write code to flatten trees :o

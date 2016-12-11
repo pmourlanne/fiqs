@@ -1,0 +1,2 @@
+# Launch an Elasticsearch 5 container
+docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:5.0.2
