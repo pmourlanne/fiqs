@@ -1,0 +1,233 @@
+{
+    "_shards": {
+        "failed": 0, 
+        "successful": 5, 
+        "total": 5
+    }, 
+    "aggregations": {
+        "shop": {
+            "buckets": [
+                {
+                    "doc_count": 62, 
+                    "key": 4, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 59, 
+                    "key": 2, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 57, 
+                    "key": 3, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 56, 
+                    "key": 8, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 54, 
+                    "key": 5, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 51, 
+                    "key": 7, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 48, 
+                    "key": 6, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 41, 
+                    "key": 9, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 40, 
+                    "key": 1, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 32, 
+                    "key": 10, 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }
+            ], 
+            "doc_count_error_upper_bound": 0, 
+            "sum_other_doc_count": 0
+        }
+    }, 
+    "hits": {
+        "hits": [
+            {
+                "_id": "14", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 14, 
+                    "payment_type": "cc", 
+                    "price": 861, 
+                    "product_id": "product_QLMW3C7RAJ", 
+                    "shop_id": 7, 
+                    "timestamp": 1451939811000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "19", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 19, 
+                    "payment_type": "store_credit", 
+                    "price": 581, 
+                    "product_id": "product_A 20HY6866", 
+                    "shop_id": 7, 
+                    "timestamp": 1452601771000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "22", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 22, 
+                    "payment_type": "store_credit", 
+                    "price": 964, 
+                    "product_id": "product_W0TEZ7Y6KB", 
+                    "shop_id": 7, 
+                    "timestamp": 1453041939000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "24", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 24, 
+                    "payment_type": "cc", 
+                    "price": 768, 
+                    "product_id": "product_73V7FBML60", 
+                    "shop_id": 4, 
+                    "timestamp": 1453477690000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "25", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 25, 
+                    "payment_type": "cc", 
+                    "price": 318, 
+                    "product_id": "product_TWT5JKKKRP", 
+                    "shop_id": 7, 
+                    "timestamp": 1451781570000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "26", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 26, 
+                    "payment_type": "cash", 
+                    "price": 285, 
+                    "product_id": "product_SMJRKNDF2K", 
+                    "shop_id": 8, 
+                    "timestamp": 1453629481000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "29", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 29, 
+                    "payment_type": "cash", 
+                    "price": 387, 
+                    "product_id": "product_S4U55UT8MK", 
+                    "shop_id": 3, 
+                    "timestamp": 1451617443000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "40", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 40, 
+                    "payment_type": "cc", 
+                    "price": 761, 
+                    "product_id": "product_AEGBDTJNO2", 
+                    "shop_id": 8, 
+                    "timestamp": 1452619026000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "41", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 41, 
+                    "payment_type": "cc", 
+                    "price": 697, 
+                    "product_id": "product_1N0R8MIZZ2", 
+                    "shop_id": 6, 
+                    "timestamp": 1451953167000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "44", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 44, 
+                    "payment_type": "cc", 
+                    "price": 429, 
+                    "product_id": "product_I27SGXWAGS", 
+                    "shop_id": 3, 
+                    "timestamp": 1452626135000
+                }, 
+                "_type": "sale"
+            }
+        ], 
+        "max_score": 1.0, 
+        "total": 500
+    }, 
+    "timed_out": false, 
+    "took": 5
+}

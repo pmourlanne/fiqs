@@ -8,7 +8,7 @@ def get_client():
     return Elasticsearch(['http://localhost:8200'], timeout=60)
 
 
-def get_search(indices=None):
+def get_search(client=None, indices=None):
     indices = indices or '*'
-    client = get_client()
+    client = client or get_client()
     return Search(using=client, index=indices)

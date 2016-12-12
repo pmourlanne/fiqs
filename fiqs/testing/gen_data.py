@@ -34,7 +34,7 @@ def gen_shop_data(size):
             'shop_id': random_shop_id(),
             'product_id': 'product_{}'.format(random_string(10)),
             'timestamp': random_timestamp(),
-            'value': random.randint(10, 1000),
+            'price': random.randint(10, 1000),
             'payment_type': random.choice(['cc', 'cash', 'store_credit', ]),
         })
 
