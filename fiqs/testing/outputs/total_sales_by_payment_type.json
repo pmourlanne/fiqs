@@ -4,6 +4,35 @@
         "successful": 5, 
         "total": 5
     }, 
+    "aggregations": {
+        "payment": {
+            "buckets": [
+                {
+                    "doc_count": 174, 
+                    "key": "cash", 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 167, 
+                    "key": "cc", 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }, 
+                {
+                    "doc_count": 159, 
+                    "key": "store_credit", 
+                    "total_sales": {
+                        "value": 0.0
+                    }
+                }
+            ], 
+            "doc_count_error_upper_bound": 0, 
+            "sum_other_doc_count": 0
+        }
+    }, 
     "hits": {
         "hits": [
             {
@@ -151,5 +180,5 @@
         "total": 500
     }, 
     "timed_out": false, 
-    "took": 1
+    "took": 4
 }
