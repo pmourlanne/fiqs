@@ -1,6 +1,5 @@
-- Generate ES results dicts for tests:
-    - Use ES5 in docker
-    - Use fixtures to bootstrap data
-    - Generate queries and store output
+- Generate more ES results dicts for tests
+- Store expected lines? Paremetrize flatten tree tests
+- Test multiple aggregations on the same level
 
 - Write code to flatten trees :o

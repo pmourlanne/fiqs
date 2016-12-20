@@ -11,21 +11,21 @@
                     "doc_count": 174, 
                     "key": "cash", 
                     "total_sales": {
-                        "value": 0.0
+                        "value": 91154.0
                     }
                 }, 
                 {
                     "doc_count": 167, 
                     "key": "cc", 
                     "total_sales": {
-                        "value": 0.0
+                        "value": 83907.0
                     }
                 }, 
                 {
                     "doc_count": 159, 
                     "key": "store_credit", 
                     "total_sales": {
-                        "value": 0.0
+                        "value": 82123.0
                     }
                 }
             ], 

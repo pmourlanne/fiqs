@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 import time
 
 from elasticsearch.helpers import bulk
@@ -81,3 +82,23 @@ def elasticsearch(request):
     time.sleep(1)
 
     return client
+
+
+BASE_PATH = 'fiqs/testing/outputs/'
+
+
+def write_output(search, name):
+    result = search.execute()
+
+    path = os.path.join(BASE_PATH, '{}.json'.format(name))
+    with open(path, 'w') as f:
+        json.dump(result._d_, f, indent=4, ensure_ascii=False, encoding='utf-8', sort_keys=True)
+
+
+def load_output(name):
+    path = os.path.join(BASE_PATH, '{}.json'.format(name))
+
+    with open(path, 'r') as f:
+        output = json.load(f)
+
+    return output
