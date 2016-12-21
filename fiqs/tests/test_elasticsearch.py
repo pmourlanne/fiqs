@@ -45,12 +45,35 @@ def test_write_search_outputs(elasticsearch):
     )
     write_output(search, 'total_sales_by_payment_type_by_shop')
 
-    # Number of sales
+    # Total sales day by day
+    search = get_search()
+    search.aggs.bucket(
+        'day', 'date_histogram', field='timestamp', interval='1d',
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+    write_output(search, 'total_sales_day_by_day')
 
     # Number of sales by shop
+    search = get_search()
+    search.aggs.bucket(
+        'shop', 'terms', field='shop_id',
+    )
+    write_output(search, 'nb_sales_by_shop')
 
-    # Number of sales by day
-
-    # Number of sales by day by shop
-
-    # Number of different products by shop
+    # Total sales day by day, by shop and by product
+    search = get_search()
+    agg = search.aggs.bucket(
+        'day', 'date_histogram', field='timestamp', interval='1d',
+    )
+    agg.bucket(
+        'shop', 'terms', field='shop_id',
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+    agg.bucket(
+        'payment', 'terms', field='payment_type',
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+    write_output(search, 'total_sales_day_by_day_by_shop_and_by_product')

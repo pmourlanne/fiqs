@@ -25,7 +25,7 @@ class ResultTree(object):
         new_line = base_line.copy()
 
         for k, v in node.iteritems():
-            if k == 'key':
+            if k in ['key', 'key_as_string']:
                 continue
             if k == 'doc_count':
                 new_line[k] = v

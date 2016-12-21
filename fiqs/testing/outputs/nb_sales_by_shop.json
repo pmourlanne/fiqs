@@ -9,73 +9,43 @@
             "buckets": [
                 {
                     "doc_count": 62, 
-                    "key": 4, 
-                    "total_sales": {
-                        "value": 33654.0
-                    }
+                    "key": 4
                 }, 
                 {
                     "doc_count": 59, 
-                    "key": 2, 
-                    "total_sales": {
-                        "value": 27983.0
-                    }
+                    "key": 2
                 }, 
                 {
                     "doc_count": 57, 
-                    "key": 3, 
-                    "total_sales": {
-                        "value": 28034.0
-                    }
+                    "key": 3
                 }, 
                 {
                     "doc_count": 56, 
-                    "key": 8, 
-                    "total_sales": {
-                        "value": 28677.0
-                    }
+                    "key": 8
                 }, 
                 {
                     "doc_count": 54, 
-                    "key": 5, 
-                    "total_sales": {
-                        "value": 29215.0
-                    }
+                    "key": 5
                 }, 
                 {
                     "doc_count": 51, 
-                    "key": 7, 
-                    "total_sales": {
-                        "value": 27082.0
-                    }
+                    "key": 7
                 }, 
                 {
                     "doc_count": 48, 
-                    "key": 6, 
-                    "total_sales": {
-                        "value": 22651.0
-                    }
+                    "key": 6
                 }, 
                 {
                     "doc_count": 41, 
-                    "key": 9, 
-                    "total_sales": {
-                        "value": 21616.0
-                    }
+                    "key": 9
                 }, 
                 {
                     "doc_count": 40, 
-                    "key": 1, 
-                    "total_sales": {
-                        "value": 21752.0
-                    }
+                    "key": 1
                 }, 
                 {
                     "doc_count": 32, 
-                    "key": 10, 
-                    "total_sales": {
-                        "value": 16520.0
-                    }
+                    "key": 10
                 }
             ], 
             "doc_count_error_upper_bound": 0, 

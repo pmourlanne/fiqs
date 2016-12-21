@@ -1,0 +1,409 @@
+{
+    "_shards": {
+        "failed": 0, 
+        "successful": 5, 
+        "total": 5
+    }, 
+    "aggregations": {
+        "day": {
+            "buckets": [
+                {
+                    "doc_count": 1, 
+                    "key": 1451520000000, 
+                    "key_as_string": "2015-12-31T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 406.0
+                    }
+                }, 
+                {
+                    "doc_count": 16, 
+                    "key": 1451606400000, 
+                    "key_as_string": "2016-01-01T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8436.0
+                    }
+                }, 
+                {
+                    "doc_count": 12, 
+                    "key": 1451692800000, 
+                    "key_as_string": "2016-01-02T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 5685.0
+                    }
+                }, 
+                {
+                    "doc_count": 11, 
+                    "key": 1451779200000, 
+                    "key_as_string": "2016-01-03T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 5549.0
+                    }
+                }, 
+                {
+                    "doc_count": 8, 
+                    "key": 1451865600000, 
+                    "key_as_string": "2016-01-04T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 3908.0
+                    }
+                }, 
+                {
+                    "doc_count": 19, 
+                    "key": 1451952000000, 
+                    "key_as_string": "2016-01-05T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8726.0
+                    }
+                }, 
+                {
+                    "doc_count": 17, 
+                    "key": 1452038400000, 
+                    "key_as_string": "2016-01-06T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 7071.0
+                    }
+                }, 
+                {
+                    "doc_count": 25, 
+                    "key": 1452124800000, 
+                    "key_as_string": "2016-01-07T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 12744.0
+                    }
+                }, 
+                {
+                    "doc_count": 22, 
+                    "key": 1452211200000, 
+                    "key_as_string": "2016-01-08T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 12178.0
+                    }
+                }, 
+                {
+                    "doc_count": 9, 
+                    "key": 1452297600000, 
+                    "key_as_string": "2016-01-09T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 3674.0
+                    }
+                }, 
+                {
+                    "doc_count": 11, 
+                    "key": 1452384000000, 
+                    "key_as_string": "2016-01-10T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 7327.0
+                    }
+                }, 
+                {
+                    "doc_count": 12, 
+                    "key": 1452470400000, 
+                    "key_as_string": "2016-01-11T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 5938.0
+                    }
+                }, 
+                {
+                    "doc_count": 27, 
+                    "key": 1452556800000, 
+                    "key_as_string": "2016-01-12T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 15501.0
+                    }
+                }, 
+                {
+                    "doc_count": 17, 
+                    "key": 1452643200000, 
+                    "key_as_string": "2016-01-13T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8146.0
+                    }
+                }, 
+                {
+                    "doc_count": 16, 
+                    "key": 1452729600000, 
+                    "key_as_string": "2016-01-14T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8054.0
+                    }
+                }, 
+                {
+                    "doc_count": 18, 
+                    "key": 1452816000000, 
+                    "key_as_string": "2016-01-15T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8617.0
+                    }
+                }, 
+                {
+                    "doc_count": 17, 
+                    "key": 1452902400000, 
+                    "key_as_string": "2016-01-16T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8358.0
+                    }
+                }, 
+                {
+                    "doc_count": 15, 
+                    "key": 1452988800000, 
+                    "key_as_string": "2016-01-17T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 7660.0
+                    }
+                }, 
+                {
+                    "doc_count": 14, 
+                    "key": 1453075200000, 
+                    "key_as_string": "2016-01-18T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 6776.0
+                    }
+                }, 
+                {
+                    "doc_count": 15, 
+                    "key": 1453161600000, 
+                    "key_as_string": "2016-01-19T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8628.0
+                    }
+                }, 
+                {
+                    "doc_count": 16, 
+                    "key": 1453248000000, 
+                    "key_as_string": "2016-01-20T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8149.0
+                    }
+                }, 
+                {
+                    "doc_count": 20, 
+                    "key": 1453334400000, 
+                    "key_as_string": "2016-01-21T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 9857.0
+                    }
+                }, 
+                {
+                    "doc_count": 16, 
+                    "key": 1453420800000, 
+                    "key_as_string": "2016-01-22T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8090.0
+                    }
+                }, 
+                {
+                    "doc_count": 18, 
+                    "key": 1453507200000, 
+                    "key_as_string": "2016-01-23T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 11109.0
+                    }
+                }, 
+                {
+                    "doc_count": 14, 
+                    "key": 1453593600000, 
+                    "key_as_string": "2016-01-24T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 7625.0
+                    }
+                }, 
+                {
+                    "doc_count": 22, 
+                    "key": 1453680000000, 
+                    "key_as_string": "2016-01-25T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 11268.0
+                    }
+                }, 
+                {
+                    "doc_count": 26, 
+                    "key": 1453766400000, 
+                    "key_as_string": "2016-01-26T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 12656.0
+                    }
+                }, 
+                {
+                    "doc_count": 13, 
+                    "key": 1453852800000, 
+                    "key_as_string": "2016-01-27T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 6664.0
+                    }
+                }, 
+                {
+                    "doc_count": 17, 
+                    "key": 1453939200000, 
+                    "key_as_string": "2016-01-28T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8741.0
+                    }
+                }, 
+                {
+                    "doc_count": 22, 
+                    "key": 1454025600000, 
+                    "key_as_string": "2016-01-29T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 11158.0
+                    }
+                }, 
+                {
+                    "doc_count": 14, 
+                    "key": 1454112000000, 
+                    "key_as_string": "2016-01-30T00:00:00.000Z", 
+                    "total_sales": {
+                        "value": 8485.0
+                    }
+                }
+            ]
+        }
+    }, 
+    "hits": {
+        "hits": [
+            {
+                "_id": "14", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 14, 
+                    "payment_type": "cc", 
+                    "price": 861, 
+                    "product_id": "product_QLMW3C7RAJ", 
+                    "shop_id": 7, 
+                    "timestamp": 1451939811000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "19", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 19, 
+                    "payment_type": "store_credit", 
+                    "price": 581, 
+                    "product_id": "product_A 20HY6866", 
+                    "shop_id": 7, 
+                    "timestamp": 1452601771000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "22", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 22, 
+                    "payment_type": "store_credit", 
+                    "price": 964, 
+                    "product_id": "product_W0TEZ7Y6KB", 
+                    "shop_id": 7, 
+                    "timestamp": 1453041939000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "24", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 24, 
+                    "payment_type": "cc", 
+                    "price": 768, 
+                    "product_id": "product_73V7FBML60", 
+                    "shop_id": 4, 
+                    "timestamp": 1453477690000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "25", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 25, 
+                    "payment_type": "cc", 
+                    "price": 318, 
+                    "product_id": "product_TWT5JKKKRP", 
+                    "shop_id": 7, 
+                    "timestamp": 1451781570000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "26", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 26, 
+                    "payment_type": "cash", 
+                    "price": 285, 
+                    "product_id": "product_SMJRKNDF2K", 
+                    "shop_id": 8, 
+                    "timestamp": 1453629481000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "29", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 29, 
+                    "payment_type": "cash", 
+                    "price": 387, 
+                    "product_id": "product_S4U55UT8MK", 
+                    "shop_id": 3, 
+                    "timestamp": 1451617443000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "40", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 40, 
+                    "payment_type": "cc", 
+                    "price": 761, 
+                    "product_id": "product_AEGBDTJNO2", 
+                    "shop_id": 8, 
+                    "timestamp": 1452619026000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "41", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 41, 
+                    "payment_type": "cc", 
+                    "price": 697, 
+                    "product_id": "product_1N0R8MIZZ2", 
+                    "shop_id": 6, 
+                    "timestamp": 1451953167000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "44", 
+                "_index": "test_shop", 
+                "_score": 1.0, 
+                "_source": {
+                    "id": 44, 
+                    "payment_type": "cc", 
+                    "price": 429, 
+                    "product_id": "product_I27SGXWAGS", 
+                    "shop_id": 3, 
+                    "timestamp": 1452626135000
+                }, 
+                "_type": "sale"
+            }
+        ], 
+        "max_score": 1.0, 
+        "total": 500
+    }, 
+    "timed_out": false, 
+    "took": 3
+}
