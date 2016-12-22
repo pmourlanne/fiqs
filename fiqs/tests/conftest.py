@@ -6,7 +6,7 @@ import time
 
 from elasticsearch.helpers import bulk
 
-from elasticsearch_dsl import Mapping
+from elasticsearch_dsl import Mapping, Nested
 
 import pytest
 
@@ -29,6 +29,19 @@ def sale_mapping():
     m.field('timestamp', 'date')
     m.field('price', 'integer')
     m.field('payment_type', 'keyword')
+
+    products = Nested()
+    products.field('product_id', 'keyword')
+    products.field('product_type', 'keyword')
+    products.field('price', 'integer')
+
+    parts = Nested()
+    parts.field('part_id', 'keyword')
+    parts.field('warehouse_id', 'keyword')
+    parts.field('price', 'integer')
+
+    products.field('parts', parts)
+    m.field('products', products)
 
     return m
 
