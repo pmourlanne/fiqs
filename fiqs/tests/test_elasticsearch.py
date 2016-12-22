@@ -77,3 +77,15 @@ def test_write_search_outputs(elasticsearch):
         'total_sales', 'sum', field='price',
     )
     write_output(search, 'total_sales_day_by_day_by_shop_and_by_product')
+
+    # Total sales and average sales by shop
+    search = get_search()
+    search.aggs.bucket(
+        'shop', 'terms', field='shop_id',
+    ).metric(
+        'total_sales', 'sum', field='price',
+    ).metric(
+        'avg_sales', 'avg', field='price',
+    )
+    write_output(search, 'total_and_avg_sales_by_shop')
+

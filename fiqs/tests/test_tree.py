@@ -139,3 +139,24 @@ def test_total_sales_day_by_day_by_shop_and_by_product():
     assert len([l for l in lines if 'shop' in l]) >= 31
     # There are more than 31 buckets within the payment buckets
     assert len([l for l in lines if 'payment' in l]) >= 31
+
+
+def test_total_and_avg_sales_by_shop():
+    lines = flatten_result(load_output('total_and_avg_sales_by_shop'))
+
+    assert len(lines) == 10  # One for each shop
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metrics are present
+        assert 'shop' in line
+        assert type(line['shop']) == int
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        assert 'avg_sales' in line
+        assert type(line['avg_sales']) == float

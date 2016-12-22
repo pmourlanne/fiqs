@@ -2,7 +2,7 @@
 - Store expected lines? Paremetrize flatten tree tests
 - Test multiple aggregations on the same level
 - Test nested fields
-- Tested multiple metrics on same aggregation (total and avg)
+- Tested metric no aggregation
 
 
 
