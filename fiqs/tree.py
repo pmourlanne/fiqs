@@ -5,6 +5,9 @@ import copy
 from elasticsearch_dsl.result import Response
 
 
+RESERVED_KEYS = ['key', 'key_as_string', 'doc_count']
+
+
 class ResultTree(object):
     def __init__(self, es_result):
         if isinstance(es_result, Response):
@@ -44,6 +47,7 @@ class ResultTree(object):
         while True:
             # We get the current node using the path
             node = aggregations
+
             for key in path:
                 node = node[key]
 
@@ -73,21 +77,38 @@ class ResultTree(object):
             if not buckets and depth == 0:
                 break
 
-            # If there are no more buckets but we're not at depth 0, we need to go one level higher
+            # If there are no more buckets but we're not at depth 0,
+            # either there is another aggregation at our depth or we go higher
             if not buckets:
-                # We delete the empty leaf
+                base_line.pop(current_key)
+
                 parent_bucket = aggregations
                 for key in path[:-2]:
                     parent_bucket = parent_bucket[key]
 
-                del parent_bucket[path[-2]]
+                # Is there another aggregation at our level?
+                next_key = [
+                    k for k in parent_bucket[path[-2]].keys()
+                    if k not in RESERVED_KEYS and k != current_key
+                ]
+                if not next_key:
+                    # No, we delete whole bucket
+                    del parent_bucket[path[-2]]
 
-                # update the path and the depth
-                depth -= 1
-                path.pop()  # `0` or first_key
-                path.pop()  # `buckets`
-                path.pop()  # current_key
-                current_key = path[-1]
+                    # We update the path, the depth and the current_key
+                    path.pop()  # current_key
+                    path.pop()  # `0` or first_key
+                    path.pop()  # `buckets`
+                    depth -= 1
+                    current_key = path[-1]
+                else:
+                    # Yes, we only delete the current bucket
+                    parent_bucket[path[-2]].pop(current_key)
+
+                    # We update the path and the current_key
+                    path.pop()  # current_key
+                    current_key = next_key[0]
+                    path.append(current_key)
 
                 # We go again
                 continue
@@ -118,7 +139,7 @@ class ResultTree(object):
                 next_node = next_node[first_key]
 
             # We find the next key if there is one
-            next_key = [k for k in next_node.keys() if k not in ['key', 'doc_count']]
+            next_key = [k for k in next_node.keys() if k not in RESERVED_KEYS]
             if next_key:
                 next_key = next_key[0]
                 if 'buckets' in next_node[next_key]:
