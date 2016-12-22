@@ -1,10 +1,8 @@
-- Generate more ES results dicts for tests
-- Store expected lines? Paremetrize flatten tree tests
 - Test nested fields
-
-
-
 - Test ordering
 
+- Code for fields
+- Code to extract mapping from "model"
 
-DOCSSSSSSSSSSSSSSs
+
+DOCSSSSSSSSSSSSSS

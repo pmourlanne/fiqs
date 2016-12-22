@@ -12,6 +12,61 @@ def test_count(elasticsearch):
 
 
 @pytest.mark.docker
+def test_write_nested_search_output(elasticsearch):
+    # Average product price by product type
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_type', 'terms', field='products.product_type',
+    ).metric(
+        'avg_product_price', 'avg', field='products.price',
+    )
+    write_output(search, 'avg_product_price_by_product')
+
+    # Average part price by part
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part', 'terms', field='products.parts.part_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.price',
+    )
+    write_output(search, 'avg_part_price_by_part')
+
+    # Average part price by product
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product', 'terms', field='products.product_id',
+    ).bucket(
+        'paths', 'nested', path='products.parts',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.price',
+    )
+    write_output(search, 'avg_part_price_by_product')
+
+    # Average part price by product by part
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part', 'terms', field='products.parts.part_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.price',
+    )
+    write_output(search, 'avg_part_price_by_product_by_part')
+
+
+@pytest.mark.docker
 def test_write_search_outputs(elasticsearch):
     # Nothing :o
     write_output(get_search(), 'no_aggregate_no_metric')
