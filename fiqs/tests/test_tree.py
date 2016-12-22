@@ -96,8 +96,8 @@ def test_total_sales_day_by_day():
 
     assert len(lines) == 31  # Number of days in the data's month
 
-    # Lines are sorted by doc_count
-    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+    # Lines are sorted by date
+    assert lines == sorted(lines, key=(lambda l: l['day']))
 
     for line in lines:
         # Doc count is present
