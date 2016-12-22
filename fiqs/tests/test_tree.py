@@ -82,7 +82,7 @@ def test_total_sales_by_payment_type_by_shop():
         assert type(line['total_sales']) == float
 
     # Ten lines for each payment type
-    for payment_type in ['cash', 'cc', 'store_credit', ]:
+    for payment_type in ['cash', 'wire_transfer', 'store_credit', ]:
         payment_type_lines = [l for l in lines if l['payment'] == payment_type]
         assert len(payment_type_lines) == 10
 

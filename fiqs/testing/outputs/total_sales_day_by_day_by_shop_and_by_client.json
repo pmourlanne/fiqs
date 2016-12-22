@@ -53,7 +53,7 @@
                             }, 
                             {
                                 "doc_count": 6, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3571.0
                                 }
@@ -140,7 +140,7 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2273.0
                                 }
@@ -227,7 +227,7 @@
                             }, 
                             {
                                 "doc_count": 3, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 775.0
                                 }
@@ -307,16 +307,16 @@
                         "buckets": [
                             {
                                 "doc_count": 3, 
-                                "key": "cc", 
+                                "key": "store_credit", 
                                 "total_sales": {
-                                    "value": 1728.0
+                                    "value": 1032.0
                                 }
                             }, 
                             {
                                 "doc_count": 3, 
-                                "key": "store_credit", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
-                                    "value": 1032.0
+                                    "value": 1728.0
                                 }
                             }, 
                             {
@@ -394,7 +394,7 @@
                         "buckets": [
                             {
                                 "doc_count": 9, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 5655.0
                                 }
@@ -502,7 +502,7 @@
                             }, 
                             {
                                 "doc_count": 6, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2797.0
                                 }
@@ -589,7 +589,7 @@
                             }, 
                             {
                                 "doc_count": 8, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 4437.0
                                 }
@@ -704,7 +704,7 @@
                             }, 
                             {
                                 "doc_count": 5, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2638.0
                                 }
@@ -791,16 +791,16 @@
                             }, 
                             {
                                 "doc_count": 2, 
-                                "key": "cc", 
+                                "key": "store_credit", 
                                 "total_sales": {
-                                    "value": 1731.0
+                                    "value": 596.0
                                 }
                             }, 
                             {
                                 "doc_count": 2, 
-                                "key": "store_credit", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
-                                    "value": 596.0
+                                    "value": 1731.0
                                 }
                             }
                         ], 
@@ -878,7 +878,7 @@
                             }, 
                             {
                                 "doc_count": 3, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1351.0
                                 }
@@ -958,7 +958,7 @@
                         "buckets": [
                             {
                                 "doc_count": 7, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3222.0
                                 }
@@ -1052,7 +1052,7 @@
                         "buckets": [
                             {
                                 "doc_count": 13, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 7543.0
                                 }
@@ -1153,7 +1153,7 @@
                         "buckets": [
                             {
                                 "doc_count": 10, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 4091.0
                                 }
@@ -1268,7 +1268,7 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1519.0
                                 }
@@ -1362,7 +1362,7 @@
                             }, 
                             {
                                 "doc_count": 5, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1598.0
                                 }
@@ -1449,7 +1449,7 @@
                         "buckets": [
                             {
                                 "doc_count": 8, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3936.0
                                 }
@@ -1557,7 +1557,7 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1993.0
                                 }
@@ -1651,7 +1651,7 @@
                             }, 
                             {
                                 "doc_count": 5, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2491.0
                                 }
@@ -1745,7 +1745,7 @@
                             }, 
                             {
                                 "doc_count": 2, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 740.0
                                 }
@@ -1825,7 +1825,7 @@
                             }, 
                             {
                                 "doc_count": 7, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3022.0
                                 }
@@ -1905,7 +1905,7 @@
                         "buckets": [
                             {
                                 "doc_count": 9, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3397.0
                                 }
@@ -2013,7 +2013,7 @@
                             }, 
                             {
                                 "doc_count": 3, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2016.0
                                 }
@@ -2121,7 +2121,7 @@
                             }, 
                             {
                                 "doc_count": 5, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2440.0
                                 }
@@ -2208,7 +2208,7 @@
                             }, 
                             {
                                 "doc_count": 3, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1295.0
                                 }
@@ -2295,7 +2295,7 @@
                             }, 
                             {
                                 "doc_count": 6, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3618.0
                                 }
@@ -2389,7 +2389,7 @@
                             }, 
                             {
                                 "doc_count": 8, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 4193.0
                                 }
@@ -2497,7 +2497,7 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 2604.0
                                 }
@@ -2570,7 +2570,7 @@
                         "buckets": [
                             {
                                 "doc_count": 7, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 3230.0
                                 }
@@ -2685,7 +2685,7 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
                                     "value": 1657.0
                                 }
@@ -2765,16 +2765,16 @@
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "cc", 
+                                "key": "store_credit", 
                                 "total_sales": {
-                                    "value": 2346.0
+                                    "value": 2084.0
                                 }
                             }, 
                             {
                                 "doc_count": 4, 
-                                "key": "store_credit", 
+                                "key": "wire_transfer", 
                                 "total_sales": {
-                                    "value": 2084.0
+                                    "value": 2346.0
                                 }
                             }
                         ], 
@@ -2849,7 +2849,7 @@
                 "_source": {
                     "client_id": "client_QLMW3C7RAJ", 
                     "id": 14, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 861, 
                     "shop_id": 7, 
                     "timestamp": 1451939811000
@@ -2891,7 +2891,7 @@
                 "_source": {
                     "client_id": "client_73V7FBML60", 
                     "id": 24, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 768, 
                     "shop_id": 4, 
                     "timestamp": 1453477690000
@@ -2905,7 +2905,7 @@
                 "_source": {
                     "client_id": "client_TWT5JKKKRP", 
                     "id": 25, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 318, 
                     "shop_id": 7, 
                     "timestamp": 1451781570000
@@ -2947,7 +2947,7 @@
                 "_source": {
                     "client_id": "client_AEGBDTJNO2", 
                     "id": 40, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 761, 
                     "shop_id": 8, 
                     "timestamp": 1452619026000
@@ -2961,7 +2961,7 @@
                 "_source": {
                     "client_id": "client_1N0R8MIZZ2", 
                     "id": 41, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 697, 
                     "shop_id": 6, 
                     "timestamp": 1451953167000
@@ -2975,7 +2975,7 @@
                 "_source": {
                     "client_id": "client_I27SGXWAGS", 
                     "id": 44, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 429, 
                     "shop_id": 3, 
                     "timestamp": 1452626135000

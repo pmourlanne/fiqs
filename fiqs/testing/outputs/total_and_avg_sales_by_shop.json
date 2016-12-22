@@ -121,7 +121,7 @@
                 "_source": {
                     "client_id": "client_QLMW3C7RAJ", 
                     "id": 14, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 861, 
                     "shop_id": 7, 
                     "timestamp": 1451939811000
@@ -163,7 +163,7 @@
                 "_source": {
                     "client_id": "client_73V7FBML60", 
                     "id": 24, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 768, 
                     "shop_id": 4, 
                     "timestamp": 1453477690000
@@ -177,7 +177,7 @@
                 "_source": {
                     "client_id": "client_TWT5JKKKRP", 
                     "id": 25, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 318, 
                     "shop_id": 7, 
                     "timestamp": 1451781570000
@@ -219,7 +219,7 @@
                 "_source": {
                     "client_id": "client_AEGBDTJNO2", 
                     "id": 40, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 761, 
                     "shop_id": 8, 
                     "timestamp": 1452619026000
@@ -233,7 +233,7 @@
                 "_source": {
                     "client_id": "client_1N0R8MIZZ2", 
                     "id": 41, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 697, 
                     "shop_id": 6, 
                     "timestamp": 1451953167000
@@ -247,7 +247,7 @@
                 "_source": {
                     "client_id": "client_I27SGXWAGS", 
                     "id": 44, 
-                    "payment_type": "cc", 
+                    "payment_type": "wire_transfer", 
                     "price": 429, 
                     "shop_id": 3, 
                     "timestamp": 1452626135000
