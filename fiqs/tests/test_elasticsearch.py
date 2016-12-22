@@ -88,3 +88,10 @@ def test_write_search_outputs(elasticsearch):
         'avg_sales', 'avg', field='price',
     )
     write_output(search, 'total_and_avg_sales_by_shop')
+
+    # Total sales, no aggregations
+    search = get_search()
+    search.aggs.metric(
+        'total_sales', 'sum', field='price',
+    )
+    write_output(search, 'total_sales')

@@ -44,6 +44,10 @@ class ResultTree(object):
         current_key = sorted(aggregations.keys())[0]
         path = [current_key]
 
+        # Are we dealing with a metric without aggs?
+        if 'buckets' not in aggregations[current_key]:
+            return [{current_key: aggregations[current_key]['value']}]
+
         while True:
             # We get the current node using the path
             node = aggregations

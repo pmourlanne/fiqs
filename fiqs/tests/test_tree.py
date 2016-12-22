@@ -160,3 +160,14 @@ def test_total_and_avg_sales_by_shop():
         assert type(line['total_sales']) == float
         assert 'avg_sales' in line
         assert type(line['avg_sales']) == float
+
+
+def test_total_sales():
+    lines = flatten_result(load_output('total_sales'))
+
+    assert len(lines) == 1
+
+    line = lines[0]
+    # Only metric is present
+    assert line.keys() == ['total_sales']
+    assert type(line['total_sales']) == float
