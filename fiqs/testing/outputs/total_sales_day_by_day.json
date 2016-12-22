@@ -404,6 +404,5 @@
         "max_score": 1.0, 
         "total": 500
     }, 
-    "timed_out": false, 
-    "took": 3
+    "timed_out": false
 }
