@@ -1,8 +1,18 @@
+########
+# Tree #
+########
+
 - Test nested fields
 - Test ordering
+- Test reverse nested aggregations
+
+##########
+# Fields #
+##########
 
 - Code for fields
-- Code to extract mapping from "model"
+- Tests and code for aggs creation
+- Tests and code for search filtering
 
 
 DOCSSSSSSSSSSSSSS
