@@ -24,7 +24,7 @@ def random_shop_id():
 
 
 def random_string(self, length=10):
-    return ''.join(random.choice(string.ascii_uppercase + string.digits + ' ')for _ in range(length))
+    return ''.join(random.choice(string.ascii_uppercase + string.digits + ' ') for _ in range(length))
 
 
 def gen_shop_data(size):
@@ -32,7 +32,7 @@ def gen_shop_data(size):
         print json.dumps({
             'id': i + 1,
             'shop_id': random_shop_id(),
-            'product_id': 'product_{}'.format(random_string(10)),
+            'client_id': 'client_{}'.format(random_string(10)),
             'timestamp': random_timestamp(),
             'price': random.randint(10, 1000),
             'payment_type': random.choice(['cc', 'cash', 'store_credit', ]),

@@ -59,10 +59,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_QLMW3C7RAJ", 
                     "id": 14, 
                     "payment_type": "cc", 
                     "price": 861, 
-                    "product_id": "product_QLMW3C7RAJ", 
                     "shop_id": 7, 
                     "timestamp": 1451939811000
                 }, 
@@ -73,10 +73,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_A 20HY6866", 
                     "id": 19, 
                     "payment_type": "store_credit", 
                     "price": 581, 
-                    "product_id": "product_A 20HY6866", 
                     "shop_id": 7, 
                     "timestamp": 1452601771000
                 }, 
@@ -87,10 +87,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_W0TEZ7Y6KB", 
                     "id": 22, 
                     "payment_type": "store_credit", 
                     "price": 964, 
-                    "product_id": "product_W0TEZ7Y6KB", 
                     "shop_id": 7, 
                     "timestamp": 1453041939000
                 }, 
@@ -101,10 +101,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_73V7FBML60", 
                     "id": 24, 
                     "payment_type": "cc", 
                     "price": 768, 
-                    "product_id": "product_73V7FBML60", 
                     "shop_id": 4, 
                     "timestamp": 1453477690000
                 }, 
@@ -115,10 +115,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_TWT5JKKKRP", 
                     "id": 25, 
                     "payment_type": "cc", 
                     "price": 318, 
-                    "product_id": "product_TWT5JKKKRP", 
                     "shop_id": 7, 
                     "timestamp": 1451781570000
                 }, 
@@ -129,10 +129,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_SMJRKNDF2K", 
                     "id": 26, 
                     "payment_type": "cash", 
                     "price": 285, 
-                    "product_id": "product_SMJRKNDF2K", 
                     "shop_id": 8, 
                     "timestamp": 1453629481000
                 }, 
@@ -143,10 +143,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_S4U55UT8MK", 
                     "id": 29, 
                     "payment_type": "cash", 
                     "price": 387, 
-                    "product_id": "product_S4U55UT8MK", 
                     "shop_id": 3, 
                     "timestamp": 1451617443000
                 }, 
@@ -157,10 +157,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_AEGBDTJNO2", 
                     "id": 40, 
                     "payment_type": "cc", 
                     "price": 761, 
-                    "product_id": "product_AEGBDTJNO2", 
                     "shop_id": 8, 
                     "timestamp": 1452619026000
                 }, 
@@ -171,10 +171,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_1N0R8MIZZ2", 
                     "id": 41, 
                     "payment_type": "cc", 
                     "price": 697, 
-                    "product_id": "product_1N0R8MIZZ2", 
                     "shop_id": 6, 
                     "timestamp": 1451953167000
                 }, 
@@ -185,10 +185,10 @@
                 "_index": "test_shop", 
                 "_score": 1.0, 
                 "_source": {
+                    "client_id": "client_I27SGXWAGS", 
                     "id": 44, 
                     "payment_type": "cc", 
                     "price": 429, 
-                    "product_id": "product_I27SGXWAGS", 
                     "shop_id": 3, 
                     "timestamp": 1452626135000
                 }, 

@@ -25,7 +25,7 @@ def sale_mapping():
 
     m.field('id', 'integer')
     m.field('shop_id', 'integer')
-    m.field('product_id', 'keyword')
+    m.field('client_id', 'keyword')
     m.field('timestamp', 'date')
     m.field('price', 'integer')
     m.field('payment_type', 'keyword')

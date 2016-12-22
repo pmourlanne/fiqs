@@ -61,7 +61,7 @@ def test_write_search_outputs(elasticsearch):
     )
     write_output(search, 'nb_sales_by_shop')
 
-    # Total sales day by day, by shop and by product
+    # Total sales day by day, by shop and by client
     search = get_search()
     agg = search.aggs.bucket(
         'day', 'date_histogram', field='timestamp', interval='1d',
@@ -76,7 +76,7 @@ def test_write_search_outputs(elasticsearch):
     ).metric(
         'total_sales', 'sum', field='price',
     )
-    write_output(search, 'total_sales_day_by_day_by_shop_and_by_product')
+    write_output(search, 'total_sales_day_by_day_by_shop_and_by_client')
 
     # Total sales and average sales by shop
     search = get_search()

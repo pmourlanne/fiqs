@@ -110,8 +110,8 @@ def test_total_sales_day_by_day():
         assert type(line['total_sales']) == float
 
 
-def test_total_sales_day_by_day_by_shop_and_by_product():
-    lines = flatten_result(load_output('total_sales_day_by_day_by_shop_and_by_product'))
+def test_total_sales_day_by_day_by_shop_and_by_client():
+    lines = flatten_result(load_output('total_sales_day_by_day_by_shop_and_by_client'))
 
     for line in lines:
         # Doc count is present
