@@ -10,9 +10,11 @@
 # Fields #
 ##########
 
-- Code for fields
 - Tests and code for aggs creation
 - Tests and code for search filtering
+- Computed aggregations? Automatically add intermediate aggs
+- Configurable size on aggregation level
+- Named group_by?
 
 
 DOCSSSSSSSSSSSSSS

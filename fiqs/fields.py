@@ -24,6 +24,27 @@ class Field(object):
         if not self.storage_field:
             self.storage_field = key
 
+    def get_storage_field(self):
+        if not self.parent:
+            return self.storage_field
+
+        parent_field = getattr(self.model, self.parent)
+        return '{}.{}'.format(parent_field.get_storage_field(), self.storage_field)
+
+    def bucket_params(self):
+        d = {
+            'name': self.key,
+            'field': self.get_storage_field(),
+        }
+        if 'script' in self.data:
+            # should we remove field?
+            d['script'] = self.data['script'].format('_value')
+
+        return d
+
+    def is_range(self):
+        return 'ranges' in self.data
+
 
 class TextField(Field):
     def __init__(self, **kwargs):
@@ -53,3 +74,27 @@ class BooleanField(Field):
 class NestedField(Field):
     def __init__(self, **kwargs):
         super(NestedField, self).__init__('nested', **kwargs)
+
+    def nested_params(self):
+        params = {
+            'name': self.key,
+            'agg_type': 'nested',
+            'path': self.key,
+        }
+        return params
+
+
+class ReverseNestedField(Field):
+    def __init__(self, **kwargs):
+        super(ReverseNestedField, self).__init__('reverse_nested', **kwargs)
+
+    def nested_params(self):
+        params = {
+            'name': self.key,
+            'agg_type': 'reverse_nested',
+        }
+        # /!\ path must not be provided for root reverse_nested aggregation
+        if self.key != 'root':
+            params['path'] = self.key
+
+        return params

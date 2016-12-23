@@ -7,17 +7,20 @@ from fiqs.fields import Field, NestedField
 
 class ModelMetaClass(type):
     def __new__(cls, name, bases, attrs):
-        ret = super(ModelMetaClass, cls).__new__(cls, name, bases, attrs)
+        klass = super(ModelMetaClass, cls).__new__(cls, name, bases, attrs)
 
         fields = []
         for k, v in attrs.iteritems():
             if isinstance(v, Field):
+                # We set the field's key
                 v._set_key(k)
+                # Give the model access to the field
+                getattr(klass, k).model = klass
                 fields.append(v)
 
         cls._fields = fields
 
-        return ret
+        return klass
 
 
 class Model(object):
