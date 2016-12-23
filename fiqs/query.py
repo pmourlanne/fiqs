@@ -150,6 +150,6 @@ class FQuery(Query):
                 agg.metric(
                     es_metric_name,
                     op,
-                    field=expression.field.key,
+                    field=expression.field.get_storage_field(),
                     **expression.params
                 )

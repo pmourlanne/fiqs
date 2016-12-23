@@ -79,7 +79,7 @@ class NestedField(Field):
         params = {
             'name': self.key,
             'agg_type': 'nested',
-            'path': self.key,
+            'path': self.get_storage_field(),
         }
         return params
 

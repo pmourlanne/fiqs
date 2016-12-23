@@ -10,11 +10,12 @@
 # Fields #
 ##########
 
-- Tests and code for aggs creation
 - Tests and code for search filtering
-- Computed aggregations? Automatically add intermediate aggs
 - Configurable size on aggregation level
 - Named group_by?
+- Test computed aggregations
+- Computed aggregations? Automatically add intermediate aggs
+- Nested fields in group_by: automatically add nested parent field (in right position?)
 
 
 DOCSSSSSSSSSSSSSS
