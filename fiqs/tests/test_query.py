@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from fiqs.aggregations import Sum, Count, Avg
+from fiqs.fields import DataExtendedField
 from fiqs.query import FQuery
 
 from fiqs.testing.models import Sale
@@ -169,6 +170,50 @@ def test_two_nested_aggregations_one_metric():
         Sale.product_id,
         Sale.parts,
         Sale.part_id,
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_default_size():
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'terms', field='shop_id', size=5,
+    ).bucket(
+        'client_id', 'terms', field='client_id', size=5,
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    fquery = FQuery(get_search(), default_size=5)
+    metric = fquery.metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+        Sale.client_id,
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_aggregation_size():
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'terms', field='shop_id', size=5,
+    ).bucket(
+        'client_id', 'terms', field='client_id',
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DataExtendedField(Sale.shop_id, size=5),
+        Sale.client_id,
     )
     fsearch = fquery.configure_search(metric)
 

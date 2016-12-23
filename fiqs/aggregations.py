@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import copy
-
 from fiqs.exceptions import MissingParameterException
-from fiqs.fields import Field
 
 
 class Metric(object):
@@ -134,26 +131,6 @@ class Operation(Metric):
 
     def compute(self, results, key=None):
         raise NotImplementedError
-
-
-class FieldWithChoices(Field):
-    def __new__(cls, field, choices=None):
-        choices = choices or ()
-        data = copy.deepcopy(field.data)
-        return super(FieldWithChoices, cls).__new__(
-            cls, field.key, field.display, field.type,
-            field.storage_field, field.unit, choices, data,
-        )
-
-
-class DataExtendedField(Field):
-    def __new__(cls, field, **kwargs):
-        data = copy.deepcopy(field.data)
-        data.update(**kwargs)
-        return super(DataExtendedField, cls).__new__(
-            cls, field.key, field.display, field.type,
-            field.storage_field, field.unit, field.choices, data,
-        )
 
 
 def div_or_none(a, b, percentage=False):

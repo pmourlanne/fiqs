@@ -11,7 +11,6 @@
 ##########
 
 - Tests and code for search filtering
-- Configurable size on aggregation level
 - Named group_by?
 - Test computed aggregations
 - Computed aggregations? Automatically add intermediate aggs

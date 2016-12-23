@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import copy
+
+
 class Field(object):
     def __init__(self, type, key=None, verbose_name=None, storage_field=None,
                  unit=None, choices=None, data=None, parent=None):
@@ -36,9 +39,16 @@ class Field(object):
             'name': self.key,
             'field': self.get_storage_field(),
         }
+
         if 'script' in self.data:
             # should we remove field?
             d['script'] = self.data['script'].format('_value')
+
+        if 'size' in self.data:
+            size = self.data['size']
+            if size == 0:
+                size = 2 ** 32 - 1
+            d['size'] = size
 
         return d
 
@@ -98,3 +108,35 @@ class ReverseNestedField(Field):
             params['path'] = self.key
 
         return params
+
+
+class FieldWithChoices(Field):
+    def __init__(self, field, choices=None):
+        choices = choices or ()
+        data = copy.deepcopy(field.data)
+        return super(FieldWithChoices, self).__init__(
+            field.type,
+            key=field.key,
+            verbose_name=field.verbose_name,
+            storage_field=field.storage_field,
+            unit=field.unit,
+            choices=choices,
+            data=data,
+            parent=field.parent,
+        )
+
+
+class DataExtendedField(Field):
+    def __init__(self, field, **kwargs):
+        data = copy.deepcopy(field.data)
+        data.update(**kwargs)
+        return super(DataExtendedField, self).__init__(
+            field.type,
+            key=field.key,
+            verbose_name=field.verbose_name,
+            storage_field=field.storage_field,
+            unit=field.unit,
+            choices=field.choices,
+            data=data,
+            parent=field.parent,
+        )
