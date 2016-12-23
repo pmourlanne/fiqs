@@ -33,12 +33,12 @@ def sale_mapping():
     products = Nested()
     products.field('product_id', 'keyword')
     products.field('product_type', 'keyword')
-    products.field('price', 'integer')
+    products.field('product_price', 'integer')
 
     parts = Nested()
     parts.field('part_id', 'keyword')
     parts.field('warehouse_id', 'keyword')
-    parts.field('price', 'integer')
+    parts.field('part_price', 'integer')
 
     products.field('parts', parts)
     m.field('products', products)

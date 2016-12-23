@@ -20,7 +20,7 @@ def test_write_nested_search_output(elasticsearch):
     ).bucket(
         'product_type', 'terms', field='products.product_type',
     ).metric(
-        'avg_product_price', 'avg', field='products.price',
+        'avg_product_price', 'avg', field='products.product_price',
     )
     write_output(search, 'avg_product_price_by_product')
 
@@ -33,7 +33,7 @@ def test_write_nested_search_output(elasticsearch):
     ).bucket(
         'part', 'terms', field='products.parts.part_id',
     ).metric(
-        'avg_part_price', 'avg', field='products.parts.price',
+        'avg_part_price', 'avg', field='products.parts.part_price',
     )
     write_output(search, 'avg_part_price_by_part')
 
@@ -46,7 +46,7 @@ def test_write_nested_search_output(elasticsearch):
     ).bucket(
         'paths', 'nested', path='products.parts',
     ).metric(
-        'avg_part_price', 'avg', field='products.parts.price',
+        'avg_part_price', 'avg', field='products.parts.part_price',
     )
     write_output(search, 'avg_part_price_by_product')
 
@@ -61,7 +61,7 @@ def test_write_nested_search_output(elasticsearch):
     ).bucket(
         'part', 'terms', field='products.parts.part_id',
     ).metric(
-        'avg_part_price', 'avg', field='products.parts.price',
+        'avg_part_price', 'avg', field='products.parts.part_price',
     )
     write_output(search, 'avg_part_price_by_product_by_part')
 

@@ -43,7 +43,7 @@ def gen_parts(product_price):
         parts.append({
             'part_id': 'part_{}'.format(random.randint(1, 10)),
             'warehouse_id': 'warehouse_{}'.format(random.randint(1, 10)),
-            'price': int(product_price / (nb_parts * 1.5)),
+            'part_price': int(product_price / (nb_parts * 1.5)),
         })
 
     return parts
@@ -55,7 +55,7 @@ def gen_products(price):
 
     for i in xrange(nb_products):
         if i == nb_products - 1:
-            product_price = price - sum(p['price'] for p in products)
+            product_price = price - sum(p['product_price'] for p in products)
         else:
             product_price = price / 10
 
@@ -64,7 +64,7 @@ def gen_products(price):
         products.append({
             'product_id': product_id,
             'product_type': product_type,
-            'price': product_price,
+            'product_price': product_price,
             'parts': gen_parts(product_price),
         })
 
