@@ -176,6 +176,44 @@ def test_two_nested_aggregations_one_metric():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_nested_parent_automatically_added():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part_id', 'terms', field='products.parts.part_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        Sale.product_id,
+        Sale.part_id,
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert search.to_dict() == fsearch.to_dict()
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        Sale.products,
+        Sale.product_id,
+        Sale.part_id,
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_default_size():
     search = get_search()
     search.aggs.bucket(

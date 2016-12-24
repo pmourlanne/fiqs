@@ -1,3 +1,5 @@
+- Better dev and test environment (setup.py?)
+
 ########
 # Tree #
 ########
@@ -14,7 +16,7 @@
 - Named group_by?
 - Test computed aggregations
 - Computed aggregations? Automatically add intermediate aggs
-- Nested fields in group_by: automatically add nested parent field (in right position?)
+- Check that metaclass doesn't create issues with children classes
 
 
 DOCSSSSSSSSSSSSSS

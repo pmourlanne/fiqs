@@ -38,8 +38,30 @@ class QueryMetric(object):
         self._group_by = []
         self._order_by = {}
 
+    def _check_nested_parents_are_present(self):
+        nested_fields_to_add = {}
+
+        for idx, field in enumerate(self._group_by):
+            parent_field = field.get_parent_field()
+            if not parent_field:
+                continue
+
+            if parent_field in self._group_by:
+                continue
+
+            if parent_field in nested_fields_to_add.values():
+                continue
+
+            nested_fields_to_add[idx] = parent_field
+
+        indices = sorted(nested_fields_to_add.keys(), reverse=True)
+        for idx in indices:
+            self._group_by.insert(idx, nested_fields_to_add[idx])
+
     def group_by(self, *args):
-        self._group_by = args
+        self._group_by = list(args)
+
+        self._check_nested_parents_are_present()
 
         return self
 

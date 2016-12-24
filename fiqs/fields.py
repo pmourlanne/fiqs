@@ -20,6 +20,13 @@ class Field(object):
         self.data = data
         self.parent = parent
 
+    def __repr__(self):
+        return '<{}: {}.{}>'.format(
+            self.__class__.__name__,
+            self.model.__name__,
+            self.key,
+        )
+
     def _set_key(self, key):
         self.key = key
         if not self.verbose_name:
@@ -28,11 +35,14 @@ class Field(object):
             self.storage_field = key
 
     def get_storage_field(self):
-        if not self.parent:
+        parent_field = self.get_parent_field()
+        if not parent_field:
             return self.storage_field
 
-        parent_field = getattr(self.model, self.parent)
-        return '{}.{}'.format(parent_field.get_storage_field(), self.storage_field)
+        return '{}.{}'.format(
+            parent_field.get_storage_field(),
+            self.storage_field,
+        )
 
     def bucket_params(self):
         d = {
@@ -54,6 +64,11 @@ class Field(object):
 
     def is_range(self):
         return 'ranges' in self.data
+
+    def get_parent_field(self):
+        if not self.parent:
+            return None
+        return getattr(self.model, self.parent)
 
 
 class TextField(Field):
