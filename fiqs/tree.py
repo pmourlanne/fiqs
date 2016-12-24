@@ -24,17 +24,21 @@ class ResultTree(object):
         aggregations = self.es_result['aggregations']
         return self._extract_lines(aggregations)
 
-    # def _is_nested_node(self, node):
-    #     if 'buckets' in node:
-    #         return False
+    def _is_nested_node(self, node):
+        if 'buckets' in node:
+            return False
 
-    #     for child_node in node.values():
-    #         if isinstance(child_node, dict) and not self._is_nested_node(child_node):
-    #             return False
+        for child_node in node.values():
+            if isinstance(child_node, dict) and not self._is_nested_node(child_node):
+                return False
 
-    #     return True
+        return True
 
     def _remove_nested_aggregations(self, aggregations):
+        for key, node in aggregations.iteritems():
+            if isinstance(node, dict) and self._is_nested_node(node):
+                pass
+
         return aggregations
 
     def _create_line(self, base_line, node):

@@ -78,6 +78,27 @@ def test_write_nested_search_output(elasticsearch):
     )
     write_output(search, 'avg_product_price_by_shop_by_product_type')
 
+    # Average part price by product and by part
+    search = get_search()
+    products_bucket = search.aggs.bucket(
+        'products', 'nested', path='products',
+    )
+    products_bucket.bucket(
+        'product', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+    products_bucket.bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part', 'terms', field='products.parts.part_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+    write_output(search, 'avg_part_price_by_product_and_by_part')
+
 
 @pytest.mark.docker
 def test_write_search_outputs(elasticsearch):

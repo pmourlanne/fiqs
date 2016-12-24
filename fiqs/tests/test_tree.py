@@ -179,10 +179,15 @@ def test_total_sales_by_shop_and_by_payment():
         elif 'payment' in line:
             assert type(line['payment']) == unicode
 
-    # There are 3 payment lines
-    assert len([l for l in lines if 'payment' in l]) == 3
-    # There are 10 shop lines
-    assert len([l for l in lines if 'shop' in l]) == 10
+    # There are 3 payment lines, sorted by doc_count
+    payment_lines = [l for l in lines if 'payment' in l]
+    assert len(payment_lines) == 3
+    assert sorted(payment_lines, key=lambda l: l['doc_count'], reverse=True) == payment_lines
+
+    # There are 10 shop lines, sorted by doc_count
+    shop_lines = [l for l in lines if 'shop' in l]
+    assert len(shop_lines) == 10
+    assert sorted(shop_lines, key=lambda l: l['doc_count'], reverse=True) == shop_lines
 
 
 def test_total_sales():
@@ -296,4 +301,34 @@ def test_avg_product_price_by_shop_by_product_type():
         assert type(line['product_type']) == unicode
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
+
+
+def test_avg_part_price_by_product_and_by_part():
+    lines = flatten_result(load_output('avg_part_price_by_product_and_by_part'))
+
+    assert len(lines) == 10 + 10  # Product agg reached the default 10 limit and 10 parts
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'avg_part_price' in line
+        assert type(line['avg_part_price']) == float
+        # Either product aggregation or part aggregation is present
+        assert ('product' in line and not 'part' in line)\
+            or ('part' in line and 'product' not in line)
+        if 'product' in line:
+            assert type(line['product']) == unicode
+        elif 'part' in line:
+            assert type(line['part']) == unicode
+
+    # 10 payment lines, sorted by doc_count
+    product_lines = [l for l in lines if 'product' in l]
+    assert len(product_lines) == 10
+    assert sorted(product_lines, key=lambda l: l['doc_count'], reverse=True) == product_lines
+    # 10 part lines, sorted by doc_count
+    part_lines = [l for l in lines if 'part' in l]
+    assert len(part_lines) == 10
+    assert sorted(part_lines, key=lambda l: l['doc_count'], reverse=True) == part_lines
 """
