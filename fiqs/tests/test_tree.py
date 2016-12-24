@@ -204,7 +204,6 @@ def test_total_sales():
 # Nested #
 ##########
 
-"""
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
@@ -243,6 +242,7 @@ def test_avg_part_price_by_part():
         assert type(line['avg_part_price']) == float
 
 
+"""
 def test_avg_part_price_by_product():
     lines = flatten_result(load_output('avg_part_price_by_part'))
 

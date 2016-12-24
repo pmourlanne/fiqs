@@ -25,19 +25,22 @@ class ResultTree(object):
         return self._extract_lines(aggregations)
 
     def _is_nested_node(self, node):
-        if 'buckets' in node:
-            return False
-
-        for child_node in node.values():
-            if isinstance(child_node, dict) and not self._is_nested_node(child_node):
-                return False
-
-        return True
+        return 'buckets' not in node and 'doc_count' in node
 
     def _remove_nested_aggregations(self, aggregations):
+        keys_to_delete = []
+        nodes_to_add = []
+
         for key, node in aggregations.iteritems():
             if isinstance(node, dict) and self._is_nested_node(node):
-                pass
+                keys_to_delete.append(key)
+                nodes_to_add.append(self._remove_nested_aggregations(node))
+
+        for key in keys_to_delete:
+            aggregations.pop(key)
+
+        for node in nodes_to_add:
+            aggregations.update(node)
 
         return aggregations
 
@@ -92,24 +95,32 @@ class ResultTree(object):
 
         return path, current_key
 
-    def _extract_lines(self, aggregations):
-        # We remove nested aggregations, I don't see the point
-        # of exposing them and they are annoying to deal with
-        self._remove_nested_aggregations(aggregations)
+    def _bootstrap_current_key(self, aggregations):
+        return sorted([
+            k for k in aggregations.keys()
+            if k not in RESERVED_KEYS
+        ])[0]
 
+    def _extract_lines(self, aggregations):
         # Initialization
         lines = []
         depth = 0
         base_line = {}
 
-        # We bootstrap the current_key and the path
-        current_key = sorted(aggregations.keys())[0]
-        path = [current_key]
+        current_key = self._bootstrap_current_key(aggregations)
         node = aggregations[current_key]
 
         # Are we dealing with a metric without aggs?
         if 'buckets' not in node and 'doc_count' not in node:
             return [{current_key: node['value']}]
+
+        # We remove nested aggregations, I don't see the point
+        # of exposing them and they are annoying to deal with
+        self._remove_nested_aggregations(aggregations)
+
+        current_key = self._bootstrap_current_key(aggregations)
+        path = [current_key]
+        node = aggregations[current_key]
 
         while True:
             # We get the current node using the path
