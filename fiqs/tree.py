@@ -37,16 +37,53 @@ class ResultTree(object):
 
         return new_line
 
+    def _is_leaf(self, node):
+        # If there are still buckets, we are on a leaf
+        if 'buckets' in node:
+            return False
+
+        return True
+
+    def _find_deeper_path(self, node):
+        # The path should always end right before a buckets node, or lead to a leaf
+        path = []
+        current_key = None
+
+        path.append('buckets')
+        buckets = node['buckets']
+
+        if isinstance(buckets, list):
+            path.append(0)
+            next_node = buckets[0]
+        elif isinstance(buckets, dict):
+            first_key = sorted(buckets.keys())[0]
+            path.append(first_key)
+            next_node = buckets[first_key]
+
+        # We find the next key if there is one
+        next_key = [k for k in next_node.keys() if k not in RESERVED_KEYS]
+        if next_key:
+            next_key = next_key[0]
+            if 'buckets' in next_node[next_key]:
+                path.append(next_key)
+                current_key = next_key
+
+        return path, current_key
+
     def extract_lines(self, aggregations):
+        # Initialization
         lines = []
         depth = 0
         base_line = {}
+
+        # We bootstrap the current_key and the path
         current_key = sorted(aggregations.keys())[0]
         path = [current_key]
+        node = aggregations[current_key]
 
         # Are we dealing with a metric without aggs?
-        if 'buckets' not in aggregations[current_key]:
-            return [{current_key: aggregations[current_key]['value']}]
+        if 'buckets' not in node and 'doc_count' not in node:
+            return [{current_key: node['value']}]
 
         while True:
             # We get the current node using the path
@@ -55,8 +92,7 @@ class ResultTree(object):
             for key in path:
                 node = node[key]
 
-            # If there are no more buckets, we arrived on a leaf
-            if 'buckets' not in node:
+            if self._is_leaf(node):
                 # We create a new line:
                 new_line = self.create_line(base_line, node)
                 lines.append(new_line)
@@ -130,26 +166,10 @@ class ResultTree(object):
                     current_key: first_key,
                 })
 
-            # We update the path
-            # The last key of path should always be right before a `buckets` key
-            path.append('buckets')
-            next_node = node
-            next_node = next_node['buckets']
-            if isinstance(buckets, list):
-                path.append(0)
-                next_node = next_node[0]
-            elif isinstance(buckets, dict):
-                path.append(first_key)
-                next_node = next_node[first_key]
-
-            # We find the next key if there is one
-            next_key = [k for k in next_node.keys() if k not in RESERVED_KEYS]
+            added_path, next_key = self._find_deeper_path(node)
+            path += added_path
             if next_key:
-                next_key = next_key[0]
-                if 'buckets' in next_node[next_key]:
-                    path.append(next_key)
-                    current_key = next_key
-
+                current_key = next_key
             depth += 1
 
         return lines

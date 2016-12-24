@@ -171,3 +171,106 @@ def test_total_sales():
     # Only metric is present
     assert line.keys() == ['total_sales']
     assert type(line['total_sales']) == float
+
+##########
+# Nested #
+##########
+"""
+
+def test_avg_product_price_by_product_type():
+    lines = flatten_result(load_output('avg_product_price_by_product_type'))
+
+    assert len(lines) == 5  # One for each product type
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'product_type' in line
+        assert type(line['product_type']) == unicode
+        assert 'avg_product_price' in line
+        assert type(line['avg_product_price']) == float
+
+
+def test_avg_part_price_by_part():
+    lines = flatten_result(load_output('avg_part_price_by_part'))
+
+    assert len(lines) == 10  # One for each part
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'part' in line
+        assert type(line['part']) == unicode
+        assert 'avg_part_price' in line
+        assert type(line['avg_part_price']) == float
+
+
+def test_avg_part_price_by_product():
+    lines = flatten_result(load_output('avg_part_price_by_part'))
+
+    assert len(lines) == 10  # Product agg reached the default 10 limit
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'product' in line
+        assert type(line['product']) == unicode
+        assert 'avg_part_price' in line
+        assert type(line['avg_part_price']) == float
+
+
+def test_avg_part_price_by_product_by_part():
+    lines = flatten_result(load_output('avg_part_price_by_part'))
+
+    assert len(lines) == 10 * 10  # Product agg reached the default 10 limit and 10 parts
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Both aggregations and metric are present
+        assert 'product' in line
+        assert type(line['product']) == unicode
+        assert 'part' in line
+        assert type(line['part']) == unicode
+        assert 'avg_part_price' in line
+        assert type(line['avg_part_price']) == float
+
+    # Lines are sorted by doc_count within each first-level aggregation
+
+
+def test_avg_product_price_by_shop_by_product_type():
+    lines = flatten_result(load_output('avg_product_price_by_shop_by_product_type'))
+
+    assert len(lines) == 5 * 10  # 5 product types and 10 shops
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Both aggregations and metric are present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
+        assert 'product_type' in line
+        assert type(line['product_type']) == unicode
+        assert 'avg_product_price' in line
+        assert type(line['avg_product_price']) == float
+"""
