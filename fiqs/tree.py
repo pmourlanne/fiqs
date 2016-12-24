@@ -22,9 +22,22 @@ class ResultTree(object):
             return []
 
         aggregations = self.es_result['aggregations']
-        return self.extract_lines(aggregations)
+        return self._extract_lines(aggregations)
 
-    def create_line(self, base_line, node):
+    # def _is_nested_node(self, node):
+    #     if 'buckets' in node:
+    #         return False
+
+    #     for child_node in node.values():
+    #         if isinstance(child_node, dict) and not self._is_nested_node(child_node):
+    #             return False
+
+    #     return True
+
+    def _remove_nested_aggregations(self, aggregations):
+        return aggregations
+
+    def _create_line(self, base_line, node):
         new_line = base_line.copy()
 
         for k, v in node.iteritems():
@@ -41,6 +54,11 @@ class ResultTree(object):
         # If there are still buckets, we are on a leaf
         if 'buckets' in node:
             return False
+
+        # We may be on a nested level, hence our children nodes may contain buckets
+        for child_node in node.values():
+            if isinstance(child_node, dict) and not self._is_leaf(child_node):
+                return False
 
         return True
 
@@ -70,7 +88,11 @@ class ResultTree(object):
 
         return path, current_key
 
-    def extract_lines(self, aggregations):
+    def _extract_lines(self, aggregations):
+        # We remove nested aggregations, I don't see the point
+        # of exposing them and they are annoying to deal with
+        self._remove_nested_aggregations(aggregations)
+
         # Initialization
         lines = []
         depth = 0
@@ -94,7 +116,7 @@ class ResultTree(object):
 
             if self._is_leaf(node):
                 # We create a new line:
-                new_line = self.create_line(base_line, node)
+                new_line = self._create_line(base_line, node)
                 lines.append(new_line)
 
                 # We delete the leaf
@@ -113,8 +135,21 @@ class ResultTree(object):
 
             buckets = node['buckets']
 
-            # If there are no more buckets, and we are at depth 0, we're done!
+            # If there are no more buckets, and we are at depth 0
             if not buckets and depth == 0:
+                # If there is another level 0 aggregation, we work on it
+                next_key = [
+                    k for k in aggregations.keys()
+                    if k not in RESERVED_KEYS and k != current_key
+                ]
+                if next_key:
+                    aggregations.pop(current_key)
+                    base_line.pop(current_key)
+                    current_key = next_key[0]
+                    path = [current_key]
+                    continue
+
+                # Otherwise we're done!
                 break
 
             # If there are no more buckets but we're not at depth 0,

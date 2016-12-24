@@ -110,8 +110,8 @@ def test_total_sales_day_by_day():
         assert type(line['total_sales']) == float
 
 
-def test_total_sales_day_by_day_by_shop_and_by_client():
-    lines = flatten_result(load_output('total_sales_day_by_day_by_shop_and_by_client'))
+def test_total_sales_day_by_day_by_shop_and_by_payment():
+    lines = flatten_result(load_output('total_sales_day_by_day_by_shop_and_by_payment'))
 
     for line in lines:
         # Doc count is present
@@ -123,13 +123,12 @@ def test_total_sales_day_by_day_by_shop_and_by_client():
         # Metric is always present
         assert 'total_sales' in line
         assert type(line['total_sales']) == float
-        # Either shop aggregation is present
-        try:
-            assert 'shop' in line
+        # Either shop aggregation or payment type aggregation is present
+        assert ('shop' in line and 'payment' not in line)\
+            or ('payment' in line and 'shop' not in line)
+        if 'shop' in line:
             assert type(line['shop']) == int
-        # Or payment type aggregation is present
-        except AssertionError:
-            assert 'payment' in line
+        elif 'payment' in line:
             assert type(line['payment']) == unicode
 
     # Documents are counted once in the payment aggregations, once in the shop aggregation
@@ -162,6 +161,30 @@ def test_total_and_avg_sales_by_shop():
         assert type(line['avg_sales']) == float
 
 
+def test_total_sales_by_shop_and_by_payment():
+    lines = flatten_result(load_output('total_sales_by_shop_and_by_payment'))
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is always present
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        # Either shop aggregation or payment type aggregation is present
+        assert ('shop' in line and 'payment' not in line)\
+            or ('payment' in line and 'shop' not in line)
+        if 'shop' in line:
+            assert type(line['shop']) == int
+        elif 'payment' in line:
+            assert type(line['payment']) == unicode
+
+    # There are 3 payment lines
+    assert len([l for l in lines if 'payment' in l]) == 3
+    # There are 10 shop lines
+    assert len([l for l in lines if 'shop' in l]) == 10
+
+
 def test_total_sales():
     lines = flatten_result(load_output('total_sales'))
 
@@ -175,8 +198,8 @@ def test_total_sales():
 ##########
 # Nested #
 ##########
-"""
 
+"""
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
