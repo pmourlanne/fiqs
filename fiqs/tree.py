@@ -25,24 +25,60 @@ class ResultTree(object):
         return self._extract_lines(aggregations)
 
     def _is_nested_node(self, node):
-        return 'buckets' not in node and 'doc_count' in node
+        # Not even a node, or a list of buckets
+        if not isinstance(node, dict):
+            return False
 
-    def _remove_nested_aggregations(self, aggregations):
-        keys_to_delete = []
-        nodes_to_add = []
+        # Standard aggregation
+        if 'buckets' in node:
+            return False
 
-        for key, node in aggregations.iteritems():
-            if isinstance(node, dict) and self._is_nested_node(node):
-                keys_to_delete.append(key)
-                nodes_to_add.append(self._remove_nested_aggregations(node))
+        # Bucket
+        if 'key' in node:
+            return False
 
-        for key in keys_to_delete:
-            aggregations.pop(key)
+        # For example the first node
+        for child_node in node.values():
+            if isinstance(child_node, dict)\
+                and 'doc_count' in child_node\
+                and not self._is_nested_node(child_node):
+                return False
 
-        for node in nodes_to_add:
-            aggregations.update(node)
+        # Node like {'value': 123.456}
+        if all([not isinstance(child_node, dict) for child_node in node.values()]):
+            return False
 
-        return aggregations
+        return True
+
+    def _remove_nested_aggregations(self, node):
+        while True:
+            new_node = self.__remove_nested_aggregations(node)
+            if new_node == node:
+                break
+            else:
+                node = new_node
+
+        return new_node
+
+    def __remove_nested_aggregations(self, node):
+        _node = {}
+
+        for key, child_node in node.iteritems():
+            if isinstance(child_node, dict):
+                if self._is_nested_node(child_node):
+                    _node.update(self._remove_nested_aggregations(child_node))
+                else:
+                    _node[key] = self._remove_nested_aggregations(child_node)
+            elif isinstance(child_node, list):
+                _node[key] = [
+                    self._remove_nested_aggregations(gchild_node)
+                    if isinstance(gchild_node, dict) else gchild_node
+                    for gchild_node in child_node
+                ]
+            else:
+                _node[key] = child_node
+
+        return _node
 
     def _create_line(self, base_line, node):
         new_line = base_line.copy()
@@ -58,16 +94,8 @@ class ResultTree(object):
         return new_line
 
     def _is_leaf(self, node):
-        # If there are still buckets, we are on a leaf
-        if 'buckets' in node:
-            return False
-
-        # We may be on a nested level, hence our children nodes may contain buckets
-        for child_node in node.values():
-            if isinstance(child_node, dict) and not self._is_leaf(child_node):
-                return False
-
-        return True
+        # If there are still buckets, we are not on a leaf
+        return 'buckets' not in node
 
     def _find_deeper_path(self, node):
         # The path should always end right before a buckets node, or lead to a leaf
@@ -116,7 +144,7 @@ class ResultTree(object):
 
         # We remove nested aggregations, I don't see the point
         # of exposing them and they are annoying to deal with
-        self._remove_nested_aggregations(aggregations)
+        aggregations = self._remove_nested_aggregations(aggregations)
 
         current_key = self._bootstrap_current_key(aggregations)
         path = [current_key]

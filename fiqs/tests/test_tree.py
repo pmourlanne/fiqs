@@ -2,6 +2,7 @@
 
 from fiqs import flatten_result
 from fiqs.tests.conftest import load_output
+from fiqs.tree import ResultTree
 
 
 def test_no_aggregate_no_metric():
@@ -204,6 +205,271 @@ def test_total_sales():
 # Nested #
 ##########
 
+def test_is_nested_node():
+    node = {
+        'products': {
+            'doc_count': 100,
+            'product': {
+                'buckets': [
+                    {
+                        "doc_count": 38,
+                        "key": "product_JQ0JVW20PV",
+                        "parts": {
+                            "doc_count": 100,
+                            "part": {
+                                "buckets": [
+                                    {
+                                        "doc_count": 10,
+                                        "key": "part_10",
+                                        "avg_part_price": {
+                                            "value": 10.11
+                                        },
+                                    },
+                                ],
+                                "doc_count_error_upper_bound": 29,
+                                "sum_other_doc_count": 1226,
+                            },
+                        },
+                    },
+                ],
+                "doc_count_error_upper_bound": 29,
+                "sum_other_doc_count": 1226,
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert tree._is_nested_node(node)
+    assert tree._is_nested_node(node['products'])
+    assert not tree._is_nested_node(node['products']['doc_count'])
+    assert not tree._is_nested_node(node['products']['product'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'])
+    assert not tree._is_nested_node(node['products']['product']['doc_count_error_upper_bound'])
+    assert not tree._is_nested_node(node['products']['product']['sum_other_doc_count'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]['doc_count'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]['key'])
+    assert tree._is_nested_node(node['products']['product']['buckets'][0]['parts'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['doc_count'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['doc_count_error_upper_bound'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['sum_other_doc_count'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'][0])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'][0]['doc_count'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'][0]['key'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'][0]['avg_part_price'])
+    assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
+                ['parts']['part']['buckets'][0]['avg_part_price']['value'])
+
+
+def test_is_nested_node_2():
+    node = {
+        'products': {
+            'doc_count': 1540,
+            'parts': {
+                'doc_count': 8497,
+                'part': {
+                    'buckets': [
+                        {
+                            'avg_part_price': {
+                                'value': 19.4,
+                            },
+                            'doc_count': 907,
+                            'key': 'part_5',
+                        },
+                    ],
+                    'doc_count_error_upper_bound': 0,
+                    'sum_other_doc_count': 0,
+                },
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert tree._is_nested_node(node)
+    assert tree._is_nested_node(node['products'])
+    assert not tree._is_nested_node(node['products']['doc_count'])
+    assert tree._is_nested_node(node['products']['parts'])
+    assert not tree._is_nested_node(node['products']['parts']['doc_count'])
+    assert not tree._is_nested_node(node['products']['parts']['part'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['doc_count_error_upper_bound'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['sum_other_doc_count'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0]\
+                ['doc_count'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0]\
+                ['key'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0]\
+                ['avg_part_price'])
+    assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0]\
+                ['avg_part_price']['value'])
+
+
+def test_remove_nested_aggregations():
+    node = {
+        "products": {
+            "doc_count": 1540,
+            "product_type": {
+                "buckets": [
+                    {
+                        "avg_product_price": {
+                            "value": 179.53889943074003
+                        },
+                        "doc_count": 527,
+                        "key": "product_type_3"
+                    },
+                ],
+                "doc_count_error_upper_bound": 0,
+                "sum_other_doc_count": 0
+            },
+        },
+    }
+
+    expected = {
+        "doc_count": 1540,
+        "product_type": {
+            "buckets": [
+                {
+                    "avg_product_price": {
+                        "value": 179.53889943074003
+                    },
+                    "doc_count": 527,
+                    "key": "product_type_3"
+                },
+            ],
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0
+        },
+    }
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+def test_remove_nested_aggregations_2():
+    node = {
+        'products': {
+            'doc_count': 100,
+            'product': {
+                'buckets': [
+                    {
+                        "doc_count": 38,
+                        "key": "product_JQ0JVW20PV",
+                        "parts": {
+                            "doc_count": 100,
+                            "part": {
+                                "buckets": [
+                                    {
+                                        "doc_count": 10,
+                                        "key": "part_10",
+                                        "avg_part_price": {
+                                            "value": 10.11
+                                        },
+                                    },
+                                ],
+                                "doc_count_error_upper_bound": 29,
+                                "sum_other_doc_count": 1226,
+                            },
+                        },
+                    },
+                ],
+                "doc_count_error_upper_bound": 29,
+                "sum_other_doc_count": 1226,
+            },
+        },
+    }
+
+    expected = {
+        'doc_count': 100,
+        'product': {
+            'buckets': [
+                {
+                    "key": "product_JQ0JVW20PV",
+                    "doc_count": 38,
+                    "part": {
+                        "buckets": [
+                            {
+                                "doc_count": 10,
+                                "key": "part_10",
+                                "avg_part_price": {
+                                    "value": 10.11
+                                },
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 29,
+                        "sum_other_doc_count": 1226,
+                    },
+                },
+            ],
+            "doc_count_error_upper_bound": 29,
+            "sum_other_doc_count": 1226,
+        },
+    }
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+def test_remove_nested_aggregations_3():
+    node = {
+        'products': {
+            'doc_count': 1540,
+            'parts': {
+                'doc_count': 8497,
+                'part': {
+                    'buckets': [
+                        {
+                            'avg_part_price': {
+                                'value': 19.4,
+                            },
+                            'doc_count': 907,
+                            'key': 'part_5',
+                        },
+                    ],
+                    'doc_count_error_upper_bound': 0,
+                    'sum_other_doc_count': 0,
+                },
+            },
+        },
+    }
+
+    expected = {
+        'doc_count': 1540,
+        'part': {
+            'buckets': [
+                {
+                    'avg_part_price': {
+                        'value': 19.4,
+                    },
+                    'doc_count': 907,
+                    'key': 'part_5',
+                },
+            ],
+            'doc_count_error_upper_bound': 0,
+            'sum_other_doc_count': 0,
+        },
+    }
+
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
@@ -242,9 +508,8 @@ def test_avg_part_price_by_part():
         assert type(line['avg_part_price']) == float
 
 
-"""
 def test_avg_part_price_by_product():
-    lines = flatten_result(load_output('avg_part_price_by_part'))
+    lines = flatten_result(load_output('avg_part_price_by_product'))
 
     assert len(lines) == 10  # Product agg reached the default 10 limit
 
@@ -263,7 +528,7 @@ def test_avg_part_price_by_product():
 
 
 def test_avg_part_price_by_product_by_part():
-    lines = flatten_result(load_output('avg_part_price_by_part'))
+    lines = flatten_result(load_output('avg_part_price_by_product_by_part'))
 
     assert len(lines) == 10 * 10  # Product agg reached the default 10 limit and 10 parts
 
@@ -279,24 +544,19 @@ def test_avg_part_price_by_product_by_part():
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
-    # Lines are sorted by doc_count within each first-level aggregation
-
 
 def test_avg_product_price_by_shop_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_shop_by_product_type'))
 
     assert len(lines) == 5 * 10  # 5 product types and 10 shops
 
-    # Lines are sorted by doc_count
-    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
-
     for line in lines:
         # Doc count is present
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
-        assert 'shop_id' in line
-        assert type(line['shop_id']) == int
+        assert 'shop' in line
+        assert type(line['shop']) == int
         assert 'product_type' in line
         assert type(line['product_type']) == unicode
         assert 'avg_product_price' in line
@@ -331,4 +591,3 @@ def test_avg_part_price_by_product_and_by_part():
     part_lines = [l for l in lines if 'part' in l]
     assert len(part_lines) == 10
     assert sorted(part_lines, key=lambda l: l['doc_count'], reverse=True) == part_lines
-"""
