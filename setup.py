@@ -22,6 +22,7 @@ install_requires = [
 tests_require = [
     'Faker==0.7.3',
     'pytest==3.0.5',
+    "pytest-cov",
 ]
 
 
@@ -38,5 +39,7 @@ setup(
         where='.',
     ),
     install_requires=install_requires,
+
+    test_suite='fiqs.tests.run_tests.run_all',
     tests_require=tests_require,
 )

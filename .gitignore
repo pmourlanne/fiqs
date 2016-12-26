@@ -5,3 +5,6 @@
 build/*
 dist/*
 .project
+coverage.xml
+.coverage
+junit.xml

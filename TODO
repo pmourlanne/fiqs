@@ -4,9 +4,7 @@
 # Tree #
 ########
 
-- Test ordering
 - Test reverse nested aggregations
-- Fill missing buckets :o
 
 ##########
 # Fields #
@@ -17,7 +15,8 @@
 - Test computed aggregations
 - Computed aggregations? Automatically add intermediate aggs
 - Check that metaclass doesn't create issues with children classes
-- Use fields to make a better flatten_result
+- Order by
+- Fill missing buckets :o
 
 
 DOCSSSSSSSSSSSSSS
