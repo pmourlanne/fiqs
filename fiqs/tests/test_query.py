@@ -256,3 +256,71 @@ def test_aggregation_size():
     fsearch = fquery.configure_search(metric)
 
     assert search.to_dict() == fsearch.to_dict()
+
+
+def test_order_by():
+    expected = {
+        'aggs': {
+            'shop_id': {
+                'aggs': {
+                    'total_sales': {'sum': {'field': 'price'}},
+                },
+                'terms': {
+                    'field': 'shop_id',
+                    'order': {'total_sales': 'desc'},
+                }
+            }
+        },
+        'query': {'match_all': {}},
+    }
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+    ).order_by(
+        {'total_sales': 'desc'}
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert fsearch.to_dict() == expected
+
+
+def test_order_by_multiple_group_by():
+    expected = {
+        'aggs': {
+            'shop_id': {
+                'aggs': {
+                    'client_id': {
+                        'aggs': {
+                            'total_sales': {'sum': {'field': 'price'}},
+                        },
+                        'terms': {
+                            'field': 'client_id',
+                            'order': {'total_sales': 'desc'},
+                        },
+                    },
+                },
+                'terms': {'field': 'shop_id'},
+            },
+        },
+        'query': {'match_all': {}}
+    }
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+        Sale.client_id,
+    ).order_by(
+        {'total_sales': 'desc'}
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert fsearch.to_dict() == expected
+
+
+def test_order_by_count():
+    pass
