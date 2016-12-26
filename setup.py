@@ -28,7 +28,7 @@ tests_require = [
 
 setup(
     name='fiqs',
-    description="Python client for Elasticsearch",
+    description="Python client for Elasticsearch built on top of elasticsearch-dsl",
     license="MIT License",
     url="https://gitlab.com/pmourlanne/fiqs",
     long_description = long_description,
