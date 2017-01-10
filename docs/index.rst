@@ -12,14 +12,22 @@ fiqs can help you in the following ways:
 
     * Automatically generate a mapping
     * Less verbose aggregations and metrics
-    * Less verbose filtering
-    * Automatically add missing buckets
+    * Less verbose filtering (soon)
+    * Automatically add missing buckets (soon)
 
 
 Compatibility
 -------------
 
-fiqs is compatible with Elasticsearch 5.X
+fiqs is compatible with Elasticsearch 5.X and works with both Python 2.7 and Python 3.3
+
+
+Contributing
+------------
+
+The fiqs project is hosted on `GitLab <https://gitlab.com/pmourlanne/fiqs>`_
+
+To run the tests on your machine use this command: ``python setup.py test`` Some tests are used to generate results output from Elasticsearch. To run them you will need to run a docker container on your machine: ``docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:5.0.2`` and then run ``py.test -k docker``.
 
 
 Contents

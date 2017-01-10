@@ -471,7 +471,6 @@ def test_remove_nested_aggregations_3():
     assert expected == result
 
 
-
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
