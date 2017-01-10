@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 from fiqs import flatten_result
 from fiqs.tests.conftest import load_output
 from fiqs.tree import ResultTree
@@ -60,7 +62,7 @@ def test_total_sales_by_payment_type():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'payment' in line
-        assert type(line['payment']) == unicode
+        assert type(line['payment']) == six.text_type
         assert 'total_sales' in line
         assert type(line['total_sales']) == float
 
@@ -76,7 +78,7 @@ def test_total_sales_by_payment_type_by_shop():
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
         assert 'payment' in line
-        assert type(line['payment']) == unicode
+        assert type(line['payment']) == six.text_type
         assert 'shop' in line
         assert type(line['shop']) == int
         assert 'total_sales' in line
@@ -130,7 +132,7 @@ def test_total_sales_day_by_day_by_shop_and_by_payment():
         if 'shop' in line:
             assert type(line['shop']) == int
         elif 'payment' in line:
-            assert type(line['payment']) == unicode
+            assert type(line['payment']) == six.text_type
 
     # Documents are counted once in the payment aggregations, once in the shop aggregation
     sum([line['doc_count']]) == 2 * 500
@@ -178,7 +180,7 @@ def test_total_sales_by_shop_and_by_payment():
         if 'shop' in line:
             assert type(line['shop']) == int
         elif 'payment' in line:
-            assert type(line['payment']) == unicode
+            assert type(line['payment']) == six.text_type
 
     # There are 3 payment lines, sorted by doc_count
     payment_lines = [l for l in lines if 'payment' in l]
@@ -198,7 +200,7 @@ def test_total_sales():
 
     line = lines[0]
     # Only metric is present
-    assert line.keys() == ['total_sales']
+    assert list(line.keys()) == ['total_sales']
     assert type(line['total_sales']) == float
 
 ##########
@@ -476,7 +478,7 @@ def test_avg_product_price_by_product_type():
     assert len(lines) == 5  # One for each product type
 
     # Lines are sorted by doc_count
-    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+    assert lines == list(sorted(lines, key=(lambda l: l['doc_count']), reverse=True))
 
     for line in lines:
         # Doc count is present
@@ -484,7 +486,7 @@ def test_avg_product_price_by_product_type():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'product_type' in line
-        assert type(line['product_type']) == unicode
+        assert type(line['product_type']) == six.text_type
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
 
@@ -495,7 +497,7 @@ def test_avg_part_price_by_part():
     assert len(lines) == 10  # One for each part
 
     # Lines are sorted by doc_count
-    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+    assert lines == list(sorted(lines, key=(lambda l: l['doc_count']), reverse=True))
 
     for line in lines:
         # Doc count is present
@@ -503,7 +505,7 @@ def test_avg_part_price_by_part():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'part' in line
-        assert type(line['part']) == unicode
+        assert type(line['part']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -514,7 +516,7 @@ def test_avg_part_price_by_product():
     assert len(lines) == 10  # Product agg reached the default 10 limit
 
     # Lines are sorted by doc_count
-    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+    assert lines == list(sorted(lines, key=(lambda l: l['doc_count']), reverse=True))
 
     for line in lines:
         # Doc count is present
@@ -522,7 +524,7 @@ def test_avg_part_price_by_product():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'product' in line
-        assert type(line['product']) == unicode
+        assert type(line['product']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -538,9 +540,9 @@ def test_avg_part_price_by_product_by_part():
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
         assert 'product' in line
-        assert type(line['product']) == unicode
+        assert type(line['product']) == six.text_type
         assert 'part' in line
-        assert type(line['part']) == unicode
+        assert type(line['part']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -558,7 +560,7 @@ def test_avg_product_price_by_shop_by_product_type():
         assert 'shop' in line
         assert type(line['shop']) == int
         assert 'product_type' in line
-        assert type(line['product_type']) == unicode
+        assert type(line['product_type']) == six.text_type
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
 
@@ -579,9 +581,9 @@ def test_avg_part_price_by_product_and_by_part():
         assert ('product' in line and not 'part' in line)\
             or ('part' in line and 'product' not in line)
         if 'product' in line:
-            assert type(line['product']) == unicode
+            assert type(line['product']) == six.text_type
         elif 'part' in line:
-            assert type(line['part']) == unicode
+            assert type(line['part']) == six.text_type
 
     # 10 payment lines, sorted by doc_count
     product_lines = [l for l in lines if 'product' in l]

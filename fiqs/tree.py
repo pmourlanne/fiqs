@@ -63,7 +63,8 @@ class ResultTree(object):
     def __remove_nested_aggregations(self, node):
         _node = {}
 
-        for key, child_node in node.iteritems():
+        # We force an ordering to have a deterministic result
+        for key, child_node in sorted(node.items(), reverse=True):
             if isinstance(child_node, dict):
                 if self._is_nested_node(child_node):
                     _node.update(self._remove_nested_aggregations(child_node))
@@ -83,7 +84,7 @@ class ResultTree(object):
     def _create_line(self, base_line, node):
         new_line = base_line.copy()
 
-        for k, v in node.iteritems():
+        for k, v in node.items():
             if k in ['key', 'key_as_string']:
                 continue
             if k == 'doc_count':

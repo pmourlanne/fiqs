@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from six import with_metaclass
+
 from elasticsearch_dsl import Mapping, Nested
 
 from fiqs.fields import Field, NestedField
@@ -10,7 +12,7 @@ class ModelMetaClass(type):
         klass = super(ModelMetaClass, cls).__new__(cls, name, bases, attrs)
 
         fields = []
-        for k, v in attrs.iteritems():
+        for k, v in attrs.items():
             if isinstance(v, Field):
                 # We set the field's key
                 v._set_key(k)
@@ -23,9 +25,7 @@ class ModelMetaClass(type):
         return klass
 
 
-class Model(object):
-    __metaclass__ = ModelMetaClass
-
+class Model(with_metaclass(ModelMetaClass, object)):
     index = None
     doc_type = None
 
