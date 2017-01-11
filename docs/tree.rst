@@ -42,73 +42,75 @@ Here is a basic example with an aggregation and a metric::
             },
         },
     }))
-    [
-        {
-            "shop": 1,
-            "doc_count": 30,
-            "total_sales": 12345.0,
-        },
-        {
-            "shop": 2,
-            "doc_count": 20,
-            "total_sales": 23456.0,
-        },
-        {
-            "shop": 3,
-            "doc_count": 10,
-            "total_sales": 34567.0,
-        },
-    ]
+    # [
+    #     {
+    #         "shop": 1,
+    #         "doc_count": 30,
+    #         "total_sales": 12345.0,
+    #     },
+    #     {
+    #         "shop": 2,
+    #         "doc_count": 20,
+    #         "total_sales": 23456.0,
+    #     },
+    #     {
+    #         "shop": 3,
+    #         "doc_count": 10,
+    #         "total_sales": 34567.0,
+    #     },
+    # ]
 
 ``flatten_result`` can handle multiple aggregations on the same level, and nested aggregations. It can also handled nested fields::
 
     print(flatten_result({
         ...
-        "products": {
-            "doc_count": 1540,
-            "product_type": {
-                "buckets": [
-                    {
-                        "avg_product_price": {
-                            "value": 179.53889943074003,
+        "aggregations": {
+            "products": {
+                "doc_count": 1540,
+                "product_type": {
+                    "buckets": [
+                        {
+                            "avg_product_price": {
+                                "value": 179.53889943074003,
+                            },
+                            "doc_count": 527,
+                            "key": "product_type_3",
                         },
-                        "doc_count": 527,
-                        "key": "product_type_3",
-                    },
-                    {
-                        "avg_product_price": {
-                            "value": 159.18296529968455,
+                        {
+                            "avg_product_price": {
+                                "value": 159.18296529968455,
+                            },
+                            "doc_count": 317,
+                            "key": "product_type_2",
                         },
-                        "doc_count": 317,
-                        "key": "product_type_2",
-                    },
-                    {
-                        "avg_product_price": {
-                            "value": 152.76785714285714,
+                        {
+                            "avg_product_price": {
+                                "value": 152.76785714285714,
+                            },
+                            "doc_count": 280,
+                            "key": "product_type_1",
                         },
-                        "doc_count": 280,
-                        "key": "product_type_1",
-                    },
-                ],
-                "doc_count_error_upper_bound": 0,
-                "sum_other_doc_count": 0,
+                    ],
+                    "doc_count_error_upper_bound": 0,
+                    "sum_other_doc_count": 0,
+                },
             },
-        },
+        }
     }))
-    [
-        {
-            "avg_product_price": 179.53889943074003,
-            "product_type": "product_type_3",
-            "doc_count": 527,
-        },
-        {
-            "avg_product_price": 159.18296529968455,
-            "product_type": "product_type_2",
-            "doc_count": 317,
-        },
-        {
-            "avg_product_price": 152.76785714285714,
-            "product_type": "product_type_1",
-            "doc_count": 280,
-        },
-    ]
+    # [
+    #     {
+    #         "avg_product_price": 179.53889943074003,
+    #         "product_type": "product_type_3",
+    #         "doc_count": 527,
+    #     },
+    #     {
+    #         "avg_product_price": 159.18296529968455,
+    #         "product_type": "product_type_2",
+    #         "doc_count": 317,
+    #     },
+    #     {
+    #         "avg_product_price": 152.76785714285714,
+    #         "product_type": "product_type_1",
+    #         "doc_count": 280,
+    #     },
+    # ]
