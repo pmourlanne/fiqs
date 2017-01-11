@@ -1,5 +1,5 @@
-Flatten tree result
-===================
+Flatten result
+==============
 
 Consuming the results from an Elasticsearch query can be troublesome. fiqs exposes a ``flatten_result`` function that transforms an elasticsearch-dsl ``Result``, or a dictionary, into the list of its nodes. You will lose access to some data (``doc_count_error_upper_bound``, ``sum_other_doc_count``, the ``hits`` etc.) so beware.
 

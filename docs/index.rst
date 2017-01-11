@@ -37,3 +37,4 @@ Contents
    :maxdepth: 2
 
    tree
+   models

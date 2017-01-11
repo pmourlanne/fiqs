@@ -15,8 +15,5 @@ Publish on Pypi?
 - Test computed aggregations
 - Computed aggregations? Automatically add intermediate aggs
 - Check that metaclass doesn't create issues with children classes
-- Order by
+- Order by with Field
 - Fill missing buckets :o
-
-
-DOCSSSSSSSSSSSSSS
