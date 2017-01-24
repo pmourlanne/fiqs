@@ -66,6 +66,9 @@ class Aggregate(Metric):
     def choice_keys(self):
         return None
 
+    def get_casted_value(self, v):
+        return self.field.get_casted_value(v)
+
 
 class Avg(Aggregate): pass
 class Max(Aggregate): pass

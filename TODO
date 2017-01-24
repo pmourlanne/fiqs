@@ -1,8 +1,11 @@
+Change FQuery object internal API (rename metric? metric call should return self)
+Re-write test_elasticsearch to use FQuery?
+
 ########
 # Tree #
 ########
 
-- Test reverse nested aggregations
+- Test reverse nested aggregations (automatically add root field?)
 
 ##########
 # Fields #
@@ -15,3 +18,6 @@
 - Check that metaclass doesn't create issues with children classes
 - Order by with Field
 - Fill missing buckets :o
+- More cast results tests
+- Cast results of computed fields? (Ratio?)
+- Docs for casting of results

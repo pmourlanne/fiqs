@@ -6,6 +6,7 @@ from fiqs.query import FQuery
 
 from fiqs.testing.models import Sale
 from fiqs.testing.utils import get_search
+from fiqs.tests.conftest import load_output
 
 
 def test_one_metric():
@@ -324,3 +325,34 @@ def test_order_by_multiple_group_by():
 
 def test_order_by_count():
     pass
+
+
+def test_flatten_result_cast():
+    search = get_search()
+    fquery = FQuery(search)
+    metric = fquery.metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+    )
+
+    result = load_output('total_sales_by_shop')
+    # TODO: correct this :O
+    result['aggregations']['shop_id'] = result['aggregations'].pop('shop')
+    lines = fquery._flatten_result(metric, result)
+
+    assert len(lines) == 10  # One for each shop
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
+        # Total sales aggregation results were casted to int
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == int

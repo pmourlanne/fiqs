@@ -70,6 +70,9 @@ class Field(object):
             return None
         return getattr(self.model, self.parent)
 
+    def get_casted_value(self, v):
+        return v
+
 
 class TextField(Field):
     def __init__(self, **kwargs):
@@ -89,6 +92,9 @@ class DateField(Field):
 class IntegerField(Field):
     def __init__(self, **kwargs):
         super(IntegerField, self).__init__('integer', **kwargs)
+
+    def get_casted_value(self, v):
+        return int(v)
 
 
 class BooleanField(Field):

@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 
+from fiqs import flatten_result
 from fiqs.aggregations import Aggregate
 from fiqs.fields import NestedField, ReverseNestedField, Field
 
@@ -70,8 +71,8 @@ class QueryMetric(object):
 
         return self
 
-    def eval(self):
-        return self._query.evaluate_metric(self)
+    def eval(self, **kwargs):
+        return self._query.evaluate_metric(self, **kwargs)
 
     def add(self, name, expression):
         self._expressions[name] = expression
@@ -81,7 +82,14 @@ class QueryMetric(object):
         return calc_group_by_keys(self._group_by, nested)
 
 
-class Query(object):
+class FQuery(object):
+    def __init__(self, search, default_size=None):
+        self.search = search
+
+        if default_size == 0:
+            default_size = 2 ** 32 - 1
+        self.default_size = default_size
+
     def metric(self, *expressions, **named_expressions):
         # /!\ named_expressions may not be correctly ordered
         # It may break some Operation fields
@@ -95,18 +103,6 @@ class Query(object):
 
         return metric
 
-    def evaluate_metric(self, metric):
-        return NotImplemented
-
-
-class FQuery(Query):
-    def __init__(self, search, default_size=None):
-        self.search = search
-
-        if default_size == 0:
-            default_size = 2 ** 32 - 1
-        self.default_size = default_size
-
     def configure_search(self, metric):
         search = self.search
 
@@ -115,9 +111,36 @@ class FQuery(Query):
 
         return search
 
-    def evaluate_metric(self, metric):
+    def _flatten_result(self, metric, result):
+        lines = flatten_result(result)
+
+        key_to_field = {}
+        for key, exp in metric._expressions.items():
+            key_to_field[key] = exp
+        for field in metric._group_by:
+            key_to_field[field.storage_field] = field
+
+        pretty_lines = []
+        for line in lines:
+            pretty_line = line.copy()
+
+            for key, value in pretty_line.items():
+                if key in key_to_field:
+                    field = key_to_field[key]
+                    pretty_line[key] = field.get_casted_value(value)
+
+            pretty_lines.append(pretty_line)
+
+        return pretty_lines
+
+    def evaluate_metric(self, metric, flat=True, fill_missing_buckets=True):
         search = self.configure_search(metric)
-        return search.execute()
+        result = search.execute()
+
+        if flat:
+            return self._flatten_result(metric, result)
+        else:
+            return result
 
     def configure_aggregations(self, search, metric):
         current_agg = search.aggs
