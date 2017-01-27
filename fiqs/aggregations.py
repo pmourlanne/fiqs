@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import calendar
+
 from fiqs.exceptions import MissingParameterException
 
 
@@ -107,6 +109,32 @@ class Histogram(Aggregate):
 
 class DateHistogram(Histogram):
     ref = 'date_histogram'
+
+    def choice_keys(self):
+        if not hasattr(self, 'min') or not hasattr(self, 'max'):
+            return None
+
+        if self.interval != '1d':
+            # TODO: handle other cases
+            return None
+
+        # Day by day histograms start at the start of day in ES
+        start = self.min.replace(hour=0, minute=0, second=0)
+        end = self.max.replace(hour=0, minute=0, second=0)
+
+        # Some UTC magic
+        start = calendar.timegm(start.timetuple()) * 1000
+        end = calendar.timegm(end.timetuple()) * 1000
+
+        choice_keys = []
+        delta = 86400000  # 24 hours in ms
+        current = start
+
+        while current <= end:
+            choice_keys.append(current)
+            current += delta
+
+        return choice_keys
 
 
 class DateRange(Aggregate):

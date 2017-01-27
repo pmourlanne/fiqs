@@ -21,10 +21,16 @@ class Field(object):
         self.parent = parent
 
     def __repr__(self):
-        return '<{}: {}.{}>'.format(
-            self.__class__.__name__,
-            self.model.__name__,
-            self.key,
+        if hasattr(self, 'model'):
+            return '<{}: {}.{}>'.format(
+                self.__class__.__name__,
+                self.model.__name__,
+                self.key,
+            )
+
+        return '<{}: {}>'.format(
+                self.__class__.__name__,
+                self.key,
         )
 
     def _set_key(self, key):
@@ -64,6 +70,14 @@ class Field(object):
 
     def is_range(self):
         return 'ranges' in self.data
+
+    def choice_keys(self):
+        if self.choices:
+            return self.choices
+        if self.is_range():
+            return [r['key'] for r in self.data['ranges']]
+
+        raise NotImplementedError()
 
     def get_parent_field(self):
         if not self.parent:
