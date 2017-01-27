@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import copy
+from datetime import datetime
 
 
 class Field(object):
@@ -101,6 +102,10 @@ class KeywordField(Field):
 class DateField(Field):
     def __init__(self, **kwargs):
         super(DateField, self).__init__('date', **kwargs)
+
+    def get_casted_value(self, v):
+        # Careful, we lose the milliseconds here
+        return datetime.utcfromtimestamp(v / 1000)
 
 
 class IntegerField(Field):

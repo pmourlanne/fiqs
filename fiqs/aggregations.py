@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import calendar
+from datetime import timedelta
 
 from fiqs.exceptions import MissingParameterException
 
@@ -122,12 +123,8 @@ class DateHistogram(Histogram):
         start = self.min.replace(hour=0, minute=0, second=0)
         end = self.max.replace(hour=0, minute=0, second=0)
 
-        # Some UTC magic
-        start = calendar.timegm(start.timetuple()) * 1000
-        end = calendar.timegm(end.timetuple()) * 1000
-
         choice_keys = []
-        delta = 86400000  # 24 hours in ms
+        delta = timedelta(days=1)
         current = start
 
         while current <= end:

@@ -21,7 +21,6 @@ Re-write test_elasticsearch to use FQuery?
 - Order by with Field
 - More cast results tests
 - Cast results of computed fields? (Ratio?)
-- Cast datetime?
 - Docs for casting of results
 - Choice keys for date histogram (all intervals!)
 - Docs for filling missing buckets

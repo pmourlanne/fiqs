@@ -401,16 +401,20 @@ def test_flatten_result_cast_sum_to_int():
         assert type(line['total_sales']) == int
 
 
-def test_flatten_result_date_histogram():
+def test_flatten_result_cast_timestamp():
+    class Sale_(Model):
+        price = fields.IntegerField()
+        day = fields.DateField()
+
     start = datetime(2016, 1, 1)
     end = datetime(2016, 1, 31)
 
     fquery = FQuery(get_search())
     metric = fquery.metric(
-        total_sales=Sum(Sale.price),
+        total_sales=Sum(Sale_.price),
     ).group_by(
         DateHistogram(
-            Sale.timestamp,
+            Sale_.day,
             interval='1d',
             min=start,
             max=end,
@@ -421,6 +425,17 @@ def test_flatten_result_date_histogram():
     lines = fquery._flatten_result(metric, result)
 
     assert len(lines) == 31
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'day' in line
+        assert type(line['day']) == datetime
+        # Total sales aggregation results were casted to int
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == int
 
 ########################
 # Fill missing buckets #
