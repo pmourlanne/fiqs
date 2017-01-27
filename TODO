@@ -1,3 +1,4 @@
+release 0.2?
 jarvis? test coverage?
 
 Change FQuery object internal API (rename metric? metric call should return self)
@@ -13,6 +14,7 @@ Re-write test_elasticsearch to use FQuery?
 # Fields #
 ##########
 
+- Can a FQuery object only need a Model class? How to get a search object from there?
 - Tests and code for search filtering
 - Named group_by?
 - Test computed aggregations
@@ -21,6 +23,6 @@ Re-write test_elasticsearch to use FQuery?
 - Order by with Field
 - More cast results tests
 - Cast results of computed fields? (Ratio?)
-- Docs for casting of results
 - Choice keys for date histogram (all intervals!)
 - Docs for filling missing buckets
+- Should Histogram / DateHistogram and DateRange be aggregates?

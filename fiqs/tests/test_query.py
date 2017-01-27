@@ -5,7 +5,7 @@ from datetime import datetime
 
 from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram
-from fiqs.fields import DataExtendedField
+from fiqs.fields import DataExtendedField, FieldWithChoices
 from fiqs.models import Model
 from fiqs.query import FQuery
 
@@ -482,7 +482,7 @@ def test_fill_missing_buckets_custom_choices():
     metric = fquery.metric(
         total_sales=Sum(Sale.price),
     ).group_by(
-        DataExtendedField(Sale.shop_id, custom_choices=range(1, 11)),
+        FieldWithChoices(Sale.shop_id, choices=range(1, 11)),
     )
 
     result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
