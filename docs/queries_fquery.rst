@@ -159,7 +159,7 @@ Form of the result
 
 FQuery will automatically flatten the result returned by Elasticsearch, as detailed :doc:`here <tree>`. It will also cast the value, depending on your model's fields.
 
-Each field may implement a `get_casted_value` method. FQuery will use this method to cast values returned by Elasticsearch. For example::
+Each field may implement a ``get_casted_value`` method. FQuery will use this method to cast values returned by Elasticsearch. For example::
 
     class IntegerField(Field):
         def __init__(self, **kwargs):
@@ -176,4 +176,149 @@ As of today, only two fields implement this method:
 Filling missing buckets
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+By default, FQuery will try to add buckets missing from the Elasticsearch result. FQuery uses several heuristics to determine which buckets are missing, as we will see below. FQuery will fill the group_by values with the missing keys, and the metric values with ``None``.
 
+* If a field in the group_by defines the ``choices`` attribute, FQuery will expect all the choices' keys to be present as keys in the Elasticsearch buckets::
+
+    # Our model
+    class Sale(Model):
+        shop_id = fields.IntegerField(choices=(1, 2, 3, ))
+        price = fields.IntegerField()
+
+    # Our query
+    results = FQuery(search).metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+    ).eval()
+
+    # Elasticsearch result, notice there is no bucket with shop_id 1
+    # {
+    #     [...],
+    #     "aggregations": {
+    #         "shop": {
+    #             "buckets": [
+    #                 {
+    #                     "doc_count": 20,
+    #                     "key": 2,
+    #                     "total_sales": {
+    #                         "value": 123,
+    #                     },
+    #                 },
+    #                 {
+    #                     "doc_count": 10,
+    #                     "key": 3,
+    #                     "total_sales": {
+    #                         "value": 456,
+    #                     },
+    #                 },
+    #             ],
+    #             [...],
+    #         },
+    #     },
+    # }
+
+    # FQuery result, with the empty line added
+    # [
+    #     {
+    #         'shop_id': 2,
+    #         'doc_count': 20,
+    #         'total_sales': 123,
+    #     },
+    #     {
+    #         'shop_id': 3,
+    #         'doc_count': 10,
+    #         'total_sales': 456,
+    #     },
+    #     {
+    #         'shop_id': 1,
+    #         'doc_count': 0,
+    #         'total_sales': None,
+    #     },
+    # ]
+
+
+* If an aggregate in the group_by returns a value when calling ``choice_keys``, FQuery will expect all the keys to be present in the Elasticsearch buckets. Only available with daily DateHistogram for the time being.
+
+* Finally, FQuery will look at all the values each key takes in the result buckets, and will expect all keys to be present in all buckets::
+
+    # Our model
+    class Sale(Model):
+        shop_id = fields.IntegerField()
+        price = fields.IntegerField()
+        payment_type = fields.KeywordField(choices=('wire_transfer', 'cash', ))
+
+    # Our query
+    results = FQuery(search).metric(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.payment_type,
+        Sale.shop_id,
+    ).eval()
+
+    # Elasticsearch result
+    # {
+    #     [...],
+    #     "aggregations": {
+    #         "payment_type": {
+    #             "buckets": [
+    #                 {
+    #                     "key": "wire_transfer",
+    #                     "shop_id": {
+    #                         "buckets": [
+    #                             {
+    #                                 doc_count: 10,
+    #                                 "key": 1,
+    #                                 "total_sales": {
+    #                                     "value": 123,
+    #                                 },
+    #                             },
+    #                         ],
+    #                     },
+    #                 },
+    #                 {
+    #                     "key": "cash",
+    #                     "shop_id": {
+    #                         "buckets": [
+    #                             {
+    #                                 doc_count: 20,
+    #                                 "key": 2,
+    #                                 "total_sales": {
+    #                                     "value": 456,
+    #                                 },
+    #                             },
+    #                         ],
+    #                     },
+    #                 },
+    #             ],
+    #         },
+    #     },
+    # }
+
+    # FQuery result, with two empty lines added
+    # [
+    #     {
+    #         'shop_id': 1,
+    #         'doc_count': 10,
+    #         'total_sales': 123,
+    #         'payment_type': 'wire_transfer',
+    #     },
+    #     {
+    #         'shop_id': 2,
+    #         'doc_count': 0,
+    #         'total_sales': None,
+    #         'payment_type': 'wire_transfer',
+    #     },
+    #     {
+    #         'shop_id': 2,
+    #         'doc_count': 20,
+    #         'total_sales': 456,
+    #         'payment_type': 'cash',
+    #     },
+    #     {
+    #         'shop_id': 1,
+    #         'doc_count': 0,
+    #         'total_sales': None,
+    #         'payment_type': 'cash',
+    #     },
+    # ]

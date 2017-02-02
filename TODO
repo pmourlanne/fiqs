@@ -24,5 +24,4 @@ Re-write test_elasticsearch to use FQuery?
 - More cast results tests
 - Cast results of computed fields? (Ratio?)
 - Choice keys for date histogram (all intervals!)
-- Docs for filling missing buckets
 - Should Histogram / DateHistogram and DateRange be aggregates?
