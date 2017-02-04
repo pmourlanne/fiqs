@@ -221,6 +221,7 @@ def test_two_nested_aggregations_one_metric():
 
 
 def test_nested_parent_automatically_added():
+    """Need to add one parent for each group_by key"""
     search = get_search()
     search.aggs.bucket(
         'products', 'nested', path='products',
@@ -246,8 +247,8 @@ def test_nested_parent_automatically_added():
     assert search.to_dict() == fsearch.to_dict()
 
 
-@pytest.mark.xfail
 def test_nested_parent_automatically_added_2():
+    """Need to add multiple parents for one group_by key"""
     search = get_search()
     search.aggs.bucket(
         'products', 'nested', path='products',
@@ -264,6 +265,31 @@ def test_nested_parent_automatically_added_2():
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
         Sale.part_id,
+    )
+    fsearch = fquery.configure_search(metric)
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_nested_parent_automatically_added_3():
+    """Should this work differently? Can it?"""
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+
+    fquery = FQuery(get_search())
+    metric = fquery.metric(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        Sale.product_id,
+        Sale.parts,  # Can we get rid of this?
     )
     fsearch = fquery.configure_search(metric)
 

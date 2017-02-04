@@ -31,9 +31,6 @@ def test_write_nested_search_output(elasticsearch):
         FQuery(get_search()).metric(
             avg_part_price=Avg(Sale.part_price),
         ).group_by(
-            # TODO: this group_by should only need Sale.part_id
-            Sale.products,
-            Sale.parts,
             Sale.part_id,
         ),
         'avg_part_price_by_part',
@@ -44,7 +41,6 @@ def test_write_nested_search_output(elasticsearch):
         FQuery(get_search()).metric(
             avg_part_price=Avg(Sale.part_price),
         ).group_by(
-            # TODO: this group_by should only need Sale.product_id
             Sale.product_id,
             Sale.parts,
         ),
