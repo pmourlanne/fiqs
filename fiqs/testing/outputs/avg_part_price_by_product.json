@@ -7,12 +7,12 @@
     "aggregations": {
         "products": {
             "doc_count": 1540, 
-            "product": {
+            "product_id": {
                 "buckets": [
                     {
                         "doc_count": 38, 
                         "key": "product_JQ0JVW20PV", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 17.038277511961724
                             }, 
@@ -22,7 +22,7 @@
                     {
                         "doc_count": 37, 
                         "key": "product_F51D18LESM", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 27.30952380952381
                             }, 
@@ -32,7 +32,7 @@
                     {
                         "doc_count": 35, 
                         "key": "product_C2VSKFVRML", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 20.20952380952381
                             }, 
@@ -42,7 +42,7 @@
                     {
                         "doc_count": 31, 
                         "key": "product_C3V01IF66F", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 19.180124223602483
                             }, 
@@ -52,7 +52,7 @@
                     {
                         "doc_count": 30, 
                         "key": "product_AFB0IM8VQG", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 22.99462365591398
                             }, 
@@ -62,7 +62,7 @@
                     {
                         "doc_count": 30, 
                         "key": "product_X68S5JGOBU", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 27.17058823529412
                             }, 
@@ -72,7 +72,7 @@
                     {
                         "doc_count": 29, 
                         "key": "product_ WMDQUD90O", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 19.179856115107913
                             }, 
@@ -82,7 +82,7 @@
                     {
                         "doc_count": 28, 
                         "key": "product_134XH7WPJ ", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 15.967532467532468
                             }, 
@@ -92,7 +92,7 @@
                     {
                         "doc_count": 28, 
                         "key": "product_2P6A21H1K7", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 14.571428571428571
                             }, 
@@ -102,7 +102,7 @@
                     {
                         "doc_count": 28, 
                         "key": "product_HQK70 XP9J", 
-                        "paths": {
+                        "parts": {
                             "avg_part_price": {
                                 "value": 17.259036144578314
                             }, 

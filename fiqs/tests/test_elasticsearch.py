@@ -14,81 +14,73 @@ def test_count(elasticsearch):
     assert get_search().count() == 500
 
 
-
 @pytest.mark.docker
 def test_write_nested_search_output(elasticsearch):
     # Average product price by product type
-    search = get_search()
-    search.aggs.bucket(
-        'products', 'nested', path='products',
-    ).bucket(
-        'product_type', 'terms', field='products.product_type',
-    ).metric(
-        'avg_product_price', 'avg', field='products.product_price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            avg_product_price=Avg(Sale.product_price),
+        ).group_by(
+            Sale.product_type,
+        ),
+        'avg_product_price_by_product_type',
     )
-    write_output(search, 'avg_product_price_by_product_type')
 
     # Average part price by part
-    search = get_search()
-    search.aggs.bucket(
-        'products', 'nested', path='products',
-    ).bucket(
-        'parts', 'nested', path='products.parts',
-    ).bucket(
-        'part', 'terms', field='products.parts.part_id',
-    ).metric(
-        'avg_part_price', 'avg', field='products.parts.part_price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            avg_part_price=Avg(Sale.part_price),
+        ).group_by(
+            # TODO: this group_by should only need Sale.part_id
+            Sale.products,
+            Sale.parts,
+            Sale.part_id,
+        ),
+        'avg_part_price_by_part',
     )
-    write_output(search, 'avg_part_price_by_part')
 
     # Average part price by product
-    search = get_search()
-    search.aggs.bucket(
-        'products', 'nested', path='products',
-    ).bucket(
-        'product', 'terms', field='products.product_id',
-    ).bucket(
-        'paths', 'nested', path='products.parts',
-    ).metric(
-        'avg_part_price', 'avg', field='products.parts.part_price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            avg_part_price=Avg(Sale.part_price),
+        ).group_by(
+            # TODO: this group_by should only need Sale.product_id
+            Sale.product_id,
+            Sale.parts,
+        ),
+        'avg_part_price_by_product',
     )
-    write_output(search, 'avg_part_price_by_product')
 
     # Average part price by product by part
-    search = get_search()
-    search.aggs.bucket(
-        'products', 'nested', path='products',
-    ).bucket(
-        'product', 'terms', field='products.product_id',
-    ).bucket(
-        'parts', 'nested', path='products.parts',
-    ).bucket(
-        'part', 'terms', field='products.parts.part_id',
-    ).metric(
-        'avg_part_price', 'avg', field='products.parts.part_price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            avg_part_price=Avg(Sale.part_price),
+        ).group_by(
+            Sale.product_id,
+            Sale.part_id,
+        ),
+        'avg_part_price_by_product_by_part',
     )
-    write_output(search, 'avg_part_price_by_product_by_part')
 
     # Average product price by shop by product
-    search = get_search()
-    search.aggs.bucket(
-        'shop', 'terms', field='shop_id',
-    ).bucket(
-        'products', 'nested', path='products',
-    ).bucket(
-        'product_type', 'terms', field='products.product_type',
-    ).metric(
-        'avg_product_price', 'avg', field='products.product_price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            avg_product_price=Avg(Sale.product_price),
+        ).group_by(
+            Sale.shop_id,
+            Sale.product_type,
+        ),
+        'avg_product_price_by_shop_by_product_type',
     )
-    write_output(search, 'avg_product_price_by_shop_by_product_type')
 
     # Average part price by product and by part
+    # This type of query is not possible with FQuery
     search = get_search()
     products_bucket = search.aggs.bucket(
         'products', 'nested', path='products',
     )
     products_bucket.bucket(
-        'product', 'terms', field='products.product_id',
+        'product_id', 'terms', field='products.product_id',
     ).bucket(
         'parts', 'nested', path='products.parts',
     ).metric(
@@ -97,7 +89,7 @@ def test_write_nested_search_output(elasticsearch):
     products_bucket.bucket(
         'parts', 'nested', path='products.parts',
     ).bucket(
-        'part', 'terms', field='products.parts.part_id',
+        'part_id', 'terms', field='products.parts.part_id',
     ).metric(
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
@@ -105,7 +97,7 @@ def test_write_nested_search_output(elasticsearch):
 
 
 @pytest.mark.docker
-def test_write_search_outputs_1(elasticsearch):
+def test_write_search_outputs(elasticsearch):
     # Nothing :o
     write_output(get_search(), 'no_aggregate_no_metric')
 
@@ -204,12 +196,12 @@ def test_write_search_outputs_1(elasticsearch):
     # This type of query is not possible with FQuery
     search = get_search()
     search.aggs.bucket(
-        'shop', 'terms', field='shop_id',
+        'shop_id', 'terms', field='shop_id',
     ).metric(
         'total_sales', 'sum', field='price',
     )
     search.aggs.bucket(
-        'payment', 'terms', field='payment_type',
+        'payment_type', 'terms', field='payment_type',
     ).metric(
         'total_sales', 'sum', field='price',
     )

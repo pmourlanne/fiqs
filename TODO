@@ -2,7 +2,6 @@ release 0.2?
 jarvis? test coverage?
 
 Change FQuery object internal API (rename metric? metric call should return self)
-Re-write test_elasticsearch to use FQuery?
 
 Sample application with front-end?
 
@@ -27,3 +26,5 @@ Sample application with front-end?
 - Cast results of computed fields? (Ratio?)
 - Choice keys for date histogram (all intervals!)
 - Should Histogram / DateHistogram and DateRange be aggregates?
+
+- Fix issue with nested field (see TODO tests and xfail)

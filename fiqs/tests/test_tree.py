@@ -175,20 +175,20 @@ def test_total_sales_by_shop_and_by_payment():
         assert 'total_sales' in line
         assert type(line['total_sales']) == float
         # Either shop aggregation or payment type aggregation is present
-        assert ('shop' in line and 'payment' not in line)\
-            or ('payment' in line and 'shop' not in line)
-        if 'shop' in line:
-            assert type(line['shop']) == int
-        elif 'payment' in line:
-            assert type(line['payment']) == six.text_type
+        assert ('shop_id' in line and 'payment_type' not in line)\
+            or ('payment_type' in line and 'shop_id' not in line)
+        if 'shop_id' in line:
+            assert type(line['shop_id']) == int
+        elif 'payment_type' in line:
+            assert type(line['payment_type']) == six.text_type
 
     # There are 3 payment lines, sorted by doc_count
-    payment_lines = [l for l in lines if 'payment' in l]
+    payment_lines = [l for l in lines if 'payment_type' in l]
     assert len(payment_lines) == 3
     assert sorted(payment_lines, key=lambda l: l['doc_count'], reverse=True) == payment_lines
 
     # There are 10 shop lines, sorted by doc_count
-    shop_lines = [l for l in lines if 'shop' in l]
+    shop_lines = [l for l in lines if 'shop_id' in l]
     assert len(shop_lines) == 10
     assert sorted(shop_lines, key=lambda l: l['doc_count'], reverse=True) == shop_lines
 
@@ -503,8 +503,8 @@ def test_avg_part_price_by_part():
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
-        assert 'part' in line
-        assert type(line['part']) == six.text_type
+        assert 'part_id' in line
+        assert type(line['part_id']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -522,8 +522,8 @@ def test_avg_part_price_by_product():
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
-        assert 'product' in line
-        assert type(line['product']) == six.text_type
+        assert 'product_id' in line
+        assert type(line['product_id']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -538,10 +538,10 @@ def test_avg_part_price_by_product_by_part():
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
-        assert 'product' in line
-        assert type(line['product']) == six.text_type
-        assert 'part' in line
-        assert type(line['part']) == six.text_type
+        assert 'product_id' in line
+        assert type(line['product_id']) == six.text_type
+        assert 'part_id' in line
+        assert type(line['part_id']) == six.text_type
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -556,8 +556,8 @@ def test_avg_product_price_by_shop_by_product_type():
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
-        assert 'shop' in line
-        assert type(line['shop']) == int
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
         assert 'product_type' in line
         assert type(line['product_type']) == six.text_type
         assert 'avg_product_price' in line
@@ -577,18 +577,18 @@ def test_avg_part_price_by_product_and_by_part():
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
         # Either product aggregation or part aggregation is present
-        assert ('product' in line and not 'part' in line)\
-            or ('part' in line and 'product' not in line)
-        if 'product' in line:
-            assert type(line['product']) == six.text_type
-        elif 'part' in line:
-            assert type(line['part']) == six.text_type
+        assert ('product_id' in line and not 'part_id' in line)\
+            or ('part_id' in line and 'product_id' not in line)
+        if 'product_id' in line:
+            assert type(line['product_id']) == six.text_type
+        elif 'part_id' in line:
+            assert type(line['part_id']) == six.text_type
 
     # 10 payment lines, sorted by doc_count
-    product_lines = [l for l in lines if 'product' in l]
+    product_lines = [l for l in lines if 'product_id' in l]
     assert len(product_lines) == 10
     assert sorted(product_lines, key=lambda l: l['doc_count'], reverse=True) == product_lines
     # 10 part lines, sorted by doc_count
-    part_lines = [l for l in lines if 'part' in l]
+    part_lines = [l for l in lines if 'part_id' in l]
     assert len(part_lines) == 10
     assert sorted(part_lines, key=lambda l: l['doc_count'], reverse=True) == part_lines

@@ -122,15 +122,10 @@ def write_fquery_output(metric, name):
         json.dump(result._d_, f, indent=4, ensure_ascii=False, encoding='utf-8', sort_keys=True)
 
 
-def load_output(name, agg_names=None):
+def load_output(name):
     path = os.path.join(BASE_PATH, '{}.json'.format(name))
 
     with open(path, 'r') as f:
         output = json.load(f)
-
-    agg_names = agg_names or {}
-    for key, pretty_key in agg_names.items():
-        if key in output['aggregations']:
-            output['aggregations'][pretty_key] = output['aggregations'].pop(key)
 
     return output

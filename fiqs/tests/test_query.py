@@ -3,10 +3,11 @@
 from collections import Counter
 from datetime import datetime
 
+import pytest
+
 from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram
 from fiqs.fields import DataExtendedField, FieldWithChoices
-from fiqs.models import Model
 from fiqs.query import FQuery
 
 from fiqs.testing.models import Sale
@@ -244,12 +245,24 @@ def test_nested_parent_automatically_added():
 
     assert search.to_dict() == fsearch.to_dict()
 
+
+@pytest.mark.xfail
+def test_nested_parent_automatically_added_2():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part_id', 'terms', field='products.parts.part_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+
     fquery = FQuery(get_search())
     metric = fquery.metric(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
-        Sale.products,
-        Sale.product_id,
         Sale.part_id,
     )
     fsearch = fquery.configure_search(metric)
@@ -381,7 +394,7 @@ def test_flatten_result_cast_sum_to_int():
         Sale.shop_id,
     )
 
-    result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
+    result = load_output('total_sales_by_shop')
     lines = fquery._flatten_result(metric, result)
 
     assert len(lines) == 10  # One for each shop
@@ -441,7 +454,7 @@ def test_fill_missing_buckets_nothing_to_do():
         Sale.shop_id,
     )
 
-    result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
+    result = load_output('total_sales_by_shop')
     lines = fquery._flatten_result(metric, result)
     assert lines == fquery._add_missing_lines(metric, result, lines)
 
@@ -455,7 +468,7 @@ def test_fill_missing_buckets_cannot_do_anything():
         Sale.shop_id,
     )
 
-    result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
+    result = load_output('total_sales_by_shop')
     result['aggregations']['shop_id']['buckets'] = [
         bucket for bucket in result['aggregations']['shop_id']['buckets']
         if bucket['key'] != 1
@@ -476,7 +489,7 @@ def test_fill_missing_buckets_custom_choices():
         FieldWithChoices(Sale.shop_id, choices=range(1, 11)),
     )
 
-    result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
+    result = load_output('total_sales_by_shop')
     result['aggregations']['shop_id']['buckets'] = [
         bucket for bucket in result['aggregations']['shop_id']['buckets']
         if bucket['key'] != 1
@@ -510,7 +523,7 @@ def test_fill_missing_buckets_field_choices():
         SaleWithChoices.shop_id,
     )
 
-    result = load_output('total_sales_by_shop', {'shop': 'shop_id'})
+    result = load_output('total_sales_by_shop')
     result['aggregations']['shop_id']['buckets'] = [
         bucket for bucket in result['aggregations']['shop_id']['buckets']
         if bucket['key'] != 1

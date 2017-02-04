@@ -9,7 +9,7 @@
             "doc_count": 1540, 
             "parts": {
                 "doc_count": 8497, 
-                "part": {
+                "part_id": {
                     "buckets": [
                         {
                             "avg_part_price": {
@@ -86,7 +86,7 @@
                     "sum_other_doc_count": 0
                 }
             }, 
-            "product": {
+            "product_id": {
                 "buckets": [
                     {
                         "doc_count": 38, 

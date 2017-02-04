@@ -9,7 +9,7 @@
             "doc_count": 1540, 
             "parts": {
                 "doc_count": 8497, 
-                "part": {
+                "part_id": {
                     "buckets": [
                         {
                             "avg_part_price": {
