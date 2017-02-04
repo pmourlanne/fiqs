@@ -111,6 +111,17 @@ def write_output(search, name):
         json.dump(result._d_, f, indent=4, ensure_ascii=False, encoding='utf-8', sort_keys=True)
 
 
+def write_fquery_output(metric, name):
+    result = metric.eval(flat=False)
+
+    path = os.path.join(BASE_PATH, '{}.json'.format(name))
+    with open(path, 'w') as f:
+        d = result._d_
+        d.pop('took', None)  # Not used and may change between calls
+
+        json.dump(result._d_, f, indent=4, ensure_ascii=False, encoding='utf-8', sort_keys=True)
+
+
 def load_output(name, agg_names=None):
     path = os.path.join(BASE_PATH, '{}.json'.format(name))
 

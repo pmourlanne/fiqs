@@ -5,12 +5,12 @@
         "total": 5
     }, 
     "aggregations": {
-        "payment": {
+        "payment_type": {
             "buckets": [
                 {
                     "doc_count": 172, 
                     "key": "wire_transfer", 
-                    "shop": {
+                    "shop_id": {
                         "buckets": [
                             {
                                 "doc_count": 23, 
@@ -90,7 +90,7 @@
                 {
                     "doc_count": 170, 
                     "key": "store_credit", 
-                    "shop": {
+                    "shop_id": {
                         "buckets": [
                             {
                                 "doc_count": 21, 
@@ -170,7 +170,7 @@
                 {
                     "doc_count": 158, 
                     "key": "cash", 
-                    "shop": {
+                    "shop_id": {
                         "buckets": [
                             {
                                 "doc_count": 23, 

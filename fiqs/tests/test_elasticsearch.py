@@ -2,13 +2,17 @@
 
 import pytest
 
+from fiqs.aggregations import Avg, Sum, DateHistogram
+from fiqs.query import FQuery
+from fiqs.testing.models import Sale
 from fiqs.testing.utils import get_search
-from fiqs.tests.conftest import write_output
+from fiqs.tests.conftest import write_output, write_fquery_output
 
 
 @pytest.mark.docker
 def test_count(elasticsearch):
     assert get_search().count() == 500
+
 
 
 @pytest.mark.docker
@@ -101,91 +105,103 @@ def test_write_nested_search_output(elasticsearch):
 
 
 @pytest.mark.docker
-def test_write_search_outputs(elasticsearch):
+def test_write_search_outputs_1(elasticsearch):
     # Nothing :o
     write_output(get_search(), 'no_aggregate_no_metric')
 
     # Total sales by shop
-    search = get_search()
-    search.aggs.bucket(
-        'shop', 'terms', field='shop_id',
-    ).metric(
-        'total_sales', 'sum', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Sale.shop_id,
+        ),
+        'total_sales_by_shop',
     )
-    write_output(search, 'total_sales_by_shop')
 
     # Total sales by payment type
-    search = get_search()
-    search.aggs.bucket(
-        'payment', 'terms', field='payment_type',
-    ).metric(
-        'total_sales', 'sum', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Sale.payment_type,
+        ),
+        'total_sales_by_payment_type',
     )
-    write_output(search, 'total_sales_by_payment_type')
 
     # Total sales by shop by payment type
-    search = get_search()
-    search.aggs.bucket(
-        'payment', 'terms', field='payment_type',
-    ).bucket(
-        'shop', 'terms', field='shop_id',
-    ).metric(
-        'total_sales', 'sum', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Sale.payment_type,
+            Sale.shop_id,
+        ),
+        'total_sales_by_payment_type_by_shop',
     )
-    write_output(search, 'total_sales_by_payment_type_by_shop')
 
     # Total sales day by day
-    search = get_search()
-    search.aggs.bucket(
-        'day', 'date_histogram', field='timestamp', interval='1d',
-    ).metric(
-        'total_sales', 'sum', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            DateHistogram(
+                Sale.timestamp,
+                interval='1d',
+            ),
+        ),
+        'total_sales_day_by_day',
     )
-    write_output(search, 'total_sales_day_by_day')
 
     # Number of sales by shop
-    search = get_search()
-    search.aggs.bucket(
-        'shop', 'terms', field='shop_id',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            # Count(Sale.id),
+        ).group_by(
+            Sale.shop_id,
+        ),
+        'nb_sales_by_shop',
     )
-    write_output(search, 'nb_sales_by_shop')
 
     # Total sales day by day, by shop and by payment type
+    # This type of query is not possible with FQuery
     search = get_search()
     agg = search.aggs.bucket(
-        'day', 'date_histogram', field='timestamp', interval='1d',
+        'timestamp', 'date_histogram', field='timestamp', interval='1d',
     )
     agg.bucket(
-        'shop', 'terms', field='shop_id',
+        'shop_id', 'terms', field='shop_id',
     ).metric(
         'total_sales', 'sum', field='price',
     )
     agg.bucket(
-        'payment', 'terms', field='payment_type',
+        'payment_type', 'terms', field='payment_type',
     ).metric(
         'total_sales', 'sum', field='price',
     )
     write_output(search, 'total_sales_day_by_day_by_shop_and_by_payment')
 
     # Total sales and average sales by shop
-    search = get_search()
-    search.aggs.bucket(
-        'shop', 'terms', field='shop_id',
-    ).metric(
-        'total_sales', 'sum', field='price',
-    ).metric(
-        'avg_sales', 'avg', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+            avg_sales=Avg(Sale.price),
+        ).group_by(
+            Sale.shop_id,
+        ),
+        'total_and_avg_sales_by_shop',
     )
-    write_output(search, 'total_and_avg_sales_by_shop')
 
     # Total sales, no aggregations
-    search = get_search()
-    search.aggs.metric(
-        'total_sales', 'sum', field='price',
+    write_fquery_output(
+        FQuery(get_search()).metric(
+            total_sales=Sum(Sale.price),
+        ),
+        'total_sales',
     )
-    write_output(search, 'total_sales')
 
     # Total sales by shop and by payment type
+    # This type of query is not possible with FQuery
     search = get_search()
     search.aggs.bucket(
         'shop', 'terms', field='shop_id',

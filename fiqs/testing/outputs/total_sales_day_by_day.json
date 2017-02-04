@@ -5,7 +5,7 @@
         "total": 5
     }, 
     "aggregations": {
-        "day": {
+        "timestamp": {
             "buckets": [
                 {
                     "doc_count": 2, 

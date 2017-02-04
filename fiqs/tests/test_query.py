@@ -402,22 +402,13 @@ def test_flatten_result_cast_sum_to_int():
 
 
 def test_flatten_result_cast_timestamp():
-    class Sale_(Model):
-        price = fields.IntegerField()
-        day = fields.DateField()
-
-    start = datetime(2016, 1, 1)
-    end = datetime(2016, 1, 31)
-
     fquery = FQuery(get_search())
     metric = fquery.metric(
-        total_sales=Sum(Sale_.price),
+        total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
-            Sale_.day,
+            Sale.timestamp,
             interval='1d',
-            min=start,
-            max=end,
         ),
     )
 
@@ -431,8 +422,8 @@ def test_flatten_result_cast_timestamp():
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
-        assert 'day' in line
-        assert type(line['day']) == datetime
+        assert 'timestamp' in line
+        assert type(line['timestamp']) == datetime
         # Total sales aggregation results were casted to int
         assert 'total_sales' in line
         assert type(line['total_sales']) == int
@@ -590,17 +581,13 @@ def test_fill_missing_buckets_values_in_other_agg():
 
 
 def test_fill_missing_buckets_range_nothing_to_do():
-    class Sale_(Model):
-        price = fields.IntegerField()
-        day = fields.DateField()
-
     search = get_search()
     fquery = FQuery(search)
     metric = fquery.metric(
-        total_sales=Sum(Sale_.price),
+        total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
-            Sale_.day,
+            Sale.timestamp,
             interval='1d',
             min=datetime(2016, 1, 1),
             max=datetime(2016, 1, 31),
@@ -616,17 +603,13 @@ def test_fill_missing_buckets_range_nothing_to_do():
 
 
 def test_fill_missing_buckets_range():
-    class Sale_(Model):
-        price = fields.IntegerField()
-        day = fields.DateField()
-
     search = get_search()
     fquery = FQuery(search)
     metric = fquery.metric(
-        total_sales=Sum(Sale_.price),
+        total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
-            Sale_.day,
+            Sale.timestamp,
             interval='1d',
             min=datetime(2015, 12, 1),
             max=datetime(2016, 1, 31),

@@ -4,6 +4,8 @@ jarvis? test coverage?
 Change FQuery object internal API (rename metric? metric call should return self)
 Re-write test_elasticsearch to use FQuery?
 
+Sample application with front-end?
+
 ########
 # Tree #
 ########

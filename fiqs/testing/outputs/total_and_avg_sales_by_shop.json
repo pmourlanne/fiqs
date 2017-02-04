@@ -5,7 +5,7 @@
         "total": 5
     }, 
     "aggregations": {
-        "shop": {
+        "shop_id": {
             "buckets": [
                 {
                     "avg_sales": {

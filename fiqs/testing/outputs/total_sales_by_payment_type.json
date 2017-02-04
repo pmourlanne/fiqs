@@ -5,7 +5,7 @@
         "total": 5
     }, 
     "aggregations": {
-        "payment": {
+        "payment_type": {
             "buckets": [
                 {
                     "doc_count": 172, 

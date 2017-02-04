@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import calendar
 from datetime import timedelta
 
 from fiqs.exceptions import MissingParameterException
