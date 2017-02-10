@@ -1,7 +1,13 @@
-test:
+tests-python2:
+  script:
+    - apt-get update -qy
+    - apt-get install -y python-dev python-pip python-setuptools
+    - pip install --upgrade setuptools
+    - python2 setup.py test
+
+tests-python3:
   script:
     - apt-get update -qy
     - apt-get install -y python-dev python-pip python-setuptools
     - pip install --upgrade setuptools
     - python setup.py test
-    - python3 setup.py test
