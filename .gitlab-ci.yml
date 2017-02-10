@@ -2,4 +2,5 @@ test:
   script:
     - apt-get update -qy
     - apt-get install -y python-dev python-pip python-setuptools
+    - pip install --upgrade setuptools
     - python setup.py test
