@@ -4,3 +4,4 @@ test:
     - apt-get install -y python-dev python-pip python-setuptools
     - pip install --upgrade setuptools
     - python setup.py test
+    - python3 setup.py test
