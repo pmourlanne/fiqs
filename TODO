@@ -1,5 +1,3 @@
-travis? test coverage?
-
 Change FQuery object internal API (rename metric? metric call should return self)
 
 Sample application with front-end?
