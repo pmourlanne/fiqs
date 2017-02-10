@@ -16,10 +16,8 @@ def run_all(argv=None):
     else:
         argv = argv[1:]
 
-    sys.exit(pytest.main(argv))
+    sys.exit(pytest.main(['fiqs'] + argv))
 
 
 if __name__ == '__main__':
     run_all(sys.argv)
-
-
