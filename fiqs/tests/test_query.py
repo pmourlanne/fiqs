@@ -3,8 +3,6 @@
 from collections import Counter
 from datetime import datetime
 
-import pytest
-
 from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram
 from fiqs.fields import DataExtendedField, FieldWithChoices
@@ -523,11 +521,11 @@ def test_fill_missing_buckets_custom_choices():
 
     lines = fquery._flatten_result(metric, result)
     assert len(lines) == 9
-    assert sorted([line['shop_id'] for line in lines]) == range(2, 11)
+    assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
 
     lines == fquery._add_missing_lines(metric, result, lines)
     assert len(lines) == 10
-    assert sorted([line['shop_id'] for line in lines]) == range(1, 11)
+    assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
 
     added_line = [line for line in lines if line['shop_id'] == 1][0]
     assert added_line == {
@@ -557,11 +555,11 @@ def test_fill_missing_buckets_field_choices():
 
     lines = fquery._flatten_result(metric, result)
     assert len(lines) == 9
-    assert sorted([line['shop_id'] for line in lines]) == range(2, 11)
+    assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
 
     lines == fquery._add_missing_lines(metric, result, lines)
     assert len(lines) == 10
-    assert sorted([line['shop_id'] for line in lines]) == range(1, 11)
+    assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
 
     added_line = [line for line in lines if line['shop_id'] == 1][0]
     assert added_line == {

@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from itertools import product
+from six import text_type as unicode
 
 from fiqs import flatten_result
 from fiqs.aggregations import Aggregate
