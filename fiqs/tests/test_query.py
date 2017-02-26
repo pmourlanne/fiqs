@@ -3,10 +3,8 @@
 from collections import Counter
 from datetime import datetime
 
-import pytest
-
 from fiqs import fields
-from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio
+from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio, Subtraction
 from fiqs.fields import DataExtendedField, FieldWithChoices
 from fiqs.query import FQuery
 
@@ -527,7 +525,6 @@ def test_computed_field():
     assert str(computed_field) in line
 
 
-@pytest.mark.xfail
 def test_multiple_computed_fields():
     addition = Addition(
         Sum(TrafficCount.incoming_traffic),
@@ -557,6 +554,43 @@ def test_multiple_computed_fields():
     assert str(addition) in line
     # Computed field is present
     assert str(computed_field) in line
+
+
+def test_multiple_computed_fields_2():
+    addition = Addition(
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    )
+    subtraction = Subtraction(
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    )
+    computed_field = Ratio(
+        addition,
+        subtraction,
+    )
+
+    fquery = FQuery(get_search()).values(
+        computed_field,
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+
+    result = load_output('total_in_traffic_and_total_out_traffic')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 1
+
+    line = lines[0]
+    # Base expressions are there
+    assert str(Sum(TrafficCount.incoming_traffic)) in line
+    assert str(Sum(TrafficCount.outgoing_traffic)) in line
+    # Addition and subtraction are there
+    assert str(addition) in line
+    assert str(subtraction)
+    # Computed field is present
+    assert str(computed_field) in line
+
 
 
 ########################

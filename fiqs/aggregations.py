@@ -209,17 +209,6 @@ class Ratio(Operation):
 
         return div_or_none(dividend, divisor, percentage=True)
 
-    def compute(self, results, key=None):
-        aa = results[str(self.dividend)]
-        bb = results[str(self.divisor)]
-
-        key = key or str(self)
-
-        if aa and bb:
-            results[key] = [div_or_none(a, b, percentage=True) for a, b in zip(aa, bb)]
-
-        return results
-
 
 class Addition(Operation):
     def __str__(self):
@@ -228,16 +217,6 @@ class Addition(Operation):
     def compute_one(self, row):
         keys = [str(op) for op in self.operands]
         return add_or_none([row[key] for key in keys])
-
-    def compute(self, results, key=None):
-        op_keys = [str(op) for op in self.operands]
-        opss = [results[op_key] for op_key in op_keys]
-
-        key = key or str(self)
-
-        results[key] = [add_or_none(ops) for ops in zip(opss)]
-
-        return results
 
 
 class Subtraction(Operation):
@@ -255,14 +234,3 @@ class Subtraction(Operation):
         key_b = str(self.subtraend)
 
         return sub_or_none(row[key_a], row[key_b])
-
-    def compute(self, results, key=None):
-        aa = results[str(self.minuend)]
-        bb = results[str(self.subtraend)]
-
-        key = key or str(self)
-
-        if aa and bb:
-            results[key] = [sub_or_none(a, b) for a, b in zip(aa, bb)]
-
-        return results

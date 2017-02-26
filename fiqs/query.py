@@ -216,11 +216,29 @@ class FQuery(object):
         return pretty_lines
 
     def _add_computed_results(self, line):
-        for key, expression in self._expressions.items():
-            if not expression.is_computed():
-                continue
+        computed_expressions = []
 
-            expression.compute(line, key=key)
+        while True:
+            expressions_to_compute = []
+
+            for key, expression in self._expressions.items():
+                if not expression.is_computed():
+                    continue
+
+                if key in computed_expressions:
+                    continue
+
+                expressions_to_compute.append((key, expression))
+
+            if not expressions_to_compute:
+                break
+
+            for key, expression in expressions_to_compute:
+                try:
+                    line[key] = expression.compute_one(line)
+                    computed_expressions.append(key)
+                except KeyError:
+                    pass
 
     def _add_missing_lines(self, result, lines):
         enums = self._get_field_enums(result, lines)
