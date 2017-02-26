@@ -3,12 +3,14 @@
 from collections import Counter
 from datetime import datetime
 
+import pytest
+
 from fiqs import fields
-from fiqs.aggregations import Sum, Count, Avg, DateHistogram
+from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio
 from fiqs.fields import DataExtendedField, FieldWithChoices
 from fiqs.query import FQuery
 
-from fiqs.testing.models import Sale
+from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
 from fiqs.tests.conftest import load_output
 
@@ -389,6 +391,58 @@ def test_order_by_multiple_group_by():
 def test_order_by_count():
     pass
 
+
+def test_computed_automatically_added():
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'terms', field='shop_id',
+    ).metric(
+        str(Sum(TrafficCount.incoming_traffic)), 'sum', field='incoming_traffic',
+    ).metric(
+        str(Sum(TrafficCount.outgoing_traffic)), 'sum', field='outgoing_traffic',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Addition(
+            Sum(TrafficCount.incoming_traffic),
+            Sum(TrafficCount.outgoing_traffic),
+        ),
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
+    fquery = FQuery(get_search()).values(
+        Addition(
+            Sum(TrafficCount.incoming_traffic),
+            Sum(TrafficCount.outgoing_traffic),
+        ),
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
+    fquery = FQuery(get_search()).values(
+        Ratio(
+            Sum(TrafficCount.incoming_traffic),
+            Addition(
+                Sum(TrafficCount.incoming_traffic),
+                Sum(TrafficCount.outgoing_traffic),
+            ),
+        ),
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
 ###################
 # Flatten results #
 ###################
@@ -446,6 +500,64 @@ def test_flatten_result_cast_timestamp():
         # Total sales aggregation results were casted to int
         assert 'total_sales' in line
         assert type(line['total_sales']) == int
+
+
+def test_computed_field():
+    computed_field = Addition(
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    )
+
+    fquery = FQuery(get_search()).values(
+        computed_field,
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+
+    result = load_output('total_in_traffic_and_total_out_traffic')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 1
+
+    line = lines[0]
+    # Base expressions are there
+    assert str(Sum(TrafficCount.incoming_traffic)) in line
+    assert str(Sum(TrafficCount.outgoing_traffic)) in line
+    # Computed field is present
+    assert str(computed_field) in line
+
+
+@pytest.mark.xfail
+def test_multiple_computed_fields():
+    addition = Addition(
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    )
+    computed_field = Ratio(
+        Sum(TrafficCount.incoming_traffic),
+        addition,
+    )
+
+    fquery = FQuery(get_search()).values(
+        computed_field,
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+
+    result = load_output('total_in_traffic_and_total_out_traffic')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 1
+
+    line = lines[0]
+    # Base expressions are there
+    assert str(Sum(TrafficCount.incoming_traffic)) in line
+    assert str(Sum(TrafficCount.outgoing_traffic)) in line
+    # Addition is there
+    assert str(addition) in line
+    # Computed field is present
+    assert str(computed_field) in line
+
 
 ########################
 # Fill missing buckets #

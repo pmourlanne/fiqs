@@ -159,6 +159,16 @@ class Operation(Metric):
     def compute(self, results, key=None):
         raise NotImplementedError
 
+    def get_casted_value(self, v):
+        return v
+
+    @property
+    def operands(self):
+        return self._operands
+
+    def __init__(self, *args):
+        self._operands = args
+
 
 def div_or_none(a, b, percentage=False):
     base = 100.0 if percentage else 1.0
@@ -181,7 +191,8 @@ def sub_or_none(a, b):
 
 class Ratio(Operation):
     def __init__(self, dividend, divisor):
-        # field or op
+        super(Ratio, self).__init__(dividend, divisor)
+
         self.dividend = dividend
         self.divisor = divisor
 
@@ -211,10 +222,6 @@ class Ratio(Operation):
 
 
 class Addition(Operation):
-    def __init__(self, *args):
-        # Operands can be fields or operations
-        self.operands = args
-
     def __str__(self):
         return '__add__'.join(['{}'.format(op) for op in self.operands])
 
@@ -235,6 +242,8 @@ class Addition(Operation):
 
 class Subtraction(Operation):
     def __init__(self, minuend, subtraend):
+        super(Subtraction, self).__init__(minuend, subtraend)
+
         self.minuend = minuend
         self.subtraend = subtraend
 

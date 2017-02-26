@@ -1,0 +1,262 @@
+{
+    "_shards": {
+        "failed": 0, 
+        "successful": 5, 
+        "total": 5
+    }, 
+    "aggregations": {
+        "shop_id": {
+            "buckets": [
+                {
+                    "doc_count": 57, 
+                    "key": 2, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 6039.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5240.0
+                    }
+                }, 
+                {
+                    "doc_count": 57, 
+                    "key": 5, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 5661.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5975.0
+                    }
+                }, 
+                {
+                    "doc_count": 53, 
+                    "key": 4, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 4508.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5406.0
+                    }
+                }, 
+                {
+                    "doc_count": 52, 
+                    "key": 3, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 5970.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5168.0
+                    }
+                }, 
+                {
+                    "doc_count": 51, 
+                    "key": 1, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 4309.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5100.0
+                    }
+                }, 
+                {
+                    "doc_count": 51, 
+                    "key": 8, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 5288.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5404.0
+                    }
+                }, 
+                {
+                    "doc_count": 50, 
+                    "key": 10, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 4778.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 5036.0
+                    }
+                }, 
+                {
+                    "doc_count": 48, 
+                    "key": 7, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 4871.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 4443.0
+                    }
+                }, 
+                {
+                    "doc_count": 41, 
+                    "key": 6, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 3813.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 3780.0
+                    }
+                }, 
+                {
+                    "doc_count": 40, 
+                    "key": 9, 
+                    "trafficcount__incoming_traffic__sum": {
+                        "value": 3767.0
+                    }, 
+                    "trafficcount__outgoing_traffic__sum": {
+                        "value": 3913.0
+                    }
+                }
+            ], 
+            "doc_count_error_upper_bound": 0, 
+            "sum_other_doc_count": 0
+        }
+    }, 
+    "hits": {
+        "hits": [
+            {
+                "_id": "14", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 900, 
+                    "id": 14, 
+                    "incoming_traffic": 20, 
+                    "outgoing_traffic": 191, 
+                    "shop_id": 4, 
+                    "timestamp": 1453262242000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "19", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 600, 
+                    "id": 19, 
+                    "incoming_traffic": 0, 
+                    "outgoing_traffic": 39, 
+                    "shop_id": 6, 
+                    "timestamp": 1451645288000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "22", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 900, 
+                    "id": 22, 
+                    "incoming_traffic": 199, 
+                    "outgoing_traffic": 173, 
+                    "shop_id": 3, 
+                    "timestamp": 1451925434000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "24", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 600, 
+                    "id": 24, 
+                    "incoming_traffic": 40, 
+                    "outgoing_traffic": 3, 
+                    "shop_id": 7, 
+                    "timestamp": 1452473996000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "25", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 600, 
+                    "id": 25, 
+                    "incoming_traffic": 96, 
+                    "outgoing_traffic": 199, 
+                    "shop_id": 5, 
+                    "timestamp": 1453693563000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "26", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 600, 
+                    "id": 26, 
+                    "incoming_traffic": 134, 
+                    "outgoing_traffic": 67, 
+                    "shop_id": 7, 
+                    "timestamp": 1452883706000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "29", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 900, 
+                    "id": 29, 
+                    "incoming_traffic": 48, 
+                    "outgoing_traffic": 101, 
+                    "shop_id": 10, 
+                    "timestamp": 1453732955000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "40", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 900, 
+                    "id": 40, 
+                    "incoming_traffic": 100, 
+                    "outgoing_traffic": 159, 
+                    "shop_id": 2, 
+                    "timestamp": 1451815985000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "41", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 600, 
+                    "id": 41, 
+                    "incoming_traffic": 199, 
+                    "outgoing_traffic": 199, 
+                    "shop_id": 1, 
+                    "timestamp": 1452467550000
+                }, 
+                "_type": "sale"
+            }, 
+            {
+                "_id": "44", 
+                "_index": "test_traffic", 
+                "_score": 1.0, 
+                "_source": {
+                    "duration": 900, 
+                    "id": 44, 
+                    "incoming_traffic": 165, 
+                    "outgoing_traffic": 122, 
+                    "shop_id": 1, 
+                    "timestamp": 1451899520000
+                }, 
+                "_type": "sale"
+            }
+        ], 
+        "max_score": 1.0, 
+        "total": 500
+    }, 
+    "timed_out": false
+}

@@ -20,7 +20,7 @@ class ModelMetaClass(type):
                 getattr(klass, k).model = klass
                 fields.append(v)
 
-        cls._fields = fields
+        klass._fields = fields
 
         return klass
 

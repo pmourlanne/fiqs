@@ -31,3 +31,15 @@ class Sale(Model):
     part_id = fields.KeywordField(parent='parts')
     warehouse_id = fields.KeywordField(parent='parts')
     part_price = fields.IntegerField(parent='parts')
+
+
+class TrafficCount(Model):
+    doc_type = 'traffic_count'
+
+    id = fields.IntegerField()
+    shop_id = fields.IntegerField()
+
+    timestamp = fields.DateField()
+    duration = fields.IntegerField()
+    incoming_traffic = fields.IntegerField()
+    outgoing_traffic = fields.IntegerField()

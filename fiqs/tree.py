@@ -141,7 +141,10 @@ class ResultTree(object):
 
         # Are we dealing with a metric without aggs?
         if 'buckets' not in node and 'doc_count' not in node:
-            return [{current_key: node['value']}]
+            return [{
+                key: aggregations[key]['value']
+                for key in aggregations.keys()
+            }]
 
         # We remove nested aggregations, I don't see the point
         # of exposing them and they are annoying to deal with

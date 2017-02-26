@@ -92,7 +92,7 @@
         "hits": [
             {
                 "_id": "14", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_G2KQSJMAL2", 
@@ -229,7 +229,7 @@
             }, 
             {
                 "_id": "19", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_SDIG3YXC11", 
@@ -328,7 +328,7 @@
             }, 
             {
                 "_id": "22", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_9Y23QVR106", 
@@ -549,7 +549,7 @@
             }, 
             {
                 "_id": "24", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_IQR86GZXAF", 
@@ -765,7 +765,7 @@
             }, 
             {
                 "_id": "25", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_FYJU8E5UT1", 
@@ -828,7 +828,7 @@
             }, 
             {
                 "_id": "26", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_T36UYZSO6W", 
@@ -861,7 +861,7 @@
             }, 
             {
                 "_id": "29", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_3N6LX3KRAI", 
@@ -1052,7 +1052,7 @@
             }, 
             {
                 "_id": "40", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_NGMOYMBQXA", 
@@ -1139,7 +1139,7 @@
             }, 
             {
                 "_id": "41", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_ND1Y 1UK80", 
@@ -1261,7 +1261,7 @@
             }, 
             {
                 "_id": "44", 
-                "_index": "test_shop", 
+                "_index": "test_sale", 
                 "_score": 1.0, 
                 "_source": {
                     "client_id": "client_7Q7X4EM8S5", 

@@ -4,18 +4,41 @@ import pytest
 
 from fiqs.aggregations import Avg, Sum, DateHistogram
 from fiqs.query import FQuery
-from fiqs.testing.models import Sale
+from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
 from fiqs.tests.conftest import write_output, write_fquery_output
 
 
 @pytest.mark.docker
-def test_count(elasticsearch):
+def test_count(elasticsearch_sale):
     assert get_search().count() == 500
 
 
 @pytest.mark.docker
-def test_write_nested_search_output(elasticsearch):
+def test_write_traffic_search_outputs(elasticsearch_traffic):
+    # Total in traffic and out traffic
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Sum(TrafficCount.incoming_traffic),
+            Sum(TrafficCount.outgoing_traffic),
+        ),
+        'total_in_traffic_and_total_out_traffic',
+    )
+
+    # Total in traffic and out traffic by shop id
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Sum(TrafficCount.incoming_traffic),
+            Sum(TrafficCount.outgoing_traffic),
+        ).group_by(
+            TrafficCount.shop_id,
+        ),
+        'total_in_traffic_and_total_out_traffic_by_shop',
+    )
+
+
+@pytest.mark.docker
+def test_write_nested_search_output(elasticsearch_sale):
     # Average product price by product type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -93,7 +116,7 @@ def test_write_nested_search_output(elasticsearch):
 
 
 @pytest.mark.docker
-def test_write_search_outputs(elasticsearch):
+def test_write_search_outputs(elasticsearch_sale):
     # Nothing :o
     write_output(get_search(), 'no_aggregate_no_metric')
 
@@ -186,6 +209,15 @@ def test_write_search_outputs(elasticsearch):
             total_sales=Sum(Sale.price),
         ),
         'total_sales',
+    )
+
+    # Total sales and avg sales, no aggregations
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+            avg_sales=Avg(Sale.price),
+        ),
+        'total_sales_and_avg_sales',
     )
 
     # Total sales by shop and by payment type

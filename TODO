@@ -1,4 +1,8 @@
+Changelog
 Sample application with front-end?
+
+Docs for computed field (note that it only works with flat results)
+Make sure multiple computed fields work (one test in xfail)
 
 ########
 # Tree #
@@ -13,8 +17,6 @@ Sample application with front-end?
 - Can a FQuery object only need a Model class? How to get a search object from there?
 - Tests and code for search filtering
 - Named group_by?
-- Test computed aggregations
-- Computed aggregations? Automatically add intermediate aggs
 - Check that metaclass doesn't create issues with children classes
 - Order by with Field
 - More cast results tests

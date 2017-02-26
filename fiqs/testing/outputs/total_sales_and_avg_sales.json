@@ -5,32 +5,11 @@
         "total": 5
     }, 
     "aggregations": {
-        "payment_type": {
-            "buckets": [
-                {
-                    "doc_count": 172, 
-                    "key": "wire_transfer", 
-                    "total_sales": {
-                        "value": 82704.0
-                    }
-                }, 
-                {
-                    "doc_count": 170, 
-                    "key": "store_credit", 
-                    "total_sales": {
-                        "value": 89040.0
-                    }
-                }, 
-                {
-                    "doc_count": 158, 
-                    "key": "cash", 
-                    "total_sales": {
-                        "value": 78827.0
-                    }
-                }
-            ], 
-            "doc_count_error_upper_bound": 0, 
-            "sum_other_doc_count": 0
+        "avg_sales": {
+            "value": 501.142
+        }, 
+        "total_sales": {
+            "value": 250571.0
         }
     }, 
     "hits": {

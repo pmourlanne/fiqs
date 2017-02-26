@@ -13,13 +13,18 @@ import pytest
 from fiqs.testing.utils import get_client
 
 
-FIXTURE_PATH = 'fiqs/testing/fixtures/shop_fixture.json'
-INDEX_NAME = 'test_shop'
-DOC_TYPE = 'sale'
+SALE_INDEX_NAME = 'test_sale'
+TRAFFIC_INDEX_NAME = 'test_traffic'
+
+SALE_FIXTURE_PATH = 'fiqs/testing/fixtures/shop_fixture.json'
+TRAFFIC_FIXTURE_PATH = 'fiqs/testing/fixtures/traffic_fixture.json'
+
+SALE_DOC_TYPE = 'sale'
+TRAFFIC_DOC_TYPE = 'traffic_count'
 
 
 def sale_mapping():
-    m = Mapping('sale')
+    m = Mapping(SALE_DOC_TYPE)
 
     m.meta('dynamic', 'strict')
 
@@ -42,6 +47,21 @@ def sale_mapping():
 
     products.field('parts', parts)
     m.field('products', products)
+
+    return m
+
+
+def traffic_mapping():
+    m = Mapping(TRAFFIC_DOC_TYPE)
+
+    m.meta('dynamic', 'strict')
+
+    m.field('id', 'integer')
+    m.field('shop_id', 'integer')
+    m.field('timestamp', 'date')
+    m.field('duration', 'integer')
+    m.field('incoming_traffic', 'integer')
+    m.field('outgoing_traffic', 'integer')
 
     return m
 
@@ -73,25 +93,49 @@ def insert_documents(client, index_name, fixture_path, doc_type):
     return bulk(client, actions)
 
 
-def insert_shop_documents(client):
-    create_shop_index(client)
-    insert_documents(client, INDEX_NAME, FIXTURE_PATH, DOC_TYPE)
+def insert_sale_documents(client):
+    create_sale_index(client)
+    insert_documents(client, SALE_INDEX_NAME, SALE_FIXTURE_PATH, SALE_DOC_TYPE)
 
 
-def create_shop_index(client):
-    create_index(client, INDEX_NAME, sale_mapping())
+def insert_traffic_documents(client):
+    create_traffic_index(client)
+    insert_documents(client, TRAFFIC_INDEX_NAME, TRAFFIC_FIXTURE_PATH, TRAFFIC_DOC_TYPE)
 
 
-def delete_shop_index(client):
-    delete_index(client, INDEX_NAME)
+def create_sale_index(client):
+    create_index(client, SALE_INDEX_NAME, sale_mapping())
+
+
+def create_traffic_index(client):
+    create_index(client, TRAFFIC_INDEX_NAME, traffic_mapping())
+
+
+def delete_sale_index(client):
+    delete_index(client, SALE_INDEX_NAME)
+
+
+def delete_traffic_index(client):
+    delete_index(client, TRAFFIC_INDEX_NAME)
 
 
 @pytest.fixture
-def elasticsearch(request):
+def elasticsearch_sale(request):
     client = get_client()
-    insert_shop_documents(client)
+    insert_sale_documents(client)
 
-    request.addfinalizer(lambda: delete_shop_index(client))
+    request.addfinalizer(lambda: delete_sale_index(client))
+    time.sleep(1)
+
+    return client
+
+
+@pytest.fixture
+def elasticsearch_traffic(request):
+    client = get_client()
+    insert_traffic_documents(client)
+
+    request.addfinalizer(lambda: delete_traffic_index(client))
     time.sleep(1)
 
     return client

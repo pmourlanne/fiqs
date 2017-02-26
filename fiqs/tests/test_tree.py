@@ -203,6 +203,19 @@ def test_total_sales():
     assert list(line.keys()) == ['total_sales']
     assert type(line['total_sales']) == float
 
+
+def test_total_sales_and_avg_sales():
+    lines = flatten_result(load_output('total_sales_and_avg_sales'))
+
+    assert len(lines) == 1
+
+    line = lines[0]
+    # Both metrics are present
+    assert sorted(list(line.keys())) == sorted(['total_sales', 'avg_sales'])
+    for key in ['total_sales', 'avg_sales']:
+        assert type(line[key]) == float
+
+
 ##########
 # Nested #
 ##########

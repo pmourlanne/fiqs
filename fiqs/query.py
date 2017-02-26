@@ -46,6 +46,8 @@ class FQuery(object):
         exps.update(named_expressions)
         self._expressions.update(exps)
 
+        self._check_exps_for_computed_are_present()
+
         return self
 
     def group_by(self, *args):
@@ -77,6 +79,26 @@ class FQuery(object):
     ################
     # Internal API #
     ################
+    def _check_exps_for_computed_are_present(self):
+        while True:
+            exps_to_add = {}
+            expression_keys = [str(exp) for exp in self._expressions.values()]
+
+            for key, expression in self._expressions.items():
+                if not expression.is_computed():
+                    continue
+
+                operands = expression.operands
+                for op in operands:
+                    if str(op) not in expression_keys:
+                        exps_to_add[str(op)] = op
+                        expression_keys.append(str(op))
+
+            if not exps_to_add:
+                break
+
+            self._expressions.update(exps_to_add)
+
     def _check_nested_parents_are_present(self):
         while True:
             nested_fields_to_add = {}
@@ -182,6 +204,7 @@ class FQuery(object):
         pretty_lines = []
         for line in lines:
             pretty_line = line.copy()
+            self._add_computed_results(pretty_line)
 
             for key, value in pretty_line.items():
                 if key in key_to_field:
@@ -191,6 +214,13 @@ class FQuery(object):
             pretty_lines.append(pretty_line)
 
         return pretty_lines
+
+    def _add_computed_results(self, line):
+        for key, expression in self._expressions.items():
+            if not expression.is_computed():
+                continue
+
+            expression.compute(line, key=key)
 
     def _add_missing_lines(self, result, lines):
         enums = self._get_field_enums(result, lines)
