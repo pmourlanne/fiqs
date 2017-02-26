@@ -18,7 +18,7 @@ def test_count(elasticsearch):
 def test_write_nested_search_output(elasticsearch):
     # Average product price by product type
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             avg_product_price=Avg(Sale.product_price),
         ).group_by(
             Sale.product_type,
@@ -28,7 +28,7 @@ def test_write_nested_search_output(elasticsearch):
 
     # Average part price by part
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             avg_part_price=Avg(Sale.part_price),
         ).group_by(
             Sale.part_id,
@@ -38,7 +38,7 @@ def test_write_nested_search_output(elasticsearch):
 
     # Average part price by product
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             avg_part_price=Avg(Sale.part_price),
         ).group_by(
             Sale.product_id,
@@ -49,7 +49,7 @@ def test_write_nested_search_output(elasticsearch):
 
     # Average part price by product by part
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             avg_part_price=Avg(Sale.part_price),
         ).group_by(
             Sale.product_id,
@@ -60,7 +60,7 @@ def test_write_nested_search_output(elasticsearch):
 
     # Average product price by shop by product
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             avg_product_price=Avg(Sale.product_price),
         ).group_by(
             Sale.shop_id,
@@ -99,7 +99,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales by shop
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ).group_by(
             Sale.shop_id,
@@ -109,7 +109,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales by payment type
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ).group_by(
             Sale.payment_type,
@@ -119,7 +119,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales by shop by payment type
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ).group_by(
             Sale.payment_type,
@@ -130,7 +130,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales day by day
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ).group_by(
             DateHistogram(
@@ -143,7 +143,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Number of sales by shop
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             # Count(Sale.id),
         ).group_by(
             Sale.shop_id,
@@ -171,7 +171,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales and average sales by shop
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
             avg_sales=Avg(Sale.price),
         ).group_by(
@@ -182,7 +182,7 @@ def test_write_search_outputs(elasticsearch):
 
     # Total sales, no aggregations
     write_fquery_output(
-        FQuery(get_search()).metric(
+        FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ),
         'total_sales',

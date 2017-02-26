@@ -18,11 +18,10 @@ def test_one_metric():
         'total_sales', 'sum', field='price',
     ).to_dict()
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     )
-    search = fquery.configure_search(metric)
+    search = fquery._configure_search()
 
     assert expected == search.to_dict()
 
@@ -32,13 +31,12 @@ def test_one_aggregation():
         'shop_id', 'terms', field='shop_id',
     ).to_dict()
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         Count(Sale),
     ).group_by(
         Sale.shop_id,
     )
-    search = fquery.configure_search(metric)
+    search = fquery._configure_search()
 
     assert expected == search.to_dict()
 
@@ -51,13 +49,12 @@ def test_one_aggregation_one_metric():
         'total_sales', 'sum', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -72,14 +69,13 @@ def test_two_aggregations_one_metric():
         'total_sales', 'sum', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
         Sale.client_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -94,14 +90,13 @@ def test_one_aggregation_two_metrics():
         'avg_sales', 'avg', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
         avg_sales=Avg(Sale.price),
     ).group_by(
         Sale.shop_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -118,15 +113,14 @@ def test_two_aggregations_two_metrics():
         'avg_sales', 'avg', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
         avg_sales=Avg(Sale.price),
     ).group_by(
         Sale.shop_id,
         Sale.client_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -152,8 +146,7 @@ def test_date_histogram():
         'total_sales', 'sum', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
@@ -163,7 +156,7 @@ def test_date_histogram():
             max=end,
         ),
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -178,14 +171,13 @@ def test_one_nested_aggregation_one_metric():
         'avg_product_price', 'avg', field='products.product_price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         avg_product_price=Avg(Sale.product_price),
     ).group_by(
         Sale.products,
         Sale.product_type,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -204,8 +196,7 @@ def test_two_nested_aggregations_one_metric():
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
         Sale.products,
@@ -213,7 +204,7 @@ def test_two_nested_aggregations_one_metric():
         Sale.parts,
         Sale.part_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -233,14 +224,13 @@ def test_nested_parent_automatically_added():
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
         Sale.product_id,
         Sale.part_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -258,13 +248,12 @@ def test_nested_parent_automatically_added_2():
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
         Sale.part_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -282,14 +271,13 @@ def test_nested_parent_automatically_added_3():
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
         Sale.product_id,
         Sale.parts,  # Can we get rid of this?
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -304,14 +292,13 @@ def test_default_size():
         'total_sales', 'sum', field='price',
     )
 
-    fquery = FQuery(get_search(), default_size=5)
-    metric = fquery.metric(
+    fquery = FQuery(get_search(), default_size=5).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
         Sale.client_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -326,14 +313,13 @@ def test_aggregation_size():
         'total_sales', 'sum', field='price',
     )
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DataExtendedField(Sale.shop_id, size=5),
         Sale.client_id,
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
@@ -354,15 +340,14 @@ def test_order_by():
         'query': {'match_all': {}},
     }
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
     ).order_by(
         {'total_sales': 'desc'}
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert fsearch.to_dict() == expected
 
@@ -388,8 +373,7 @@ def test_order_by_multiple_group_by():
         'query': {'match_all': {}}
     }
 
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
@@ -397,7 +381,7 @@ def test_order_by_multiple_group_by():
     ).order_by(
         {'total_sales': 'desc'}
     )
-    fsearch = fquery.configure_search(metric)
+    fsearch = fquery._configure_search()
 
     assert fsearch.to_dict() == expected
 
@@ -411,15 +395,14 @@ def test_order_by_count():
 
 def test_flatten_result_cast_sum_to_int():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
     )
 
     result = load_output('total_sales_by_shop')
-    lines = fquery._flatten_result(metric, result)
+    lines = fquery._flatten_result(result)
 
     assert len(lines) == 10  # One for each shop
 
@@ -439,8 +422,7 @@ def test_flatten_result_cast_sum_to_int():
 
 
 def test_flatten_result_cast_timestamp():
-    fquery = FQuery(get_search())
-    metric = fquery.metric(
+    fquery = FQuery(get_search()).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
@@ -450,7 +432,7 @@ def test_flatten_result_cast_timestamp():
     )
 
     result = load_output('total_sales_day_by_day')
-    lines = fquery._flatten_result(metric, result)
+    lines = fquery._flatten_result(result)
 
     assert len(lines) == 31
 
@@ -471,22 +453,20 @@ def test_flatten_result_cast_timestamp():
 
 def test_fill_missing_buckets_nothing_to_do():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
     )
 
     result = load_output('total_sales_by_shop')
-    lines = fquery._flatten_result(metric, result)
-    assert lines == fquery._add_missing_lines(metric, result, lines)
+    lines = fquery._flatten_result(result)
+    assert lines == fquery._add_missing_lines(result, lines)
 
 
 def test_fill_missing_buckets_cannot_do_anything():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
@@ -498,16 +478,15 @@ def test_fill_missing_buckets_cannot_do_anything():
         if bucket['key'] != 1
     ]
 
-    lines = fquery._flatten_result(metric, result)
-    assert lines == fquery._add_missing_lines(metric, result, lines)
+    lines = fquery._flatten_result(result)
+    assert lines == fquery._add_missing_lines(result, lines)
 
     assert len(lines) == 9
 
 
 def test_fill_missing_buckets_custom_choices():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         FieldWithChoices(Sale.shop_id, choices=range(1, 11)),
@@ -519,11 +498,11 @@ def test_fill_missing_buckets_custom_choices():
         if bucket['key'] != 1
     ]
 
-    lines = fquery._flatten_result(metric, result)
+    lines = fquery._flatten_result(result)
     assert len(lines) == 9
     assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
 
-    lines == fquery._add_missing_lines(metric, result, lines)
+    lines == fquery._add_missing_lines(result, lines)
     assert len(lines) == 10
     assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
 
@@ -540,8 +519,7 @@ def test_fill_missing_buckets_field_choices():
         shop_id = fields.IntegerField(choices=range(1, 11))
 
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(SaleWithChoices.price),
     ).group_by(
         SaleWithChoices.shop_id,
@@ -553,11 +531,11 @@ def test_fill_missing_buckets_field_choices():
         if bucket['key'] != 1
     ]
 
-    lines = fquery._flatten_result(metric, result)
+    lines = fquery._flatten_result(result)
     assert len(lines) == 9
     assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
 
-    lines == fquery._add_missing_lines(metric, result, lines)
+    lines == fquery._add_missing_lines(result, lines)
     assert len(lines) == 10
     assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
 
@@ -571,8 +549,7 @@ def test_fill_missing_buckets_field_choices():
 
 def test_fill_missing_buckets_values_in_other_agg():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.payment_type,
@@ -589,7 +566,7 @@ def test_fill_missing_buckets_values_in_other_agg():
         if b['key'] != 1
     ]
 
-    lines = fquery._flatten_result(metric, result)
+    lines = fquery._flatten_result(result)
     assert len(lines) == 29
     # All shop ids are present three times
     counter = Counter([line['shop_id'] for line in lines])
@@ -598,7 +575,7 @@ def test_fill_missing_buckets_values_in_other_agg():
     # Except the one I removed
     assert counter[1] == 2
 
-    lines == fquery._add_missing_lines(metric, result, lines)
+    lines == fquery._add_missing_lines(result, lines)
     assert len(lines) == 30
     # All shop ids are present three times
     counter = Counter([line['shop_id'] for line in lines])
@@ -619,8 +596,7 @@ def test_fill_missing_buckets_values_in_other_agg():
 
 def test_fill_missing_buckets_range_nothing_to_do():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
@@ -630,19 +606,18 @@ def test_fill_missing_buckets_range_nothing_to_do():
             max=datetime(2016, 1, 31),
         ),
     )
-    fquery.configure_search(metric)
+    fquery._configure_search()
 
     result = load_output('total_sales_day_by_day')
 
-    lines = fquery._flatten_result(metric, result)
-    assert lines == fquery._add_missing_lines(metric, result, lines)
+    lines = fquery._flatten_result(result)
+    assert lines == fquery._add_missing_lines(result, lines)
     assert len(lines) == 31
 
 
 def test_fill_missing_buckets_range():
     search = get_search()
-    fquery = FQuery(search)
-    metric = fquery.metric(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
@@ -652,10 +627,10 @@ def test_fill_missing_buckets_range():
             max=datetime(2016, 1, 31),
         ),
     )
-    fquery.configure_search(metric)
+    fquery._configure_search()
 
     result = load_output('total_sales_day_by_day')
 
-    lines = fquery._flatten_result(metric, result)
-    lines == fquery._add_missing_lines(metric, result, lines)
+    lines = fquery._flatten_result(result)
+    lines == fquery._add_missing_lines(result, lines)
     assert len(lines) == 62

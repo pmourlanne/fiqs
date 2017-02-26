@@ -26,7 +26,7 @@ fiqs exposes a ``FQuery`` object which lets you write less verbose simple querie
 
     # The FQuery way
     search = Search(...)
-    metric = FQuery(search).metric(
+    metric = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
@@ -51,21 +51,22 @@ A ``FQuery`` object only needs an elasticsearch-dsl object to get started. You m
     * ``fill_missing_buckets``: `True` by default. If `False`, FQuery will not try to fill the missing buckets. For more details see `Filling missing buckets`_.
 
 
-Metric
+Values
 ******
 
-You need to call ``metric`` on a FQuery object to specify the metric you want to use in your request. metric accepts both arguments and keyword arguments::
+You need to call ``values`` on a FQuery object to specify the metrics you want to use in your request. values accepts both arguments and keyword arguments::
 
     from fiqs.aggregation import Sum, Avg
 
     from .models import Sale
 
-    FQuery(search).metric(
+    FQuery(search).values(
         Avg(Sale.price),
         total_sales=Sum(Sale.price),
     )
 
 In this case, the nodes will contain two keys for the metrics: *total_sales*, and *sale__price__avg*, a string representation of the *Avg(Sale.price)* metric.
+A ``values`` call returns the FQuery object, to allow chaining calls.
 
 fiqs contains several classes, which all take a field as argument, to help you make these metric calls:
 
@@ -110,7 +111,7 @@ Soon :>
 Group by
 ********
 
-Calling ``metric`` on a FQuery object returns a ``QueryMetric`` object, on which you can call ``group_by`` to add aggregations. fiqs lets you build only one aggregation, which can be as deep as you need it to be. In a group_by call, you can use any fiqs Field, or Field subclass, object. fiqs also offers Field subclasses that help you configure your aggregation:
+You can call ``group_by`` on a FQuery object to add aggregations. Like ``values``, ``group_by`` returns the FQuery object, to allow chaining. fiqs lets you build only one aggregation, which can be as deep as you need it to be. In a group_by call, you can use any fiqs Field, or Field subclass, object. fiqs also offers Field subclasses that help you configure your aggregation:
 
 
 FieldWithChoices
@@ -135,9 +136,10 @@ This field is useful if you want to to fine tune the aggregation. In the example
 Order by
 ********
 
-You can call ``order_by`` on a QueryMetric to order the Elasticsearch result as you want. order_by expects a dictionary that will be directly used in the aggregation as a `sort <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html>`_::
+You can call ``order_by`` on a FQuery object, to order the Elasticsearch result as you want. ``order_by`` returns the FQuery object, to allow chaining. order_by expects a dictionary that will be directly used in the aggregation as a `sort <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html>`_::
 
-    FQuery(search).metric(
+
+    FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
@@ -151,7 +153,7 @@ In this example, the Elasticsearch result will be ordered by total sales, in des
 Executing the query
 *******************
 
-Calling ``eval`` on the metric will execute the Elasticsearch query and return the result.
+Calling ``eval`` on the Fquery object will execute the Elasticsearch query and return the result.
 
 
 Form of the result
@@ -186,7 +188,7 @@ By default, FQuery will try to add buckets missing from the Elasticsearch result
         price = fields.IntegerField()
 
     # Our query
-    results = FQuery(search).metric(
+    results = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
@@ -249,7 +251,7 @@ By default, FQuery will try to add buckets missing from the Elasticsearch result
         payment_type = fields.KeywordField(choices=('wire_transfer', 'cash', ))
 
     # Our query
-    results = FQuery(search).metric(
+    results = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.payment_type,
