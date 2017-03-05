@@ -2,3 +2,7 @@
 
 class MissingParameterException(Exception):
     pass
+
+
+class ConfigurationError(Exception):
+    pass

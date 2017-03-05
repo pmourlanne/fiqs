@@ -6,6 +6,7 @@ from six import text_type as unicode
 
 from fiqs import flatten_result
 from fiqs.aggregations import Aggregate
+from fiqs.exceptions import ConfigurationError
 from fiqs.fields import NestedField, ReverseNestedField, Field
 
 
@@ -63,6 +64,12 @@ class FQuery(object):
         return self
 
     def eval(self, flat=True, fill_missing_buckets=True):
+        # Raise if computed fields are present, and we are not in flat mode
+        if not flat:
+            for expression in self._expressions.values():
+                if expression.is_computed():
+                    raise ConfigurationError(u'Cannot use computed fields in non-flat mode')
+
         search = self._configure_search()
         result = search.execute()
 

@@ -3,8 +3,11 @@
 from collections import Counter
 from datetime import datetime
 
+import pytest
+
 from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio, Subtraction
+from fiqs.exceptions import ConfigurationError
 from fiqs.fields import DataExtendedField, FieldWithChoices
 from fiqs.query import FQuery
 
@@ -592,6 +595,19 @@ def test_multiple_computed_fields_2():
     assert str(computed_field) in line
 
 
+def test_computed_fields_raise_when_non_flat():
+    addition = Addition(
+        Sum(TrafficCount.incoming_traffic),
+        Sum(TrafficCount.outgoing_traffic),
+    )
+
+    fquery = FQuery(get_search()).values(
+        addition,
+    ).group_by(
+        TrafficCount.shop_id,
+    )
+    with pytest.raises(ConfigurationError):
+        fquery.eval(flat=False)
 
 ########################
 # Fill missing buckets #
