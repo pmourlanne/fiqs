@@ -14,7 +14,6 @@ Sample application with front-end?
 - Can a FQuery object only need a Model class? How to get a search object from there?
 - Tests and code for search filtering
 - Named group_by?
-- Check that metaclass doesn't create issues with children classes
 - Order by with Field
 - More cast results tests
 - Cast results of computed fields? (Ratio?)

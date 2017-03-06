@@ -9,6 +9,7 @@ from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio, Subtraction
 from fiqs.exceptions import ConfigurationError
 from fiqs.fields import DataExtendedField, FieldWithChoices
+from fiqs.models import Model
 from fiqs.query import FQuery
 
 from fiqs.testing.models import Sale, TrafficCount
@@ -677,8 +678,9 @@ def test_fill_missing_buckets_custom_choices():
 
 
 def test_fill_missing_buckets_field_choices():
-    class SaleWithChoices(Sale):
+    class SaleWithChoices(Model):
         shop_id = fields.IntegerField(choices=range(1, 11))
+        price = fields.IntegerField()
 
     search = get_search()
     fquery = FQuery(search).values(

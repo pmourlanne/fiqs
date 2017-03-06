@@ -6,3 +6,7 @@ class MissingParameterException(Exception):
 
 class ConfigurationError(Exception):
     pass
+
+
+class FieldError(Exception):
+    pass

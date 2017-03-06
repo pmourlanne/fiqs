@@ -21,6 +21,12 @@ class Field(object):
         self.data = data
         self.parent = parent
 
+    def get_copy(self):
+        return self.__class__(
+            key=self.key, verbose_name=self.verbose_name, storage_field=self.storage_field,
+            unit=self.unit, choices=self.choices, data=self.data, parent=self.parent,
+        )
+
     def __repr__(self):
         if hasattr(self, 'model'):
             return '<{}: {}.{}>'.format(
