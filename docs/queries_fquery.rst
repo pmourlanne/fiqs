@@ -105,7 +105,27 @@ Used for the Elasticsearch `sum aggregation <https://www.elastic.co/guide/en/ela
 Operations
 ^^^^^^^^^^
 
-Soon :>
+fiqs lets you query computed fields, created with operations on a model's fields. For example::
+
+    from fiqs.aggregation import Sum
+
+    from .models import TrafficCount
+
+    FQuery(search).values(
+        total_traffic=Addition(
+            Sum(TrafficCount.in_count),
+            Sum(TrafficCount.out_count),
+        ),
+        in_traffic_ratio=Ratio(
+            Sum(TrafficCount.in_count),
+            Addition(
+                Sum(TrafficCount.in_count),
+                Sum(TrafficCount.out_count),
+            ),
+        ),
+    )
+
+The three existing operations are Addition, Subtraction and Ratio. **Do note that these operations cannot be used if the FQuery was initialized with fill_missing_buckets at False.**
 
 
 Group by
