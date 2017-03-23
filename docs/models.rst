@@ -123,6 +123,21 @@ IntegerField
 
 A field with the ``integer`` Elasticsearch data type.
 
+ByteField
+"""""""""
+
+A field with the ``byte`` Elasticsearch data type.
+
+DayOfWeekField
+""""""""""""""
+
+A field inheriting from ByteField. It accepts ``iso`` as a keyword argument. Depending on the value of ``iso``, this field will have data and choices matching weekdays or isoweekdays.
+
+HourOfDayField
+""""""""""""""
+
+A field inheriting from ByteField. By default, it will be able to contain values betweek 0 and 23.
+
 FloatField
 """"""""""
 

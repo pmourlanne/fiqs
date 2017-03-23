@@ -130,6 +130,37 @@ class FloatField(Field):
         return float(v)
 
 
+class ByteField(Field):
+    def __init__(self, **kwargs):
+        super(ByteField, self).__init__('byte', **kwargs)
+
+    def get_casted_value(self, v):
+        return int(v)
+
+
+class DayOfWeekField(ByteField):
+    def __init__(self, iso=True, **kwargs):
+        if iso:
+            choices = range(1, 8)
+            data = {'min': 1, 'max': 7}
+        else:
+            choices = range(7)
+            data = {'min': 0, 'max': 6}
+
+        kwargs['choices'] = choices
+        kwargs['data'] = data
+
+        super(DayOfWeekField, self).__init__(**kwargs)
+
+
+class HourOfDayField(ByteField):
+    def __init__(self, **kwargs):
+        kwargs['choices'] = range(24)
+        kwargs['data'] = {'min': 0, 'max': 23}
+
+        super(HourOfDayField, self).__init__(**kwargs)
+
+
 class BooleanField(Field):
     def __init__(self, **kwargs):
         super(BooleanField, self).__init__('boolean', **kwargs)
