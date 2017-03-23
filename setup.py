@@ -4,7 +4,7 @@ from os.path import join, dirname
 from setuptools import setup, find_packages
 
 
-VERSION = (0, 3, 1)
+VERSION = (0, 3, 2)
 __version__ = VERSION
 __versionstr__ = '.'.join(map(str, VERSION))
 
@@ -16,7 +16,7 @@ f.close()
 
 install_requires = [
     'urllib3>=1.8, <2.0',
-    'elasticsearch==5.0.1',
+    'elasticsearch==5.1.0',
     'elasticsearch-dsl==5.1.0',
 ]
 tests_require = [
