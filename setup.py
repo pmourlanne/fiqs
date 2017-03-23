@@ -16,8 +16,8 @@ f.close()
 
 install_requires = [
     'urllib3>=1.8, <2.0',
-    'elasticsearch==5.1.0',
-    'elasticsearch-dsl==5.1.0',
+    'elasticsearch>=5.1.0',
+    'elasticsearch-dsl>=5.1.0',
 ]
 tests_require = [
     'six==1.10.0',
