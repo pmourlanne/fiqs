@@ -63,6 +63,22 @@ def test_one_aggregation_one_metric():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_one_aggregation_count():
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'terms', field='shop_id',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.shop_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_two_aggregations_one_metric():
     search = get_search()
     search.aggs.bucket(
