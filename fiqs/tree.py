@@ -2,18 +2,16 @@
 
 import copy
 
-from elasticsearch_dsl.result import Response
-
 
 RESERVED_KEYS = ['key', 'key_as_string', 'doc_count']
 
 
 class ResultTree(object):
     def __init__(self, es_result):
-        if isinstance(es_result, Response):
-            self.es_result = copy.deepcopy(es_result._d_)
-        elif isinstance(es_result, dict):
+        if isinstance(es_result, dict):
             self.es_result = copy.deepcopy(es_result)
+        elif hasattr(es_result, '_d_'):
+            self.es_result = copy.deepcopy(es_result._d_)
         else:
             raise Exception('ResultTree expects a dict or an elasticsearch_dsl Response object')
 
