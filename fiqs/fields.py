@@ -122,6 +122,14 @@ class IntegerField(Field):
         return int(v)
 
 
+class FloatField(Field):
+    def __init__(self, **kwargs):
+        super(FloatField, self).__init__('float', **kwargs)
+
+    def get_casted_value(self, v):
+        return float(v)
+
+
 class BooleanField(Field):
     def __init__(self, **kwargs):
         super(BooleanField, self).__init__('boolean', **kwargs)

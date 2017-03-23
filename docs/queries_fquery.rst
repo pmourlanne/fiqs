@@ -190,9 +190,10 @@ Each field may implement a ``get_casted_value`` method. FQuery will use this met
         def get_casted_value(self, v):
             return int(v)
 
-As of today, only two fields implement this method:
+As of today, only the following fields implement this method:
 
 * IntegerField cast values as int
+* FloatField cast values as float
 * DateField cast values as datetime, **ignoring the milliseconds**
 
 Filling missing buckets

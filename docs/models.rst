@@ -123,15 +123,15 @@ IntegerField
 
 A field with the ``integer`` Elasticsearch data type.
 
+FloatField
+""""""""""
+
+A field with the ``float`` Elasticsearch data type.
+
 BooleanField
 """"""""""""
 
 A field with the ``boolean`` Elasticsearch data type.
-
-IntegerField
-""""""""""""
-
-A field with the ``integer`` Elasticsearch data type.
 
 NestedField
 """""""""""
