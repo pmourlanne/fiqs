@@ -9,7 +9,7 @@ __version__ = VERSION
 __versionstr__ = '.'.join(map(str, VERSION))
 
 
-f = open(join(dirname(__file__), 'README.md'))
+f = open(join(dirname(__file__), 'README'))
 long_description = f.read().strip()
 f.close()
 
@@ -32,7 +32,7 @@ setup(
     description="Python client for Elasticsearch built on top of elasticsearch-dsl",
     license="MIT License",
     url="https://gitlab.com/pmourlanne/fiqs",
-    long_description = long_description,
+    long_description=long_description,
     version=__versionstr__,
     author="Pierre Mourlanne",
     author_email="pmourlanne@gmail.com",
