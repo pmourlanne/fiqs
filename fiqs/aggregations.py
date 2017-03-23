@@ -32,8 +32,7 @@ class Count(ModelMetric):
         return True
 
     def __str__(self):
-        model = self.model.__name__.lower()
-        return '{}__count'.format(model)
+        return 'doc_count'
 
     def order_by_key(self):
         return '_count'

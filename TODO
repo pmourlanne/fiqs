@@ -3,8 +3,6 @@ Sample application with front-end?
 units for fields?
 Move doc_type into Meta subclass?
 
-When Count Aggregation is used, change doc_count key into str(Count(model))?
-
 ########
 # Tree #
 ########
