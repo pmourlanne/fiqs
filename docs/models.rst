@@ -6,7 +6,7 @@ fiqs lets you create Model classes, a la Django, which automatically generate an
 
 A model is a class inheriting from ``fiqs.models.Model``. It needs to define a doc_type, an index and its fields::
 
-    from fiqs import models
+    from fiqs import fields, models
 
     class Sale(models.Model):
         index = 'sale_data'
