@@ -71,7 +71,12 @@ class Aggregate(Metric):
         return self.field.get_casted_value(v)
 
 
-class Avg(Aggregate): pass
+class Avg(Aggregate):
+    def get_casted_value(self, v):
+        """Average of an IntegerField does not have to be an integer"""
+        return v
+
+
 class Max(Aggregate): pass
 class Min(Aggregate): pass
 class Sum(Aggregate): pass
