@@ -2,7 +2,7 @@
 
 import pytest
 
-from fiqs.aggregations import Avg, Sum, DateHistogram
+from fiqs.aggregations import Avg, Sum, DateHistogram, Count
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
@@ -167,7 +167,7 @@ def test_write_search_outputs(elasticsearch_sale):
     # Number of sales by shop
     write_fquery_output(
         FQuery(get_search()).values(
-            # Count(Sale.id),
+            Count(Sale.id),
         ).group_by(
             Sale.shop_id,
         ),

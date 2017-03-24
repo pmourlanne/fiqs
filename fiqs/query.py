@@ -201,7 +201,10 @@ class FQuery(object):
 
         key_to_field = {}
         for key, exp in self._expressions.items():
+            if exp.is_doc_count():
+                continue
             key_to_field[key] = exp
+
         for field_or_exp in self._group_by:
             if isinstance(field_or_exp, Aggregate):
                 key_to_field[field_or_exp.field.storage_field] = field_or_exp

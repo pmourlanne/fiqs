@@ -465,6 +465,31 @@ def test_computed_automatically_added():
 # Flatten results #
 ###################
 
+def test_flatten_result_count():
+    search = get_search()
+    fquery = FQuery(search).values(
+        Count(Sale),
+    ).group_by(
+        Sale.shop_id,
+    )
+
+    result = load_output('nb_sales_by_shop')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 10  # One for each shop
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation is present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
+
+
 def test_flatten_result_cast_sum_to_int():
     search = get_search()
     fquery = FQuery(search).values(
