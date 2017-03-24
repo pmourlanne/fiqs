@@ -86,6 +86,20 @@ class Field(object):
 
         raise NotImplementedError()
 
+    def min_key(self):
+        if self.data and 'min' in self.data:
+            return self.data['min']
+
+        if self.choices:
+            return min(self.choices)
+
+    def max_key(self):
+        if self.data and 'max' in self.data:
+            return self.data['max']
+
+        if self.choices:
+            return max(self.choices)
+
     def get_parent_field(self):
         if not self.parent:
             return None
