@@ -119,7 +119,7 @@ class IntegerField(Field):
         super(IntegerField, self).__init__('integer', **kwargs)
 
     def get_casted_value(self, v):
-        return int(v)
+        return int(v) if v else v
 
 
 class FloatField(Field):
@@ -127,7 +127,7 @@ class FloatField(Field):
         super(FloatField, self).__init__('float', **kwargs)
 
     def get_casted_value(self, v):
-        return float(v)
+        return float(v) if v else v
 
 
 class ByteField(Field):
@@ -135,7 +135,7 @@ class ByteField(Field):
         super(ByteField, self).__init__('byte', **kwargs)
 
     def get_casted_value(self, v):
-        return int(v)
+        return int(v) if v else v
 
 
 class DayOfWeekField(ByteField):
