@@ -2,6 +2,7 @@
 
 from os.path import join, dirname
 from setuptools import setup, find_packages
+from setuptools.command.sdist import sdist
 
 
 VERSION = (0, 3, 5)
@@ -19,12 +20,24 @@ install_requires = [
     'elasticsearch>=5.1.0',
     'elasticsearch-dsl>=5.1.0',
 ]
+setup_requires = [
+    'Babel>=2.3.4',
+]
 tests_require = [
     'six==1.10.0',
     'Faker==0.7.3',
     'pytest==3.0.5',
-    "pytest-cov",
+    'pytest-cov',
 ]
+
+
+class Sdist(sdist):
+    """Custom ``sdist`` command to ensure that mo files are always created."""
+
+    def run(self):
+        self.run_command('compile_catalog')
+        # sdist is an old style class so super cannot be used.
+        sdist.run(self)
 
 
 setup(
@@ -40,7 +53,8 @@ setup(
         where='.',
     ),
     install_requires=install_requires,
-
+    setup_requires=setup_requires,
+    cmdclass={'sdist': Sdist},
     test_suite='fiqs.tests.run_tests.run_all',
     tests_require=tests_require,
 )
