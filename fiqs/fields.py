@@ -3,6 +3,8 @@
 import copy
 from datetime import datetime
 
+from fiqs.i18n import _
+
 
 class Field(object):
     def __init__(self, type, key=None, verbose_name=None, storage_field=None,
@@ -78,9 +80,16 @@ class Field(object):
     def is_range(self):
         return 'ranges' in self.data
 
+    def _has_pretty_choices(self):
+        return self.choices and isinstance(self.choices[0], tuple)
+
     def choice_keys(self):
+        if self._has_pretty_choices():
+            return [choice[0] for choice in self.choices]
+
         if self.choices:
             return self.choices
+
         if self.is_range():
             return [r['key'] for r in self.data['ranges']]
 
@@ -91,14 +100,14 @@ class Field(object):
             return self.data['min']
 
         if self.choices:
-            return min(self.choices)
+            return min(self.choice_keys())
 
     def max_key(self):
         if self.data and 'max' in self.data:
             return self.data['max']
 
         if self.choices:
-            return max(self.choices)
+            return max(self.choice_keys())
 
     def get_parent_field(self):
         if not self.parent:
@@ -152,13 +161,37 @@ class ByteField(Field):
         return int(v) if v else v
 
 
+def get_weekdays():
+    return [
+        (0, _('Monday')),
+        (1, _('Tuesday')),
+        (2, _('Wednesday')),
+        (3, _('Thursday')),
+        (4, _('Friday')),
+        (5, _('Saturday')),
+        (6, _('Sunday')),
+    ]
+
+
+def get_iso_weekdays():
+    return [
+        (1, _('Monday')),
+        (2, _('Tuesday')),
+        (3, _('Wednesday')),
+        (4, _('Thursday')),
+        (5, _('Friday')),
+        (6, _('Saturday')),
+        (7, _('Sunday')),
+    ]
+
+
 class DayOfWeekField(ByteField):
     def __init__(self, iso=True, **kwargs):
         if iso:
-            choices = range(1, 8)
+            choices = get_iso_weekdays()
             data = {'min': 1, 'max': 7}
         else:
-            choices = range(7)
+            choices = get_weekdays()
             data = {'min': 0, 'max': 6}
 
         kwargs['choices'] = choices
@@ -169,7 +202,7 @@ class DayOfWeekField(ByteField):
 
 class HourOfDayField(ByteField):
     def __init__(self, **kwargs):
-        kwargs['choices'] = range(24)
+        kwargs['choices'] = [(i, _('{hour}h').format(hour=i)) for i in range(24)]
         kwargs['data'] = {'min': 0, 'max': 23}
 
         super(HourOfDayField, self).__init__(**kwargs)

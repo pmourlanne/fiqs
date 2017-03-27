@@ -752,6 +752,42 @@ def test_fill_missing_buckets_field_choices():
     }
 
 
+def test_fill_missing_buckets_field_choices_pretty():
+    pretty_choices = [(i, 'Shop {}'.format(i)) for i in range(1, 11)]
+
+    class SaleWithPrettyChoices(Model):
+        shop_id = fields.IntegerField(choices=pretty_choices)
+        price = fields.IntegerField()
+
+    search = get_search()
+    fquery = FQuery(search).values(
+        total_sales=Sum(SaleWithPrettyChoices.price),
+    ).group_by(
+        SaleWithPrettyChoices.shop_id,
+    )
+
+    result = load_output('total_sales_by_shop')
+    result['aggregations']['shop_id']['buckets'] = [
+        bucket for bucket in result['aggregations']['shop_id']['buckets']
+        if bucket['key'] != 1
+    ]
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 9
+    assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
+
+    lines == fquery._add_missing_lines(result, lines)
+    assert len(lines) == 10
+    assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
+
+    added_line = [line for line in lines if line['shop_id'] == 1][0]
+    assert added_line == {
+        'shop_id': 1,
+        'total_sales': None,
+        'doc_count': 0,
+    }
+
+
 def test_fill_missing_buckets_values_in_other_agg():
     search = get_search()
     fquery = FQuery(search).values(

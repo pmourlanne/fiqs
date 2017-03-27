@@ -58,7 +58,13 @@ This is a string that tells fiqs which `field datatype <https://www.elastic.co/g
 choices
 """""""
 
-A list of possible values for the field. fiqs will use it to fill the missing buckets.
+A list of possible values for the field. fiqs will use it to fill the missing buckets. It can also contains a list of tuples, where the first element is the key, and the second is a 'pretty key'::
+
+    payment_type = fields.KeywordField(choices=[
+        ('wire_transfer', _('Wire transfer')),
+        ('cash', _('Cash')),
+        ('store_credit', _('Store credit')),
+    ])
 
 data
 """"
