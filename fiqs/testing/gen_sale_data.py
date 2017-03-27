@@ -53,7 +53,7 @@ def gen_products(price):
 def gen_shop_data(size):
     for i in xrange(size):
         price = random.randint(10, 1000)
-        print json.dumps({
+        print(json.dumps({
             'id': i + 1,
             'shop_id': random_shop_id(),
             'client_id': 'client_{}'.format(random_string(10)),
@@ -61,7 +61,7 @@ def gen_shop_data(size):
             'price': price,
             'payment_type': random.choice(['wire_transfer', 'cash', 'store_credit', ]),
             'products': gen_products(price),
-        })
+        }))
 
 
 if __name__ == '__main__':
