@@ -5,6 +5,7 @@ Move doc_type into Meta subclass?
 Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle other interval in choice keys
+Fix doc: fill_missing_buckets is an argument for eval, not for FQuery (or change code?)
 
 ########
 # Tree #
