@@ -26,13 +26,13 @@ fiqs exposes a ``FQuery`` object which lets you write less verbose simple querie
 
     # The FQuery way
     search = Search(...)
-    metric = FQuery(search).values(
+    fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.shop_id,
         Sale.client_id,
     )
-    result = metric.eval()
+    result = fquery.eval()
 
 
 Loss of expresiveness
@@ -46,9 +46,17 @@ Let's start with a warning :> FQuery may allow you to write cleaner and more re-
 
 A ``FQuery`` object only needs an elasticsearch-dsl object to get started. You may also configure the following options:
 
-    * ``default_size``: the `size <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html#search-request-from-size>`_ used by default in aggregations built by this object.
+    * ``default_size``: the `size <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html#_size>`_ used by default in aggregations built by this object.
 
-    * ``fill_missing_buckets``: `True` by default. If `False`, FQuery will not try to fill the missing buckets. For more details see `Filling missing buckets`_.
+
+``eval`` call
+^^^^^^^^^^^^^
+
+To execute the Elasticsearch query, you need to call ``eval`` on the FQuery object. This call accepts the following arguments:
+
+    * ``flat``: If `False`, will return the elasticsearch-dsl `Result` object, without flattening the result. Note that you cannot ask for a flat result if you used computed expressions. `True` by default.
+
+    * ``fill_missing_buckets``: If `False`, FQuery will not try to fill the missing buckets. For more details see `Filling missing buckets`_. Note that fiqs cannot fill the missing buckets in non flat mode. `True` by default.
 
 
 Values
