@@ -1,0 +1,83 @@
+{
+    "hits": {
+        "hits": [], 
+        "total": 0, 
+        "max_score": 0.0
+    }, 
+    "took": 1, 
+    "aggregations": {
+        "day_of_week": {
+            "buckets": [
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 0, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 1, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 2, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 3, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 4, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 5, 
+                    "doc_count": 0
+                }, 
+                {
+                    "shop_id": {
+                        "buckets": [], 
+                        "sum_other_doc_count": 0, 
+                        "doc_count_error_upper_bound": 0
+                    }, 
+                    "key": 6, 
+                    "doc_count": 0
+                }
+            ]
+        }
+    }, 
+    "timed_out": false, 
+    "_shards": {
+        "successful": 1, 
+        "failed": 0, 
+        "total": 1
+    }
+}

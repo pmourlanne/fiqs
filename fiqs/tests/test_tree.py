@@ -12,6 +12,11 @@ def test_no_aggregate_no_metric():
     assert flatten_result(load_output('no_aggregate_no_metric')) == expected
 
 
+def test_no_data():
+    lines = flatten_result(load_output('no_data_nb_sales_by_day_of_week_by_shop'))
+    assert lines == []
+
+
 def test_nb_sales_by_shop():
     lines = flatten_result(load_output('nb_sales_by_shop'))
 

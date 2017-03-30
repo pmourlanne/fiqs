@@ -200,7 +200,7 @@ class ResultTree(object):
             # If there are no more buckets but we're not at depth 0,
             # either there is another aggregation at our depth or we go higher
             if not buckets:
-                base_line.pop(current_key)
+                base_line.pop(current_key, None)  # Buckets may have been empty from the start
 
                 parent_bucket = aggregations
                 for key in path[:-2]:
