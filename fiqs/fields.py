@@ -72,7 +72,7 @@ class Field(object):
         if 'size' in self.data:
             size = self.data['size']
             if size == 0:
-                size = 2 ** 32 - 1
+                size = 2 ** 31 - 1
             d['size'] = size
 
         return d

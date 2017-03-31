@@ -5,7 +5,6 @@ Move doc_type into Meta subclass?
 Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle other interval in choice keys
-Issue in query when default_size is 0?
 
 ########
 # Tree #
