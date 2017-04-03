@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, timedelta
+
 import pytest
 
 from fiqs.aggregations import Avg, Sum, DateHistogram, Count
@@ -12,6 +14,45 @@ from fiqs.tests.conftest import write_output, write_fquery_output
 @pytest.mark.docker
 def test_count(elasticsearch_sale):
     assert get_search().count() == 500
+
+
+@pytest.mark.xfail  # See https://github.com/elastic/elasticsearch/issues/23776
+@pytest.mark.docker
+def test_offset_date_histogram(elasticsearch_sale):
+    start = datetime(2016, 2, 1, 6)
+    end = start + timedelta(days=2, hours=2)
+
+    search = get_search()
+    search = search.filter('range', **{
+        'timestamp': {
+            'gte': start.isoformat(),
+            'lte': end.isoformat(),
+        },
+    })
+
+    fquery = FQuery(search).values(
+        Count(Sale),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1d',
+            min=start,
+            max=end,
+            offset='+6h',
+        )
+    )
+
+    result = fquery.eval(flat=False)
+    aggregations = result._d_['aggregations']
+    buckets = aggregations['timestamp']['buckets']
+
+    keys = [datetime.utcfromtimestamp(bucket['key'] / 1000) for bucket in buckets]
+    expected_keys = [
+        start,
+        start + timedelta(days=1),
+        start + timedelta(days=2),
+    ]
+    assert keys == expected_keys
 
 
 @pytest.mark.docker
