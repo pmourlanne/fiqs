@@ -111,6 +111,61 @@ class Histogram(Aggregate):
         return params
 
 
+def get_timedelta_from_timestring(timestring):
+    pass
+
+
+TIME_UNIT_CONVERSION = {
+    'd': 'days',
+    'day': 'days',
+    'H': 'hours',
+    'h': 'hours',
+    'hour': 'hours',
+    'm': 'minutes',
+    'minute': 'minutes',
+    's': 'seconds',
+    'second': 'seconds',
+}
+
+
+def get_timedelta_from_interval(interval):
+    # Some intervals are still missing: year, quarter, month, week
+    for key, param in TIME_UNIT_CONVERSION.items():
+        if interval.endswith(key):
+            value = interval.rstrip(key)
+            if not value:
+                value = '1'
+
+            return timedelta(**{
+                param: int(value),
+            })
+
+    return None
+
+
+def get_rounded_date_from_interval(d, interval):
+    kwargs = {
+        'microsecond': 0,
+    }
+
+    if interval.endswith('d') or interval.endswith('day'):
+        kwargs['minute'] = kwargs['hour'] = kwargs['second'] = 0
+        return d.replace(**kwargs)
+
+    if interval.endswith('H') or interval.endswith('h') or interval.endswith('hour'):
+        kwargs['minute'] = kwargs['second'] = 0
+        return d.replace(**kwargs)
+
+    if interval.endswith('m') or interval.endswith('minute'):
+        kwargs['second'] = 0
+        return d.replace(**kwargs)
+
+    if interval.endswith('s') or interval.endswith('second'):
+        return d.replace(**kwargs)
+
+    return d
+
+
 class DateHistogram(Histogram):
     ref = 'date_histogram'
 
@@ -118,18 +173,15 @@ class DateHistogram(Histogram):
         if not hasattr(self, 'min') or not hasattr(self, 'max'):
             return None
 
-        if self.interval != '1d':
-            # TODO: handle other cases
+        delta = get_timedelta_from_interval(self.interval)
+        if not delta:
             return None
 
-        # Day by day histograms start at the start of day in ES
-        start = self.min.replace(hour=0, minute=0, second=0)
-        end = self.max.replace(hour=0, minute=0, second=0)
+        start = get_rounded_date_from_interval(self.min, self.interval)
+        end = get_rounded_date_from_interval(self.max, self.interval)
 
         choice_keys = []
-        delta = timedelta(days=1)
         current = start
-
         while current <= end:
             choice_keys.append(current)
             current += delta

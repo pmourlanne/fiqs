@@ -4,7 +4,7 @@ units for fields?
 Move doc_type into Meta subclass?
 Different documentation for different major versions
 DateHistogram: handle offset in choice keys
-DateHistogram: handle other interval in choice keys
+DateHistogram: handle remaining intervals in choice keys (year, quaryer, month, week)
 
 ########
 # Tree #
@@ -22,5 +22,4 @@ DateHistogram: handle other interval in choice keys
 - Order by with Field
 - More cast results tests
 - Cast results of computed fields? (Ratio?)
-- Choice keys for date histogram (all intervals!)
 - Should Histogram / DateHistogram and DateRange be aggregates?

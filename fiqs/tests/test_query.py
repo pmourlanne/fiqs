@@ -856,7 +856,7 @@ def test_fill_missing_buckets_range_nothing_to_do():
     assert len(lines) == 31
 
 
-def test_fill_missing_buckets_range():
+def test_fill_missing_buckets_date_histogram():
     search = get_search()
     fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
