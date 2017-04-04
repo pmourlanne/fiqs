@@ -5,6 +5,7 @@ Move doc_type into Meta subclass?
 Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quaryer, month, week)
+DateHistogram: choice keys are wrong :O They should be computed using the remainder to the epoch
 
 ########
 # Tree #
