@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from fiqs.exceptions import MissingParameterException
 
@@ -143,27 +143,13 @@ def get_timedelta_from_interval(interval):
     return None
 
 
-def get_rounded_date_from_interval(d, interval):
-    kwargs = {
-        'microsecond': 0,
-    }
+def get_rounded_date_from_timedelta(d, delta):
+    epoch = datetime(1970, 1, 1)
+    nb_seconds = int((d - epoch).total_seconds())
+    delta_seconds = int(delta.total_seconds())
 
-    if interval.endswith('d') or interval.endswith('day'):
-        kwargs['minute'] = kwargs['hour'] = kwargs['second'] = 0
-        return d.replace(**kwargs)
-
-    if interval.endswith('H') or interval.endswith('h') or interval.endswith('hour'):
-        kwargs['minute'] = kwargs['second'] = 0
-        return d.replace(**kwargs)
-
-    if interval.endswith('m') or interval.endswith('minute'):
-        kwargs['second'] = 0
-        return d.replace(**kwargs)
-
-    if interval.endswith('s') or interval.endswith('second'):
-        return d.replace(**kwargs)
-
-    return d
+    rounded_nb_seconds = (nb_seconds // delta_seconds) * delta_seconds
+    return datetime.utcfromtimestamp(rounded_nb_seconds)
 
 
 class DateHistogram(Histogram):
@@ -177,8 +163,8 @@ class DateHistogram(Histogram):
         if not delta:
             return None
 
-        start = get_rounded_date_from_interval(self.min, self.interval)
-        end = get_rounded_date_from_interval(self.max, self.interval)
+        start = get_rounded_date_from_timedelta(self.min, delta)
+        end = self.max
 
         choice_keys = []
         current = start
