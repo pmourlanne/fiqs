@@ -161,6 +161,14 @@ class ByteField(Field):
         return int(v) if v else v
 
 
+class ShortField(Field):
+    def __init__(self, **kwargs):
+        super(ShortField, self).__init__('short', **kwargs)
+
+    def get_casted_value(self, v):
+        return int(v) if v else v
+
+
 def get_weekdays():
     return [
         (0, _('Monday')),
