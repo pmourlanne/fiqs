@@ -137,36 +137,44 @@ class DateField(Field):
         return datetime.utcfromtimestamp(v / 1000)
 
 
-class IntegerField(Field):
+class BaseIntegerField(Field):
     def __init__(self, **kwargs):
-        super(IntegerField, self).__init__('integer', **kwargs)
+        super(BaseIntegerField, self).__init__(self.type, **kwargs)
 
     def get_casted_value(self, v):
         return int(v) if v else v
 
 
-class FloatField(Field):
+class LongField(BaseIntegerField):
+    type = 'long'
+
+
+class IntegerField(BaseIntegerField):
+    type = 'integer'
+
+
+class ShortField(BaseIntegerField):
+    type = 'short'
+
+
+class ByteField(BaseIntegerField):
+    type = 'byte'
+
+
+class BaseFloatField(Field):
     def __init__(self, **kwargs):
-        super(FloatField, self).__init__('float', **kwargs)
+        super(BaseFloatField, self).__init__(self.type, **kwargs)
 
     def get_casted_value(self, v):
         return float(v) if v else v
 
 
-class ByteField(Field):
-    def __init__(self, **kwargs):
-        super(ByteField, self).__init__('byte', **kwargs)
-
-    def get_casted_value(self, v):
-        return int(v) if v else v
+class DoubleField(BaseFloatField):
+    type = 'double'
 
 
-class ShortField(Field):
-    def __init__(self, **kwargs):
-        super(ShortField, self).__init__('short', **kwargs)
-
-    def get_casted_value(self, v):
-        return int(v) if v else v
+class FloatField(BaseFloatField):
+    type = 'float'
 
 
 def get_weekdays():

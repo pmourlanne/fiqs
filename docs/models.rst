@@ -124,15 +124,35 @@ DateField
 
 A field with the ``date`` Elasticsearch data type.
 
+LongField
+"""""""""
+
+A field with the ``long`` Elasticsearch data type.
+
 IntegerField
 """"""""""""
 
 A field with the ``integer`` Elasticsearch data type.
 
+ShortField
+""""""""""
+
+A field with the ``short`` Elasticsearch data type.
+
 ByteField
 """""""""
 
 A field with the ``byte`` Elasticsearch data type.
+
+DoubleField
+"""""""""""
+
+A field with the ``double`` Elasticsearch data type.
+
+FloatField
+""""""""""
+
+A field with the ``float`` Elasticsearch data type.
 
 DayOfWeekField
 """"""""""""""
@@ -143,11 +163,6 @@ HourOfDayField
 """"""""""""""
 
 A field inheriting from ByteField. By default, it will be able to contain values betweek 0 and 23.
-
-FloatField
-""""""""""
-
-A field with the ``float`` Elasticsearch data type.
 
 BooleanField
 """"""""""""

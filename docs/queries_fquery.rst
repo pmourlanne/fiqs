@@ -200,9 +200,10 @@ Each field may implement a ``get_casted_value`` method. FQuery will use this met
 
 As of today, only the following fields implement this method:
 
-* IntegerField, ByteField and fields inheriting from them cast values as int
-* FloatField cast values as float
+* LongField, IntegerField, ShortField, ByteField and field inheriting from them cast values as int
+* DoubleField and FloatField cast values as float
 * DateField cast values as datetime, **ignoring the milliseconds**
+
 
 Filling missing buckets
 ^^^^^^^^^^^^^^^^^^^^^^^
