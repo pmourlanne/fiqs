@@ -196,7 +196,7 @@ Each field may implement a ``get_casted_value`` method. FQuery will use this met
             super(IntegerField, self).__init__('integer', **kwargs)
 
         def get_casted_value(self, v):
-            return int(v) if v else v
+            return int(v) if v is not None else v
 
 As of today, only the following fields implement this method:
 

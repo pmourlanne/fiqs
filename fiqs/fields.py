@@ -142,7 +142,7 @@ class BaseIntegerField(Field):
         super(BaseIntegerField, self).__init__(self.type, **kwargs)
 
     def get_casted_value(self, v):
-        return int(v) if v else v
+        return int(v) if v is not None else v
 
 
 class LongField(BaseIntegerField):
@@ -166,7 +166,7 @@ class BaseFloatField(Field):
         super(BaseFloatField, self).__init__(self.type, **kwargs)
 
     def get_casted_value(self, v):
-        return float(v) if v else v
+        return float(v) if v is not None else v
 
 
 class DoubleField(BaseFloatField):
