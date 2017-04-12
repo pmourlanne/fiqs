@@ -148,10 +148,7 @@ class FQuery(object):
                 current_agg = current_agg.bucket(**field_or_exp.agg_params())
                 continue
 
-            if field_or_exp.is_range():
-                current_agg = current_agg.bucket(**field_or_exp.range_params())
-
-            elif isinstance(field_or_exp, NestedField)\
+            if isinstance(field_or_exp, NestedField)\
                 or isinstance(field_or_exp, ReverseNestedField):
                 current_agg = current_agg.bucket(**field_or_exp.nested_params())
 
