@@ -30,7 +30,7 @@ class FQuery(object):
         self.search = search
 
         if default_size == 0:
-            default_size = 2 ** 32 - 1
+            default_size = 2 ** 31 - 1
         self.default_size = default_size
 
         self._expressions = OrderedDict()
