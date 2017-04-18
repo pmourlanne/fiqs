@@ -308,6 +308,25 @@ class FieldWithChoices(Field):
         )
 
 
+class FieldWithRanges(Field):
+    def __init__(self, field, ranges=None):
+        data = copy.deepcopy(field.data)
+
+        if ranges is not None:
+            data['ranges'] = ranges
+
+        return super(FieldWithRanges, self).__init__(
+            field.type,
+            key=field.key,
+            verbose_name=field.verbose_name,
+            storage_field=field.storage_field,
+            unit=field.unit,
+            choices=field.choices,
+            data=data,
+            parent=field.parent,
+        )
+
+
 class DataExtendedField(Field):
     def __init__(self, field, **kwargs):
         data = copy.deepcopy(field.data)

@@ -151,6 +151,32 @@ A ``FieldWithChoices`` takes as argument an existing field, and a list of choice
 
 This field is useful if you want to tune the capacity of FQuery to fill the missing buckets.
 
+FieldWithRanges
+^^^^^^^^^^^^^^^
+
+A ``FieldWithRanges`` takes as argument an existing field, with a list of ranges. Ranges can either be a list of dictionaries forming an `Elasticsearch range aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-range-aggregation.html>`_, or a list of tuples::
+
+    ranges = [
+        {
+            'from': 1,
+            'to': 5,
+            'key': '1 - 5',
+        },
+        {
+            'from': 5,
+            'to': 11,
+            'key': '5 - 11',
+        },
+    ]
+    # Equivalent to :
+    ranges = [
+        (1, 5),
+        (5, 11),
+    ]
+    FieldWithRanges(Sale.shop_id, ranges=ranges)
+
+Do note that the `from` value (or the first tuple value) is **included**, and the `to` value (or the second tuple value) is **excluded**.
+
 DataExtendedField
 ^^^^^^^^^^^^^^^^^
 

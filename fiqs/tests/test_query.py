@@ -8,7 +8,7 @@ import pytest
 from fiqs import fields
 from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio, Subtraction
 from fiqs.exceptions import ConfigurationError
-from fiqs.fields import DataExtendedField, FieldWithChoices
+from fiqs.fields import DataExtendedField, FieldWithChoices, FieldWithRanges
 from fiqs.models import Model
 from fiqs.query import FQuery
 
@@ -982,7 +982,7 @@ def test_filling_missing_buckets_ranges():
         total_sales=Sum(Sale.price),
     ).group_by(
         Sale.payment_type,
-        DataExtendedField(Sale.shop_id, ranges=ranges)
+        FieldWithRanges(Sale.shop_id, ranges=ranges)
     )
     fquery._configure_search()
 
