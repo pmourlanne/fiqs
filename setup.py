@@ -27,6 +27,7 @@ tests_require = [
     'six==1.10.0',
     'Faker==0.7.3',
     'pytest==3.0.5',
+    'pytest-cov',
 ]
 
 
