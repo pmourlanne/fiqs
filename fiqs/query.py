@@ -156,7 +156,7 @@ class FQuery(object):
                 params = field_or_exp.bucket_params()
                 params['agg_type'] = 'terms'
                 if self.default_size:
-                    params['default_size'] = self.default_size
+                    params['size'] = self.default_size
                 current_agg = current_agg.bucket(**params)
 
             elif isinstance(field_or_exp, Field):
