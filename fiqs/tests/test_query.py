@@ -365,6 +365,83 @@ def test_aggregation_size():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_ranges():
+    ranges = [
+        {
+            'to': 4,
+            'key': 'first_three',
+        },
+        {
+            'from': 4,
+            'to': 7,
+            'key': 'next_three',
+        },
+        {
+            'from': 7,
+            'key': 'last_four',
+        },
+    ]
+
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'range', field='shop_id', ranges=ranges, keyed=True,
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DataExtendedField(Sale.shop_id, ranges=ranges),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_ranges_2():
+    # Ranges can also be given as a list of tuples
+    ranges = [
+        {
+            'from': 1,
+            'to': 4,
+            'key': '1 - 4',
+        },
+        {
+            'from': 4,
+            'to': 7,
+            'key': '4 - 7',
+        },
+        {
+            'from': 7,
+            'to': 11,
+            'key': '7 - 11',
+        },
+    ]
+
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'range', field='shop_id', ranges=ranges, keyed=True,
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    ranges_as_list = [
+        (1, 4),
+        (4, 7),
+        (7, 11),
+    ]
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DataExtendedField(Sale.shop_id, ranges=ranges_as_list),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_order_by():
     expected = {
         'aggs': {
@@ -797,7 +874,7 @@ def test_fill_missing_buckets_field_choices_pretty():
     assert len(lines) == 9
     assert sorted([line['shop_id'] for line in lines]) == list(range(2, 11))
 
-    lines == fquery._add_missing_lines(result, lines)
+    lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 10
     assert sorted([line['shop_id'] for line in lines]) == list(range(1, 11))
 
@@ -837,7 +914,7 @@ def test_fill_missing_buckets_values_in_other_agg():
     # Except the one I removed
     assert counter[1] == 2
 
-    lines == fquery._add_missing_lines(result, lines)
+    lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 30
     # All shop ids are present three times
     counter = Counter([line['shop_id'] for line in lines])
@@ -873,7 +950,7 @@ def test_fill_missing_buckets_range_nothing_to_do():
     result = load_output('total_sales_day_by_day')
 
     lines = fquery._flatten_result(result)
-    assert lines == fquery._add_missing_lines(result, lines)
+    lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 31
 
 
@@ -894,5 +971,35 @@ def test_fill_missing_buckets_date_histogram():
     result = load_output('total_sales_day_by_day')
 
     lines = fquery._flatten_result(result)
-    lines == fquery._add_missing_lines(result, lines)
+    lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 62
+
+
+def test_filling_missing_buckets_ranges():
+    ranges = [[1, 5], [5, 11], [11, 15]]
+    search = get_search()
+    fquery = FQuery(search).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.payment_type,
+        DataExtendedField(Sale.shop_id, ranges=ranges)
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_by_payment_type_by_shop_range')
+    # We remove one bucket
+    payment_type_buckets = [
+        b for b in result['aggregations']['payment_type']['buckets']
+        if b['key'] != 'wire_transfer'
+    ]
+    result['aggregations']['payment_type']['buckets'] = payment_type_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 6  # 3 shop ranges, 2 payment types
+    assert set([l['payment_type'] for l in lines]) == {'cash', 'store_credit'}
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 9  # 3 shop ranges, 3 payment types
+    added_lines = [l for l in lines if l['payment_type'] == 'wire_transfer']
+    range_keys = ['1 - 5', '5 - 11', '11 - 15']
+    assert sorted([l['shop_id'] for l in added_lines]) == sorted(range_keys)

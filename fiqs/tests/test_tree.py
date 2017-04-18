@@ -259,7 +259,6 @@ def test_is_nested_node():
     }
 
     tree = ResultTree({})
-    assert tree._is_nested_node(node)
     assert tree._is_nested_node(node['products'])
     assert not tree._is_nested_node(node['products']['doc_count'])
     assert not tree._is_nested_node(node['products']['product'])
@@ -316,7 +315,6 @@ def test_is_nested_node_2():
     }
 
     tree = ResultTree({})
-    assert tree._is_nested_node(node)
     assert tree._is_nested_node(node['products'])
     assert not tree._is_nested_node(node['products']['doc_count'])
     assert tree._is_nested_node(node['products']['parts'])
@@ -334,6 +332,113 @@ def test_is_nested_node_2():
                 ['avg_part_price'])
     assert not tree._is_nested_node(node['products']['parts']['part']['buckets'][0]\
                 ['avg_part_price']['value'])
+
+
+def test_is_nested_node_3():
+    # This is not a nested node
+    node = {
+        "shop_id": {
+            "buckets": [
+                {
+                    "doc_count": 59,
+                    "key": 7,
+                    "total_sales": {
+                        "value": 28194.0,
+                    },
+                },
+            ]
+        }
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['shop_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'][0])
+    assert not tree._is_nested_node(node['shop_id']['buckets'][0]['total_sales'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'][0]['total_sales']['value'])
+
+
+def test_is_nested_node_4():
+    # This is not a nested node, but it contains ranges
+    node = {
+        "payment_type": {
+            "buckets": [
+                {
+                    "doc_count": 172,
+                    "key": "wire_transfer",
+                    "shop_id": {
+                        "buckets": {
+                            "1 - 5": {
+                                "doc_count": 61,
+                                "from": 1.0,
+                                "to": 5.0,
+                                "total_sales": {
+                                    "value": 29523.0,
+                                },
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['payment_type'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets']['1 - 5'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets']['1 - 5']['total_sales'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets']['1 - 5']['total_sales']['value'])
+
+
+def test_is_nested_node_5():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "1 - 5": {
+                    "doc_count": 181,
+                    "from": 1.0,
+                    "payment_type": {
+                        "buckets": [
+                            {
+                                "doc_count": 68,
+                                "key": "store_credit",
+                                "total_sales": {
+                                    "value": 33595.0,
+                                },
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                    "to": 5.0,
+                },
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['shop_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type']['buckets'][0])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type']['buckets'][0]['total_sales'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type']['buckets'][0]['total_sales']['value'])
 
 
 def test_remove_nested_aggregations():
@@ -483,7 +588,77 @@ def test_remove_nested_aggregations_3():
         },
     }
 
+    result = ResultTree({})._remove_nested_aggregations(node)
 
+    assert expected == result
+
+
+def test_remove_nested_aggregations_4():
+    result = load_output('total_sales_by_shop')
+    node = result['aggregations']
+    expected = node
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+def test_remove_nested_aggregations_5():
+    node = {
+        "payment_type": {
+            "buckets": [
+                {
+                    "doc_count": 172,
+                    "key": "wire_transfer",
+                    "shop_id": {
+                        "buckets": {
+                            "1 - 5": {
+                                "doc_count": 61,
+                                "from": 1.0,
+                                "to": 5.0,
+                                "total_sales": {
+                                    "value": 29523.0,
+                                },
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+    }
+
+    expected = node
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+def test_remove_nested_aggregations_6():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "1 - 5": {
+                    "doc_count": 181,
+                    "from": 1.0,
+                    "payment_type": {
+                        "buckets": [
+                            {
+                                "doc_count": 68,
+                                "key": "store_credit",
+                                "total_sales": {
+                                    "value": 33595.0,
+                                },
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                    "to": 5.0,
+                },
+            },
+        },
+    }
+
+    expected = node
     result = ResultTree({})._remove_nested_aggregations(node)
 
     assert expected == result
@@ -610,3 +785,29 @@ def test_avg_part_price_by_product_and_by_part():
     part_lines = [l for l in lines if 'part_id' in l]
     assert len(part_lines) == 10
     assert sorted(part_lines, key=lambda l: l['doc_count'], reverse=True) == part_lines
+
+
+def test_total_sales_by_payment_type_by_shop_range():
+    lines = flatten_result(load_output('total_sales_by_payment_type_by_shop_range'))
+
+    assert len(lines) == 3 * 3  # 3 payment types, 3 shop ranges
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        # Both group by are present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == six.text_type
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
+    # Three lines for each payment type
+    for payment_type in ['cash', 'wire_transfer', 'store_credit', ]:
+        payment_type_lines = [l for l in lines if l['payment_type'] == payment_type]
+        assert len(payment_type_lines) == 3
+        range_keys = ['1 - 5', '5 - 11', '11 - 15']
+        assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)

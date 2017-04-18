@@ -83,6 +83,40 @@ class Field(object):
     def _has_pretty_choices(self):
         return self.choices and isinstance(self.choices[0], tuple)
 
+    def _get_ranges_as_dict(self):
+        if 'ranges' not in self.data:
+            return None
+
+        if isinstance(self.data['ranges'][0], dict):
+            return self.data['ranges']
+
+        if isinstance(self.data['ranges'][0], tuple) or\
+             isinstance(self.data['ranges'][0], list):
+            ranges = []
+            for start, end in self.data['ranges']:
+                ranges.append({
+                    'from': start,
+                    'to': end,
+                    'key': '{} - {}'.format(start, end),
+                })
+            return ranges
+
+        raise NotImplementedError()
+
+    def range_params(self):
+        params = self.bucket_params()
+
+        params['agg_type'] = 'range'
+        params['keyed'] = True
+
+        if 'ranges' in self.data:
+            params['ranges'] = self._get_ranges_as_dict()
+
+        else:
+            raise NotImplementedError()
+
+        return params
+
     def choice_keys(self):
         if self._has_pretty_choices():
             return [choice[0] for choice in self.choices]
@@ -91,7 +125,7 @@ class Field(object):
             return self.choices
 
         if self.is_range():
-            return [r['key'] for r in self.data['ranges']]
+            return [r['key'] for r in self._get_ranges_as_dict()]
 
         raise NotImplementedError()
 

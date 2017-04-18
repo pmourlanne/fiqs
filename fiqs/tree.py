@@ -3,7 +3,7 @@
 import copy
 
 
-RESERVED_KEYS = ['key', 'key_as_string', 'doc_count']
+RESERVED_KEYS = ['key', 'key_as_string', 'doc_count', 'from', 'to', ]
 
 
 class ResultTree(object):
@@ -35,11 +35,16 @@ class ResultTree(object):
         if 'key' in node:
             return False
 
-        # For example the first node
-        for child_node in node.values():
-            if isinstance(child_node, dict)\
-                and 'doc_count' in child_node\
-                and not self._is_nested_node(child_node):
+        # Range bucket
+        if 'from' in node and 'to' in node:
+            return False
+
+        dict_child_nodes = [
+            child_node for child_node in node.values()
+            if isinstance(child_node, dict)
+        ]
+        for child_node in dict_child_nodes:
+            if 'doc_count' in child_node and not self._is_nested_node(child_node):
                 return False
 
         # Node like {'value': 123.456}
@@ -83,10 +88,10 @@ class ResultTree(object):
         new_line = base_line.copy()
 
         for k, v in node.items():
-            if k in ['key', 'key_as_string']:
-                continue
             if k == 'doc_count':
                 new_line[k] = v
+            elif k in RESERVED_KEYS:
+                continue
             else:
                 new_line[k] = v['value']
 

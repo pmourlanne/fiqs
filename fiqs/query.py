@@ -152,6 +152,9 @@ class FQuery(object):
                 or isinstance(field_or_exp, ReverseNestedField):
                 current_agg = current_agg.bucket(**field_or_exp.nested_params())
 
+            elif field_or_exp.is_range():
+                current_agg = current_agg.bucket(**field_or_exp.range_params())
+
             elif field_or_exp.choices:
                 params = field_or_exp.bucket_params()
                 params['agg_type'] = 'terms'

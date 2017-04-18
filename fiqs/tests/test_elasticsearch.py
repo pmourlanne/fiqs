@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import pytest
 
 from fiqs.aggregations import Avg, Sum, DateHistogram, Count
+from fiqs.fields import DataExtendedField
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
@@ -275,3 +276,27 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales', 'sum', field='price',
     )
     write_output(search, 'total_sales_by_shop_and_by_payment')
+
+    # Total sales by payment by shop range
+    ranges = [[1, 5], [5, 11], [11, 15]]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Sale.payment_type,
+            DataExtendedField(Sale.shop_id, ranges=ranges),
+        ),
+        'total_sales_by_payment_type_by_shop_range',
+    )
+
+    # Total sales by shop range by payment_type
+    ranges = [[1, 5], [5, 11], [11, 15]]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            DataExtendedField(Sale.shop_id, ranges=ranges),
+            Sale.payment_type,
+        ),
+        'total_sales_by_shop_range_by_payment_type',
+    )
