@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 from setuptools.command.sdist import sdist
 
 
-VERSION = (0, 3, 13)
+VERSION = (0, 3, 14)
 __version__ = VERSION
 __versionstr__ = '.'.join(map(str, VERSION))
 
