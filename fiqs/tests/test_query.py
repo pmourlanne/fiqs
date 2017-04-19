@@ -504,6 +504,34 @@ def test_order_by_multiple_group_by():
     assert fsearch.to_dict() == expected
 
 
+def test_order_by_field_with_choices():
+    expected = {
+        'aggs': {
+            'payment_type': {
+                'aggs': {
+                    'total_sales': {'sum': {'field': 'price'}},
+                },
+                'terms': {
+                    'field': 'payment_type',
+                    'order': {'total_sales': 'desc'},
+                }
+            }
+        },
+        'query': {'match_all': {}},
+    }
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.payment_type,
+    ).order_by(
+        {'total_sales': 'desc'}
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == expected
+
+
 def test_order_by_count():
     pass
 

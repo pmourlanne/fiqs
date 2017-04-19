@@ -145,26 +145,25 @@ class FQuery(object):
 
         for idx, field_or_exp in enumerate(self._group_by):
             if isinstance(field_or_exp, Aggregate):
-                current_agg = current_agg.bucket(**field_or_exp.agg_params())
-                continue
+                params = field_or_exp.agg_params()
 
-            if isinstance(field_or_exp, NestedField)\
+            elif isinstance(field_or_exp, NestedField)\
                 or isinstance(field_or_exp, ReverseNestedField):
-                current_agg = current_agg.bucket(**field_or_exp.nested_params())
+                params = field_or_exp.nested_params()
 
             elif field_or_exp.is_range():
-                current_agg = current_agg.bucket(**field_or_exp.range_params())
+                params = field_or_exp.range_params()
 
-            elif field_or_exp.choices:
+            elif isinstance(field_or_exp, Field):
                 params = field_or_exp.bucket_params()
                 params['agg_type'] = 'terms'
                 if self.default_size:
                     params['size'] = self.default_size
-                current_agg = current_agg.bucket(**params)
 
-            elif isinstance(field_or_exp, Field):
-                params = field_or_exp.bucket_params()
+            else:
+                raise NotImplementedError
 
+            if isinstance(field_or_exp, Field):
                 # /!\ TODO: not working with two group_by
                 if self._order_by:
                     # If we're at the latest group_by, we can order by
@@ -174,13 +173,7 @@ class FQuery(object):
                     elif self._order_by.keys() == ['_count']:
                         params['order'] = self._order_by
 
-                params['agg_type'] = 'terms'
-                if self.default_size:
-                    params['size'] = self.default_size
-                current_agg = current_agg.bucket(**params)
-
-            else:
-                raise NotImplementedError
+            current_agg = current_agg.bucket(**params)
 
         return current_agg
 
