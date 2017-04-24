@@ -1031,3 +1031,45 @@ def test_filling_missing_buckets_ranges():
     added_lines = [l for l in lines if l['payment_type'] == 'wire_transfer']
     range_keys = ['1 - 5', '5 - 11', '11 - 15']
     assert sorted([l['shop_id'] for l in added_lines]) == sorted(range_keys)
+
+
+def test_filling_missing_buckets_nested_nothing_to_do():
+    fquery = FQuery(get_search()).values(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        Sale.part_id,
+    )
+    fquery._configure_search()
+
+    result = load_output('avg_part_price_by_part')
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 10  # 10 parts
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 10
+
+
+def test_filling_missing_buckets_nested():
+    fquery = FQuery(get_search()).values(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        Sale.product_id,
+        Sale.part_id,
+    )
+    fquery._configure_search()
+
+    result = load_output('avg_part_price_by_product_by_part')
+    # We remove one part bucket in the first product bucket
+    product_bucket = result['aggregations']['products']['product_id']['buckets'][0]
+    part_id_buckets = [
+        b for b in product_bucket['parts']['part_id']['buckets']
+        if b['key'] != 'part_1'
+    ]
+    product_bucket['parts']['part_id']['buckets'] = part_id_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 99  # 10 parts, 10 products minus the one we removed
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 100

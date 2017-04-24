@@ -274,6 +274,9 @@ class FQuery(object):
         enums = []
 
         for field in self._group_by:
+            if isinstance(field, NestedField):
+                continue
+
             if isinstance(field, Aggregate):
                 if field.choice_keys():
                     enums.append(field.choice_keys())
@@ -294,16 +297,11 @@ class FQuery(object):
                     enums.append(field.choice_keys())
 
                 else:
-                    # /!\ uncommon terms (beyond 10 first) will not be fetched by default
-                    if 'custom_choices' in field.data:  #  and self.default_size == 0
-                        # We add the custom choices
-                        enums.append([c for c in field.data['custom_choices']])
-                    else:
-                        # We add the lines' values
-                        key = field.key
-                        values = set([line[key] for line in lines])
-                        values = sorted(list(values))
-                        enums.append(values)
+                    # We add the lines' values
+                    key = field.key
+                    values = set([line[key] for line in lines])
+                    values = sorted(list(values))
+                    enums.append(values)
 
         return enums
 
