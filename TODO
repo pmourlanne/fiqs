@@ -8,8 +8,6 @@ DateHistogram: handle remaining intervals in choice keys (year, quarter, month, 
 
 Documentation for ReverseNested aggregation
 
-Nested query: issue when doing a FieldWithChoices with a field with a parent
-
 ##########
 # Fields #
 ##########

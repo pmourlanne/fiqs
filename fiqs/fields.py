@@ -8,7 +8,7 @@ from fiqs.i18n import _
 
 class Field(object):
     def __init__(self, type, key=None, verbose_name=None, storage_field=None,
-                 unit=None, choices=None, data=None, parent=None):
+                 unit=None, choices=None, data=None, parent=None, model=None):
         verbose_name = verbose_name or key
         storage_field = storage_field or key
         choices = choices or ()
@@ -22,6 +22,8 @@ class Field(object):
         self.choices = choices
         self.data = data
         self.parent = parent
+        if model:
+            self.model = model
 
     def get_copy(self):
         return self.__class__(
@@ -289,6 +291,7 @@ class FieldWithChoices(Field):
             choices=choices,
             data=data,
             parent=field.parent,
+            model=field.model,
         )
 
 
@@ -308,6 +311,7 @@ class FieldWithRanges(Field):
             choices=field.choices,
             data=data,
             parent=field.parent,
+            model=field.model,
         )
 
 
@@ -324,4 +328,5 @@ class DataExtendedField(Field):
             choices=field.choices,
             data=data,
             parent=field.parent,
+            model=field.model,
         )

@@ -311,6 +311,26 @@ def test_nested_parent_automatically_added_3():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_nested_parent_automatically_added_4():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).metric(
+        'avg_part_price', 'avg', field='products.parts.part_price',
+    )
+
+    fquery = FQuery(get_search()).values(
+        avg_part_price=Avg(Sale.part_price),
+    ).group_by(
+        FieldWithChoices(Sale.product_id, choices=[]),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_reverse_nested_aggregation():
     search = get_search()
     search.aggs.bucket(
