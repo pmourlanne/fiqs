@@ -206,6 +206,9 @@ class ReverseNested(Metric):
 
         return params
 
+    def get_casted_value(self, v):
+        return v
+
 
 class Operation(Metric):
     def is_field_agg(self):

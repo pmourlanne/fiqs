@@ -859,6 +859,28 @@ def test_computed_fields_raise_when_non_flat():
     with pytest.raises(ConfigurationError):
         fquery.eval(flat=False)
 
+
+def test_reverse_nested():
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.product_type,
+        ReverseNested(),
+    )
+
+    result = load_output('nb_sales_by_product_type')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 5
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        # Group by is present
+        assert 'product_type' in line
+        # Reverse nested is present
+        assert str(ReverseNested()) in line
+
+
 ########################
 # Fill missing buckets #
 ########################

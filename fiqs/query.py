@@ -199,6 +199,8 @@ class FQuery(object):
         for field_or_exp in self._group_by:
             if isinstance(field_or_exp, Aggregate):
                 key_to_field[field_or_exp.field.storage_field] = field_or_exp
+            elif isinstance(field_or_exp, ReverseNested):
+                key_to_field[str(field_or_exp)] = field_or_exp
             else:
                 key_to_field[field_or_exp.storage_field] = field_or_exp
 
