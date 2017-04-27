@@ -92,8 +92,10 @@ class ResultTree(object):
                 new_line[k] = v
             elif k in RESERVED_KEYS:
                 continue
-            else:
+            elif 'value' in v:
                 new_line[k] = v['value']
+            elif 'doc_count' in v:
+                new_line[k] = v['doc_count']
 
         return new_line
 

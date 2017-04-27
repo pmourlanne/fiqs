@@ -6,11 +6,7 @@ Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
 
-########
-# Tree #
-########
-
-- Test reverse nested aggregations (automatically add root field?)
+Documentation for ReverseNested aggregation
 
 ##########
 # Fields #
@@ -22,4 +18,3 @@ DateHistogram: handle remaining intervals in choice keys (year, quarter, month, 
 - Order by with Field
 - More cast results tests
 - Cast results of computed fields? (Ratio?)
-- Should Histogram / DateHistogram and DateRange be aggregates?

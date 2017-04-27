@@ -811,3 +811,37 @@ def test_total_sales_by_payment_type_by_shop_range():
         assert len(payment_type_lines) == 3
         range_keys = ['1 - 5', '5 - 11', '11 - 15']
         assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)
+
+
+def test_nb_sales_by_product_type():
+    lines = flatten_result(load_output('nb_sales_by_product_type'))
+
+    assert len(lines) == 5  # 5 product types
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'product_type' in line
+        assert type(line['product_type']) == six.text_type
+        # Reverse nested is present
+        assert 'reverse_nested_root' in line
+        assert type(line['reverse_nested_root']) == int
+
+
+def test_nb_sales_by_product_type_by_part_id():
+    lines = flatten_result(load_output('nb_sales_by_product_type_by_part_id'))
+
+    assert len(lines) == 5 * 10 # 5 product types, 10 part ids
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by are present
+        assert 'product_type' in line
+        assert type(line['product_type']) == six.text_type
+        assert 'part_id' in line
+        assert type(line['part_id']) == six.text_type
+        # Reverse nested is present
+        assert 'reverse_nested_root' in line
+        assert type(line['reverse_nested_root']) == int
