@@ -1202,7 +1202,7 @@ def test_filling_missing_buckets_nested():
 def test_filling_missing_buckets_reverse_nested():
     product_types = [
         'product_type_{}'.format(i)
-        for i in xrange(5)
+        for i in range(5)
     ]
 
     class SaleWithProductTypeChoices(Model):
