@@ -188,6 +188,25 @@ class DateRange(Aggregate):
         return params
 
 
+class ReverseNested(Metric):
+    def __init__(self, path=None):
+        self.path = path or 'root'
+
+    def __str__(self):
+        return 'reverse_nested_{}'.format(self.path)
+
+    def agg_params(self):
+        params = {
+            'name': str(self),
+            'agg_type': 'reverse_nested',
+        }
+
+        if self.path != 'root':
+            params['path'] = self.path
+
+        return params
+
+
 class Operation(Metric):
     def is_field_agg(self):
         return False

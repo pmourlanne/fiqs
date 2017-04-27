@@ -276,22 +276,6 @@ class NestedField(Field):
         return params
 
 
-class ReverseNestedField(Field):
-    def __init__(self, **kwargs):
-        super(ReverseNestedField, self).__init__('reverse_nested', **kwargs)
-
-    def nested_params(self):
-        params = {
-            'name': self.key,
-            'agg_type': 'reverse_nested',
-        }
-        # /!\ path must not be provided for root reverse_nested aggregation
-        if self.key != 'root':
-            params['path'] = self.key
-
-        return params
-
-
 class FieldWithChoices(Field):
     def __init__(self, field, choices=None):
         choices = choices or ()

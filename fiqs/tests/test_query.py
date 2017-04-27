@@ -6,7 +6,16 @@ from datetime import datetime
 import pytest
 
 from fiqs import fields
-from fiqs.aggregations import Sum, Count, Avg, DateHistogram, Addition, Ratio, Subtraction
+from fiqs.aggregations import (
+    Sum,
+    Count,
+    Avg,
+    DateHistogram,
+    Addition,
+    Ratio,
+    Subtraction,
+    ReverseNested,
+)
 from fiqs.exceptions import ConfigurationError
 from fiqs.fields import DataExtendedField, FieldWithChoices, FieldWithRanges
 from fiqs.models import Model
@@ -296,6 +305,53 @@ def test_nested_parent_automatically_added_3():
     ).group_by(
         Sale.product_id,
         Sale.parts,  # Can we get rid of this?
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_reverse_nested_aggregation():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'reverse_nested_root', 'reverse_nested',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.product_id,
+        ReverseNested(),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_reverse_nested_aggregation_path():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part_id', 'terms', field='products.parts.part_id',
+    ).bucket(
+        'reverse_nested_products', 'reverse_nested', path='products',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.product_id,
+        Sale.part_id,
+        ReverseNested('products'),
     )
     fsearch = fquery._configure_search()
 

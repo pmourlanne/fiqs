@@ -5,9 +5,9 @@ from itertools import product
 from six import text_type as unicode
 
 from fiqs import flatten_result
-from fiqs.aggregations import Aggregate
+from fiqs.aggregations import Aggregate, ReverseNested
 from fiqs.exceptions import ConfigurationError
-from fiqs.fields import NestedField, ReverseNestedField, Field
+from fiqs.fields import NestedField, Field
 
 
 def calc_group_by_keys(group_by_fields, nested=True):
@@ -18,8 +18,6 @@ def calc_group_by_keys(group_by_fields, nested=True):
         elif isinstance(field, NestedField):
             if nested:
                 ret.append(field.key)
-        elif isinstance(field, ReverseNestedField):
-            continue
         else:
             ret.append(field.key)
     return ret
@@ -144,11 +142,11 @@ class FQuery(object):
         last_idx = len(self._group_by) - 1
 
         for idx, field_or_exp in enumerate(self._group_by):
-            if isinstance(field_or_exp, Aggregate):
+            if isinstance(field_or_exp, Aggregate)\
+            or isinstance(field_or_exp, ReverseNested):
                 params = field_or_exp.agg_params()
 
-            elif isinstance(field_or_exp, NestedField)\
-                or isinstance(field_or_exp, ReverseNestedField):
+            elif isinstance(field_or_exp, NestedField):
                 params = field_or_exp.nested_params()
 
             elif field_or_exp.is_range():

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from fiqs.aggregations import Avg, Sum, DateHistogram, Count
+from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested
 from fiqs.fields import FieldWithRanges
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
@@ -155,6 +155,28 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_part_price', 'avg', field='products.parts.part_price',
     )
     write_output(search, 'avg_part_price_by_product_and_by_part')
+
+    # Nb sales by product_type
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            Sale.product_type,
+            ReverseNested(),
+        ),
+        'nb_sales_by_product_type',
+    )
+
+    # Nb sales by part_id
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            Sale.part_id,
+            ReverseNested(),
+        ),
+        'nb_sales_by_part_id',
+    )
 
 
 @pytest.mark.docker
