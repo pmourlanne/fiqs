@@ -1177,3 +1177,38 @@ def test_filling_missing_buckets_nested():
 
     lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 100
+
+
+def test_filling_missing_buckets_reverse_nested():
+    product_types = [
+        'product_type_{}'.format(i)
+        for i in xrange(5)
+    ]
+
+    class SaleWithProductTypeChoices(Model):
+        products = fields.NestedField()
+        product_type = fields.KeywordField(parent='products', choices=product_types)
+
+    fquery = FQuery(get_search()).values(
+        Count(SaleWithProductTypeChoices),
+    ).group_by(
+        SaleWithProductTypeChoices.product_type,
+        ReverseNested(),
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_product_type')
+    product_type_buckets = result['aggregations']['products']['product_type']['buckets']
+    product_type_buckets = [
+        b for b in product_type_buckets
+        if b['key'] != 'product_type_0'
+    ]
+    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 4
+    assert sorted([l['product_type'] for l in lines]) == product_types[1:]
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 5
+    assert sorted([l['product_type'] for l in lines]) == product_types

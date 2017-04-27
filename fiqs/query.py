@@ -18,6 +18,8 @@ def calc_group_by_keys(group_by_fields, nested=True):
         elif isinstance(field, NestedField):
             if nested:
                 ret.append(field.key)
+        elif isinstance(field, ReverseNested):
+            continue
         else:
             ret.append(field.key)
     return ret
@@ -274,7 +276,7 @@ class FQuery(object):
         enums = []
 
         for field in self._group_by:
-            if isinstance(field, NestedField):
+            if isinstance(field, NestedField) or isinstance(field, ReverseNested):
                 continue
 
             if isinstance(field, Aggregate):
