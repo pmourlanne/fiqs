@@ -2,6 +2,8 @@
 
 import six
 
+import pytest
+
 from fiqs import flatten_result
 from fiqs.tests.conftest import load_output
 from fiqs.tree import ResultTree
@@ -811,6 +813,27 @@ def test_total_sales_by_payment_type_by_shop_range():
         assert len(payment_type_lines) == 3
         range_keys = ['1 - 5', '5 - 11', '11 - 15']
         assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)
+
+
+@pytest.mark.xfail
+def test_total_sales_by_shop_range():
+    lines = flatten_result(load_output('total_sales_by_shop_range'))
+
+    assert len(lines) == 2  # 2 ranges
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        # Group by is present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == six.text_type
+
+    range_keys = ['1 - 5', '5+']
+    assert sorted([l['shop_id'] for l in lines]) == range_keys
 
 
 def test_nb_sales_by_product_type():

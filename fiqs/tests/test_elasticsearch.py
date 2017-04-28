@@ -321,3 +321,21 @@ def test_write_search_outputs(elasticsearch_sale):
         ),
         'total_sales_by_shop_range_by_payment_type',
     )
+
+    # Total sales by shop range
+    ranges = [{
+        'from': 1,
+        'to': 5,
+        'key': '1 - 5',
+    }, {
+        'from': 5,
+        'key': '5+',
+    }]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            FieldWithRanges(Sale.shop_id, ranges=ranges),
+        ),
+        'total_sales_by_shop_range',
+    )
