@@ -404,6 +404,32 @@ def test_reverse_nested_aggregation_path():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_reverse_nested_aggregation_path_2():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part_id', 'terms', field='products.parts.part_id',
+    ).bucket(
+        'reverse_nested_products', 'reverse_nested', path='products',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.product_id,
+        Sale.part_id,
+        ReverseNested(Sale.products),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_default_size():
     search = get_search()
     search.aggs.bucket(
@@ -1205,14 +1231,10 @@ def test_filling_missing_buckets_reverse_nested():
         for i in range(5)
     ]
 
-    class SaleWithProductTypeChoices(Model):
-        products = fields.NestedField()
-        product_type = fields.KeywordField(parent='products', choices=product_types)
-
     fquery = FQuery(get_search()).values(
-        Count(SaleWithProductTypeChoices),
+        Count(Sale),
     ).group_by(
-        SaleWithProductTypeChoices.product_type,
+        FieldWithChoices(Sale.product_type, choices=product_types),
         ReverseNested(),
     )
     fquery._configure_search()

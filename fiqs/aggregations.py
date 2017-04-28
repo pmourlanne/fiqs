@@ -3,6 +3,7 @@
 from datetime import timedelta, datetime
 
 from fiqs.exceptions import MissingParameterException
+from fiqs.fields import Field
 
 
 class Metric(object):
@@ -189,8 +190,13 @@ class DateRange(Aggregate):
 
 
 class ReverseNested(Metric):
-    def __init__(self, path=None):
-        self.path = path or 'root'
+    def __init__(self, path_or_field=None):
+        if path_or_field is None:
+            self.path = 'root'
+        elif isinstance(path_or_field, Field):
+            self.path = path_or_field.get_storage_field()
+        else:
+            self.path = path_or_field
 
     def __str__(self):
         return 'reverse_nested_{}'.format(self.path)
