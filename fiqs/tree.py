@@ -36,7 +36,7 @@ class ResultTree(object):
             return False
 
         # Range bucket
-        if 'from' in node and 'to' in node:
+        if 'from' in node or 'to' in node:
             return False
 
         dict_child_nodes = [

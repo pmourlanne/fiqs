@@ -2,8 +2,6 @@
 
 import six
 
-import pytest
-
 from fiqs import flatten_result
 from fiqs.tests.conftest import load_output
 from fiqs.tree import ResultTree
@@ -815,7 +813,6 @@ def test_total_sales_by_payment_type_by_shop_range():
         assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)
 
 
-@pytest.mark.xfail
 def test_total_sales_by_shop_range():
     lines = flatten_result(load_output('total_sales_by_shop_range'))
 
