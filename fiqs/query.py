@@ -334,4 +334,8 @@ class FQuery(object):
 
         empty_line['doc_count'] = 0
 
+        for field_or_exp in self._group_by:
+            if isinstance(field_or_exp, ReverseNested):
+                empty_line[str(field_or_exp)] = 0
+
         return empty_line

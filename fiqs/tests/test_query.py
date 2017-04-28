@@ -1250,3 +1250,7 @@ def test_filling_missing_buckets_reverse_nested():
     lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 5
     assert sorted([l['product_type'] for l in lines]) == product_types
+
+    # Reverse nested aggregation is present in all lines
+    for line in lines:
+        assert str(ReverseNested()) in line
