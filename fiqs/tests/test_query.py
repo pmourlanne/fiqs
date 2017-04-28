@@ -392,9 +392,7 @@ def test_reverse_nested_aggregation_path():
         'reverse_nested_products', 'reverse_nested', path='products',
     )
 
-    fquery = FQuery(get_search()).values(
-        Count(Sale),
-    ).group_by(
+    fquery = FQuery(get_search()).group_by(
         Sale.product_id,
         Sale.part_id,
         ReverseNested('products'),
@@ -418,9 +416,7 @@ def test_reverse_nested_aggregation_path_2():
         'reverse_nested_products', 'reverse_nested', path='products',
     )
 
-    fquery = FQuery(get_search()).values(
-        Count(Sale),
-    ).group_by(
+    fquery = FQuery(get_search()).group_by(
         Sale.product_id,
         Sale.part_id,
         ReverseNested(Sale.products),

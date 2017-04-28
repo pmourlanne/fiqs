@@ -186,6 +186,32 @@ A ``DataExtendedField`` takes as argument an existing field, and a data dictiona
 
 This field is useful if you want to to fine tune the aggregation. In the example we changed the ``size`` parameter that will be used in the Elasticsearch aggregation.
 
+ReverseNested
+^^^^^^^^^^^^^
+
+The ``ReverseNested`` class lets you make `reverse nested aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-reverse-nested-aggregation.html>`_. It takes a path as an optional argument, which can be a string or a field::
+
+    class Sale(models.Model):
+        products = fields.NestedField()
+        product_id = fields.KeywordField(parent='products')
+
+        parts = fields.NestedField(parent='products')
+        part_id = fields.KeywordField(parent='parts')
+
+    # Number of sales by product_id
+    FQuery(search).values(
+        Count(Sale),
+    ).group_by(
+        Sale.product_id,
+        ReverseNested(),
+    )
+    # Number of products by part_id
+    FQuery(search).group_by(
+        Sale.product_id,
+        Sale.part_id,
+        ReverseNested(Sale.products),  # Or ReverseNested('products')
+    )
+
 
 Order by
 ********

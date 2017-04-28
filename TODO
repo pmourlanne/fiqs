@@ -6,8 +6,6 @@ Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
 
-Documentation for ReverseNested aggregation
-
 ##########
 # Fields #
 ##########

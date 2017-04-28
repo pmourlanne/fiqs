@@ -169,9 +169,7 @@ def test_write_nested_search_output(elasticsearch_sale):
 
     # Nb sales by product type by part_id
     write_fquery_output(
-        FQuery(get_search()).values(
-            Count(Sale),
-        ).group_by(
+        FQuery(get_search()).group_by(
             Sale.product_type,
             Sale.part_id,
             ReverseNested(),
