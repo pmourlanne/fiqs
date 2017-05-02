@@ -334,7 +334,7 @@ def test_is_nested_node_2():
                 ['avg_part_price']['value'])
 
 
-def test_is_nested_node_3():
+def test_is_nested_node_standard_node():
     # This is not a nested node
     node = {
         "shop_id": {
@@ -358,7 +358,7 @@ def test_is_nested_node_3():
     assert not tree._is_nested_node(node['shop_id']['buckets'][0]['total_sales']['value'])
 
 
-def test_is_nested_node_4():
+def test_is_nested_node_ranges_node():
     # This is not a nested node, but it contains ranges
     node = {
         "payment_type": {
@@ -399,7 +399,7 @@ def test_is_nested_node_4():
                 ['shop_id']['buckets']['1 - 5']['total_sales']['value'])
 
 
-def test_is_nested_node_5():
+def test_is_nested_node_ranges_node_2():
     node = {
         "shop_id": {
             "buckets": {
@@ -438,6 +438,47 @@ def test_is_nested_node_5():
     assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
                 ['payment_type']['buckets'][0]['total_sales'])
     assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['payment_type']['buckets'][0]['total_sales']['value'])
+
+
+def test_is_nested_node_ranges_node_3():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "5+": {
+                    "doc_count": 181,
+                    "payment_type": {
+                        "buckets": [
+                            {
+                                "doc_count": 68,
+                                "key": "store_credit",
+                                "total_sales": {
+                                    "value": 33595.0,
+                                },
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                    "from": 5.0,
+                },
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['shop_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
+                ['payment_type'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
+                ['payment_type']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
+                ['payment_type']['buckets'][0])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
+                ['payment_type']['buckets'][0]['total_sales'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
                 ['payment_type']['buckets'][0]['total_sales']['value'])
 
 
@@ -593,7 +634,7 @@ def test_remove_nested_aggregations_3():
     assert expected == result
 
 
-def test_remove_nested_aggregations_4():
+def test_remove_nested_aggregations_standard_node():
     result = load_output('total_sales_by_shop')
     node = result['aggregations']
     expected = node
@@ -602,7 +643,8 @@ def test_remove_nested_aggregations_4():
 
     assert expected == result
 
-def test_remove_nested_aggregations_5():
+
+def test_remove_nested_aggregations_standard_node_2():
     node = {
         "payment_type": {
             "buckets": [
@@ -619,6 +661,13 @@ def test_remove_nested_aggregations_5():
                                     "value": 29523.0,
                                 },
                             },
+                            "5+": {
+                                "doc_count": 123,
+                                "from": 5.0,
+                                "total_sales": {
+                                    "value": 123.456,
+                                },
+                            },
                         },
                     },
                 },
@@ -632,7 +681,7 @@ def test_remove_nested_aggregations_5():
     assert expected == result
 
 
-def test_remove_nested_aggregations_6():
+def test_remove_nested_aggregations_ranges_node():
     node = {
         "shop_id": {
             "buckets": {
@@ -844,9 +893,9 @@ def test_nb_sales_by_product_type():
         # Group by is present
         assert 'product_type' in line
         assert type(line['product_type']) == six.text_type
-        # Reverse nested is present
-        assert 'reverse_nested_root' in line
-        assert type(line['reverse_nested_root']) == int
+        # Reverse nested doc count is present
+        assert 'reverse_nested_root__doc_count' in line
+        assert type(line['reverse_nested_root__doc_count']) == int
 
 
 def test_nb_sales_by_product_type_by_part_id():
@@ -862,6 +911,29 @@ def test_nb_sales_by_product_type_by_part_id():
         assert type(line['product_type']) == six.text_type
         assert 'part_id' in line
         assert type(line['part_id']) == six.text_type
-        # Reverse nested is present
-        assert 'reverse_nested_root' in line
-        assert type(line['reverse_nested_root']) == int
+        # Reverse nested doc count is present
+        assert 'reverse_nested_root__doc_count' in line
+        assert type(line['reverse_nested_root__doc_count']) == int
+
+
+import pytest
+@pytest.mark.xfail
+def test_total_and_avg_sales_by_product_type():
+    lines = flatten_result(load_output('total_and_avg_sales_by_product_type'))
+
+    assert len(lines) == 5  # 5 product types
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'product_type' in line
+        assert type(line['product_type']) == six.text_type
+        # Reverse nested doc count is present
+        assert 'reverse_nested_root__doc_count' in line
+        assert type(line['reverse_nested_root__doc_count']) == int
+        # Both reverse nested metrics are present
+        assert 'reverse_nested_root__total_sales' in line
+        assert type(line['reverse_nested_root__total_sales']) == float
+        assert 'reverse_nested_root__avg_sales' in line
+        assert type(line['reverse_nested_root__avg_sales']) == float

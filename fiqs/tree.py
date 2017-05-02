@@ -94,8 +94,8 @@ class ResultTree(object):
                 continue
             elif 'value' in v:
                 new_line[k] = v['value']
-            elif 'doc_count' in v:
-                new_line[k] = v['doc_count']
+            elif 'doc_count' in v:  # Reverse nested aggregation
+                new_line['{}__doc_count'.format(k)] = v['doc_count']
 
         return new_line
 

@@ -199,7 +199,7 @@ class ReverseNested(Metric):
             self.path = path_or_field
 
     def __str__(self):
-        return 'reverse_nested_{}'.format(self.path)
+        return 'reverse_nested_{}__doc_count'.format(self.path)
 
     def agg_params(self):
         params = {

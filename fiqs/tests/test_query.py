@@ -338,7 +338,7 @@ def test_reverse_nested_aggregation():
     ).bucket(
         'product_id', 'terms', field='products.product_id',
     ).bucket(
-        'reverse_nested_root', 'reverse_nested',
+        'reverse_nested_root__doc_count', 'reverse_nested',
     )
 
     fquery = FQuery(get_search()).values(
@@ -363,7 +363,7 @@ def test_reverse_nested_aggregation_2():
     ).bucket(
         'part_id', 'terms', field='products.parts.part_id',
     ).bucket(
-        'reverse_nested_root', 'reverse_nested',
+        'reverse_nested_root__doc_count', 'reverse_nested',
     )
 
     fquery = FQuery(get_search()).values(
@@ -389,7 +389,7 @@ def test_reverse_nested_aggregation_path():
     ).bucket(
         'part_id', 'terms', field='products.parts.part_id',
     ).bucket(
-        'reverse_nested_products', 'reverse_nested', path='products',
+        'reverse_nested_products__doc_count', 'reverse_nested', path='products',
     )
 
     fquery = FQuery(get_search()).group_by(
@@ -413,7 +413,7 @@ def test_reverse_nested_aggregation_path_2():
     ).bucket(
         'part_id', 'terms', field='products.parts.part_id',
     ).bucket(
-        'reverse_nested_products', 'reverse_nested', path='products',
+        'reverse_nested_products__doc_count', 'reverse_nested', path='products',
     )
 
     fquery = FQuery(get_search()).group_by(
