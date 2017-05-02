@@ -338,47 +338,76 @@ def test_reverse_nested_aggregation():
     ).bucket(
         'product_id', 'terms', field='products.product_id',
     ).bucket(
-        'reverse_nested_root__doc_count', 'reverse_nested',
+        'reverse_nested_root', 'reverse_nested',
+    ).metric(
+        'avg_price', 'avg', field='price',
     )
 
     fquery = FQuery(get_search()).values(
-        Count(Sale),
+        ReverseNested(
+            Sale,
+            avg_price=Avg(Sale.price),
+        ),
     ).group_by(
         Sale.product_id,
-        ReverseNested(),
     )
     fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
 
-def test_reverse_nested_aggregation_2():
+def test_reverse_nested_aggregation_doc_count():
     search = get_search()
     search.aggs.bucket(
         'products', 'nested', path='products',
     ).bucket(
         'product_id', 'terms', field='products.product_id',
     ).bucket(
-        'parts', 'nested', path='products.parts',
-    ).bucket(
-        'part_id', 'terms', field='products.parts.part_id',
-    ).bucket(
-        'reverse_nested_root__doc_count', 'reverse_nested',
+        'reverse_nested_root', 'reverse_nested',
     )
 
     fquery = FQuery(get_search()).values(
-        Count(Sale),
+        ReverseNested(
+            Sale,
+            Count(Sale),
+        ),
+    ).group_by(
+        Sale.product_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+def test_reverse_nested_aggregation_doc_count_2():
+    search = get_search()
+    search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    ).bucket(
+        'parts', 'nested', path='products.parts',
+    ).bucket(
+        'part_id', 'terms', field='products.parts.part_id',
+    ).bucket(
+        'reverse_nested_root', 'reverse_nested',
+    )
+
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale,
+            Count(Sale),
+        ),
     ).group_by(
         Sale.product_id,
         Sale.part_id,
-        ReverseNested(),
     )
     fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
 
-def test_reverse_nested_aggregation_path():
+def test_reverse_nested_aggregation_doc_count_path():
     search = get_search()
     search.aggs.bucket(
         'products', 'nested', path='products',
@@ -389,20 +418,24 @@ def test_reverse_nested_aggregation_path():
     ).bucket(
         'part_id', 'terms', field='products.parts.part_id',
     ).bucket(
-        'reverse_nested_products__doc_count', 'reverse_nested', path='products',
+        'reverse_nested_products', 'reverse_nested', path='products',
     )
 
-    fquery = FQuery(get_search()).group_by(
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            'products',
+            Count(Sale.products),
+        ),
+    ).group_by(
         Sale.product_id,
         Sale.part_id,
-        ReverseNested('products'),
     )
     fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
 
 
-def test_reverse_nested_aggregation_path_2():
+def test_reverse_nested_aggregation_doc_count_path_2():
     search = get_search()
     search.aggs.bucket(
         'products', 'nested', path='products',
@@ -413,13 +446,17 @@ def test_reverse_nested_aggregation_path_2():
     ).bucket(
         'part_id', 'terms', field='products.parts.part_id',
     ).bucket(
-        'reverse_nested_products__doc_count', 'reverse_nested', path='products',
+        'reverse_nested_products', 'reverse_nested', path='products',
     )
 
-    fquery = FQuery(get_search()).group_by(
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale.products,
+            Count(Sale.products),
+        ),
+    ).group_by(
         Sale.product_id,
         Sale.part_id,
-        ReverseNested(Sale.products),
     )
     fsearch = fquery._configure_search()
 
@@ -904,10 +941,12 @@ def test_computed_fields_raise_when_non_flat():
 
 def test_reverse_nested():
     fquery = FQuery(get_search()).values(
-        Count(Sale),
+        ReverseNested(
+            Sale,
+            Count(Sale),
+        ),
     ).group_by(
         Sale.product_type,
-        ReverseNested(),
     )
 
     result = load_output('nb_sales_by_product_type')
@@ -920,7 +959,10 @@ def test_reverse_nested():
         # Group by is present
         assert 'product_type' in line
         # Reverse nested is present
-        assert str(ReverseNested()) in line
+        assert str(ReverseNested(
+            Sale,
+            Count(Sale),
+        )) in line
 
 
 ########################
@@ -1228,10 +1270,12 @@ def test_filling_missing_buckets_reverse_nested():
     ]
 
     fquery = FQuery(get_search()).values(
-        Count(Sale),
+        ReverseNested(
+            Sale,
+            Count(Sale),
+        ),
     ).group_by(
         FieldWithChoices(Sale.product_type, choices=product_types),
-        ReverseNested(),
     )
     fquery._configure_search()
 
@@ -1253,4 +1297,7 @@ def test_filling_missing_buckets_reverse_nested():
 
     # Reverse nested aggregation is present in all lines
     for line in lines:
-        assert str(ReverseNested()) in line
+        assert str(ReverseNested(
+            Sale,
+            Count(Sale),
+        )) in line

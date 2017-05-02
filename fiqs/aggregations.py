@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 from datetime import timedelta, datetime
+
+import six
 
 from fiqs.exceptions import MissingParameterException
 from fiqs.fields import Field
+from fiqs.models import Model
 
 
 class Metric(object):
@@ -20,17 +24,18 @@ class Metric(object):
         return False
 
 
-class ModelMetric(Metric):
-    def __init__(self, model):
-        self.model = model
+class Count(Metric):
+    def __init__(self, model_or_field):
+        if isinstance(model_or_field, Field):
+            self.model = model_or_field.model
+        else:
+            self.model = model_or_field
+
+    def is_doc_count(self):
+        return True
 
     def is_field_agg(self):
         return False
-
-
-class Count(ModelMetric):
-    def is_doc_count(self):
-        return True
 
     def __str__(self):
         return 'doc_count'
@@ -190,20 +195,27 @@ class DateRange(Aggregate):
 
 
 class ReverseNested(Metric):
-    def __init__(self, path_or_field=None):
-        if path_or_field is None:
+    def __init__(self, path_or_field_or_model, *expressions, **named_expressions):
+        # /!\ named_expressions may not be correctly ordered
+        if isinstance(path_or_field_or_model, six.text_type)\
+        or isinstance(path_or_field_or_model, str):
+            self.path = path_or_field_or_model or 'root'
+        elif isinstance(path_or_field_or_model, Field):
+            self.path = path_or_field_or_model.get_storage_field()
+        elif issubclass(path_or_field_or_model, Model):
             self.path = 'root'
-        elif isinstance(path_or_field, Field):
-            self.path = path_or_field.get_storage_field()
-        else:
-            self.path = path_or_field
+
+        self._expressions = OrderedDict()
+        for exp in expressions:
+            self._expressions[str(exp)] = exp
+        self._expressions.update(named_expressions)
 
     def __str__(self):
         return 'reverse_nested_{}__doc_count'.format(self.path)
 
-    def agg_params(self):
+    def reverse_agg_params(self):
         params = {
-            'name': str(self),
+            'name': 'reverse_nested_{}'.format(self.path),
             'agg_type': 'reverse_nested',
         }
 
@@ -214,6 +226,22 @@ class ReverseNested(Metric):
 
     def get_casted_value(self, v):
         return v
+
+    def configure_aggregations(self, agg):
+        reverse_agg_params = self.reverse_agg_params()
+        reverse_nested_bucket = agg.bucket(
+            **reverse_agg_params
+        )
+
+        for key, expression in self._expressions.items():
+            if expression.is_field_agg():
+                op = expression.__class__.__name__.lower()
+                reverse_nested_bucket.metric(
+                    key,
+                    op,
+                    field=expression.field.get_storage_field(),
+                    **expression.params
+                )
 
 
 class Operation(Metric):

@@ -144,8 +144,7 @@ class FQuery(object):
         last_idx = len(self._group_by) - 1
 
         for idx, field_or_exp in enumerate(self._group_by):
-            if isinstance(field_or_exp, Aggregate)\
-            or isinstance(field_or_exp, ReverseNested):
+            if isinstance(field_or_exp, Aggregate):
                 params = field_or_exp.agg_params()
 
             elif isinstance(field_or_exp, NestedField):
@@ -179,11 +178,13 @@ class FQuery(object):
 
     def _configure_values(self, agg):
         for key, expression in self._expressions.items():
-            if expression.is_field_agg():
+            if isinstance(expression, ReverseNested):
+                expression.configure_aggregations(agg)
+
+            elif expression.is_field_agg():
                 op = expression.__class__.__name__.lower()
-                es_metric_name = key
                 agg.metric(
-                    es_metric_name,
+                    key,
                     op,
                     field=expression.field.get_storage_field(),
                     **expression.params

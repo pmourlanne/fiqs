@@ -6,8 +6,8 @@ Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
 
-Rewrite ReverseNested :o ReverseNested should be an aggregation passed to values,
-and should accept a path and another aggregation(s?) as arguments
+ReverseNested: get_casted_value?
+ReverseNested: rewrite documentation
 
 ##########
 # Fields #
