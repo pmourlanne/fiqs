@@ -6,8 +6,8 @@ Different documentation for different major versions
 DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
 
-ReverseNested: get_casted_value?
 ReverseNested: rewrite documentation
+ReverseNested: Internal API should be closer to FQuery than to Metric?
 
 ##########
 # Fields #
@@ -17,5 +17,4 @@ ReverseNested: rewrite documentation
 - Tests and code for search filtering
 - Named group_by?
 - Order by with Field
-- More cast results tests
 - Cast results of computed fields? (Ratio?)

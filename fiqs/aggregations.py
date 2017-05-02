@@ -211,7 +211,8 @@ class ReverseNested(Metric):
         self._expressions.update(named_expressions)
 
     def __str__(self):
-        return 'reverse_nested_{}__doc_count'.format(self.path)
+        keys = '__'.join(self._expressions.keys())
+        return 'reverse_nested_{}__{}'.format(self.path, keys)
 
     def reverse_agg_params(self):
         params = {
@@ -242,6 +243,25 @@ class ReverseNested(Metric):
                     field=expression.field.get_storage_field(),
                     **expression.params
                 )
+
+    @property
+    def expressions(self):
+        return {
+            'reverse_nested_{}__{}'.format(self.path, key): expression
+            for key, expression in self._expressions.items()
+        }
+
+    def create_empty_line(self):
+        line = {}
+
+        for key, expression in self.expressions.items():
+            if expression.is_doc_count():
+                continue
+            line[key] = None
+
+        line['reverse_nested_{}__doc_count'.format(self.path)] = 0
+
+        return line
 
 
 class Operation(Metric):

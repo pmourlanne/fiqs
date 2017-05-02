@@ -197,13 +197,17 @@ class FQuery(object):
         for key, exp in self._expressions.items():
             if exp.is_doc_count():
                 continue
-            key_to_field[key] = exp
+            elif isinstance(exp, ReverseNested):
+                for nested_key, nested_expression in exp.expressions.items():
+                    if nested_expression.is_doc_count():
+                        continue
+                    key_to_field[nested_key] = nested_expression
+            else:
+                key_to_field[key] = exp
 
         for field_or_exp in self._group_by:
             if isinstance(field_or_exp, Aggregate):
                 key_to_field[field_or_exp.field.storage_field] = field_or_exp
-            elif isinstance(field_or_exp, ReverseNested):
-                key_to_field[str(field_or_exp)] = field_or_exp
             else:
                 key_to_field[field_or_exp.storage_field] = field_or_exp
 
@@ -331,12 +335,11 @@ class FQuery(object):
         empty_line = base_line.copy()
 
         for key, expression in self._expressions.items():
-            empty_line[key] = None
+            if isinstance(expression, ReverseNested):
+                empty_line.update(expression.create_empty_line())
+            else:
+                empty_line[key] = None
 
         empty_line['doc_count'] = 0
-
-        for field_or_exp in self._group_by:
-            if isinstance(field_or_exp, ReverseNested):
-                empty_line[str(field_or_exp)] = 0
 
         return empty_line

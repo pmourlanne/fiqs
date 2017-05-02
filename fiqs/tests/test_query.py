@@ -939,7 +939,7 @@ def test_computed_fields_raise_when_non_flat():
         fquery.eval(flat=False)
 
 
-def test_reverse_nested():
+def test_reverse_nested_doc_count():
     fquery = FQuery(get_search()).values(
         ReverseNested(
             Sale,
@@ -963,6 +963,35 @@ def test_reverse_nested():
             Sale,
             Count(Sale),
         )) in line
+
+
+def test_reverse_nested():
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale,
+            avg_sales=Avg(Sale.price),
+            total_sales=Sum(Sale.price),
+        ),
+    ).group_by(
+        Sale.product_type,
+    )
+
+    result = load_output('total_and_avg_sales_by_product_type')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 5
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        # Group by is present
+        assert 'product_type' in line
+        # Reverse nested metrics are present and properly casted
+        assert str(ReverseNested(Sale, Count(Sale))) in line
+        assert type(line[str(ReverseNested(Sale, Count(Sale)))]) == int
+        assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
+        assert type(line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
+        assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
+        assert type(line[str(ReverseNested(Sale, total_sales=Sum(Sale.price)))]) == int
 
 
 ########################
@@ -1263,7 +1292,7 @@ def test_filling_missing_buckets_nested():
     assert len(lines) == 100
 
 
-def test_filling_missing_buckets_reverse_nested():
+def test_filling_missing_buckets_reverse_nested_doc_count():
     product_types = [
         'product_type_{}'.format(i)
         for i in range(5)
@@ -1301,3 +1330,45 @@ def test_filling_missing_buckets_reverse_nested():
             Sale,
             Count(Sale),
         )) in line
+
+
+def test_filling_missing_buckets_reverse_nested():
+    product_types = [
+        'product_type_{}'.format(i)
+        for i in range(5)
+    ]
+
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale,
+            avg_sales=Avg(Sale.price),
+            total_sales=Sum(Sale.price),
+        ),
+    ).group_by(
+        FieldWithChoices(Sale.product_type, choices=product_types),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_and_avg_sales_by_product_type')
+    product_type_buckets = result['aggregations']['products']['product_type']['buckets']
+    product_type_buckets = [
+        b for b in product_type_buckets
+        if b['key'] != 'product_type_0'
+    ]
+    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 4
+    assert sorted([l['product_type'] for l in lines]) == product_types[1:]
+    for line in lines:
+        assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
+        assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
+        assert str(ReverseNested(Sale, Count(Sale))) in line
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 5
+    assert sorted([l['product_type'] for l in lines]) == product_types
+    for line in lines:
+        assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
+        assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
+        assert str(ReverseNested(Sale, Count(Sale))) in line
