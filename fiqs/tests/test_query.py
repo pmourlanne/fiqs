@@ -356,6 +356,36 @@ def test_reverse_nested_aggregation():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_reverse_nested_aggregation_2():
+    search = get_search()
+    product_id_bucket = search.aggs.bucket(
+        'products', 'nested', path='products',
+    ).bucket(
+        'product_id', 'terms', field='products.product_id',
+    )
+    product_id_bucket.metric(
+        'avg_product_price', 'avg', field='products.product_price',
+    )
+    product_id_bucket.bucket(
+        'reverse_nested_root', 'reverse_nested',
+    ).metric(
+        'avg_price', 'avg', field='price',
+    )
+
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale,
+            avg_price=Avg(Sale.price),
+        ),
+        avg_product_price=Avg(Sale.product_price),
+    ).group_by(
+        Sale.product_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_reverse_nested_aggregation_doc_count():
     search = get_search()
     search.aggs.bucket(
@@ -992,6 +1022,37 @@ def test_reverse_nested():
         assert type(line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
         assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
         assert type(line[str(ReverseNested(Sale, total_sales=Sum(Sale.price)))]) == int
+
+
+def test_reverse_nested_2():
+    fquery = FQuery(get_search()).values(
+        ReverseNested(
+            Sale,
+            avg_sales=Avg(Sale.price),
+        ),
+        avg_product_price=Avg(Sale.product_price),
+    ).group_by(
+        Sale.product_type,
+    )
+
+    result = load_output('avg_product_price_and_avg_sales_by_product_type')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 5  # 5 product types
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        # Group by is present
+        assert 'product_type' in line
+        # Reverse nested doc count is present
+        assert str(ReverseNested(Sale, Count(Sale))) in line
+        assert type(line[str(ReverseNested(Sale, Count(Sale)))]) == int
+        # Reverse nested metric is present
+        assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
+        assert type(line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
+        # Standard metric is present
+        assert 'avg_product_price' in line
+        assert type(line['avg_product_price']) == float
 
 
 ########################

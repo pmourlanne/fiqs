@@ -1024,3 +1024,25 @@ def test_total_and_avg_sales_by_product_type():
         assert type(line['reverse_nested_root__total_sales']) == float
         assert 'reverse_nested_root__avg_sales' in line
         assert type(line['reverse_nested_root__avg_sales']) == float
+
+
+def test_avg_product_price_and_avg_sales_by_product_type():
+    lines = flatten_result(load_output('avg_product_price_and_avg_sales_by_product_type'))
+
+    assert len(lines) == 5  # 5 product types
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'product_type' in line
+        assert type(line['product_type']) == six.text_type
+        # Reverse nested doc count is present
+        assert 'reverse_nested_root__doc_count' in line
+        assert type(line['reverse_nested_root__doc_count']) == int
+        # Reverse nested metric is present
+        assert 'reverse_nested_root__avg_sales' in line
+        assert type(line['reverse_nested_root__avg_sales']) == float
+        # Standard metric is present
+        assert 'avg_product_price' in line
+        assert type(line['avg_product_price']) == float

@@ -197,6 +197,20 @@ def test_write_nested_search_output(elasticsearch_sale):
         'total_and_avg_sales_by_product_type',
     )
 
+    # Average sale price and average product price by product type
+    write_fquery_output(
+        FQuery(get_search()).values(
+            ReverseNested(
+                Sale,
+                avg_sales=Avg(Sale.price),
+            ),
+            avg_product_price=Avg(Sale.product_price),
+        ).group_by(
+            Sale.product_type,
+        ),
+        'avg_product_price_and_avg_sales_by_product_type',
+    )
+
 
 @pytest.mark.docker
 def test_write_search_outputs(elasticsearch_sale):
