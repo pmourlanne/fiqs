@@ -68,7 +68,9 @@ class ResultTree(object):
 
         # We force an ordering to have a deterministic result
         for key, child_node in sorted(node.items(), reverse=True):
-            if isinstance(child_node, dict):
+            if key.startswith('reverse_nested'):
+                _node[key] = child_node
+            elif isinstance(child_node, dict):
                 if self._is_nested_node(child_node):
                     _node.update(self._remove_nested_aggregations(child_node))
                 else:
@@ -88,14 +90,20 @@ class ResultTree(object):
         new_line = base_line.copy()
 
         for k, v in node.items():
-            if k == 'doc_count':
+            if k.startswith('reverse_nested'):
+                for nested_k, nested_v in v.items():
+                    if isinstance(nested_v, dict):
+                        value = nested_v['value']
+                    else:
+                        value = nested_v
+                    new_line['{}__{}'.format(k, nested_k)] = value
+
+            elif k == 'doc_count':
                 new_line[k] = v
             elif k in RESERVED_KEYS:
                 continue
             elif 'value' in v:
                 new_line[k] = v['value']
-            elif 'doc_count' in v:  # Reverse nested aggregation
-                new_line['{}__doc_count'.format(k)] = v['doc_count']
 
         return new_line
 

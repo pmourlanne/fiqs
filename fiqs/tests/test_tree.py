@@ -221,6 +221,51 @@ def test_total_sales_and_avg_sales():
         assert type(line[key]) == float
 
 
+def test_total_sales_by_payment_type_by_shop_range():
+    lines = flatten_result(load_output('total_sales_by_payment_type_by_shop_range'))
+
+    assert len(lines) == 3 * 3  # 3 payment types, 3 shop ranges
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        # Both group by are present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == six.text_type
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
+    # Three lines for each payment type
+    for payment_type in ['cash', 'wire_transfer', 'store_credit', ]:
+        payment_type_lines = [l for l in lines if l['payment_type'] == payment_type]
+        assert len(payment_type_lines) == 3
+        range_keys = ['1 - 5', '5 - 11', '11 - 15']
+        assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)
+
+
+def test_total_sales_by_shop_range():
+    lines = flatten_result(load_output('total_sales_by_shop_range'))
+
+    assert len(lines) == 2  # 2 ranges
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == float
+        # Group by is present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == six.text_type
+
+    range_keys = ['1 - 5', '5+']
+    assert sorted([l['shop_id'] for l in lines]) == range_keys
+
 ##########
 # Nested #
 ##########
@@ -713,6 +758,96 @@ def test_remove_nested_aggregations_ranges_node():
     assert expected == result
 
 
+def test_remove_nested_aggregations_reverse_nested():
+    # Reverse nested aggregations need to begin with 'reverse_nested'
+    # Otherwise fiqs cannot distinguish nested nodes from reverse nested ones
+    node = {
+        "products": {
+            "doc_count": 1540,
+            "product_type": {
+                "buckets": [
+                    {
+                        "doc_count": 527,
+                        "key": "product_type_3",
+                        "reverse_nested_root": {
+                            "doc_count": 332,
+                        },
+                    },
+                ],
+            },
+        },
+    }
+
+    expected = {
+        "doc_count": 1540,
+        "product_type": {
+            "buckets": [
+                {
+                    "doc_count": 527,
+                    "key": "product_type_3",
+                    "reverse_nested_root": {
+                        "doc_count": 332,
+                    },
+                },
+            ],
+        },
+    }
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+def test_remove_nested_aggregations_reverse_nested_2():
+    # Reverse nested aggregations need to begin with 'reverse_nested'
+    # Otherwise fiqs cannot distinguish nested nodes from reverse nested ones
+    node = {
+        "products": {
+            "doc_count": 1540,
+            "product_type": {
+                "buckets": [
+                    {
+                        "doc_count": 527,
+                        "key": "product_type_3",
+                        "reverse_nested_root": {
+                            "avg_sales": {
+                                "value": 495.18674698795184,
+                            },
+                            "doc_count": 332,
+                            "total_sales": {
+                                "value": 164402.0,
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+    }
+
+    expected = {
+        "doc_count": 1540,
+        "product_type": {
+            "buckets": [
+                {
+                    "doc_count": 527,
+                    "key": "product_type_3",
+                    "reverse_nested_root": {
+                        "avg_sales": {
+                            "value": 495.18674698795184,
+                        },
+                        "doc_count": 332,
+                        "total_sales": {
+                            "value": 164402.0,
+                        },
+                    },
+                },
+            ],
+        },
+    }
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
@@ -836,52 +971,6 @@ def test_avg_part_price_by_product_and_by_part():
     assert sorted(part_lines, key=lambda l: l['doc_count'], reverse=True) == part_lines
 
 
-def test_total_sales_by_payment_type_by_shop_range():
-    lines = flatten_result(load_output('total_sales_by_payment_type_by_shop_range'))
-
-    assert len(lines) == 3 * 3  # 3 payment types, 3 shop ranges
-
-    for line in lines:
-        # Doc count is present
-        assert 'doc_count' in line
-        assert type(line['doc_count']) == int
-        # Metric is present
-        assert 'total_sales' in line
-        assert type(line['total_sales']) == float
-        # Both group by are present
-        assert 'shop_id' in line
-        assert type(line['shop_id']) == six.text_type
-        assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
-
-    # Three lines for each payment type
-    for payment_type in ['cash', 'wire_transfer', 'store_credit', ]:
-        payment_type_lines = [l for l in lines if l['payment_type'] == payment_type]
-        assert len(payment_type_lines) == 3
-        range_keys = ['1 - 5', '5 - 11', '11 - 15']
-        assert sorted([l['shop_id'] for l in payment_type_lines]) == sorted(range_keys)
-
-
-def test_total_sales_by_shop_range():
-    lines = flatten_result(load_output('total_sales_by_shop_range'))
-
-    assert len(lines) == 2  # 2 ranges
-
-    for line in lines:
-        # Doc count is present
-        assert 'doc_count' in line
-        assert type(line['doc_count']) == int
-        # Metric is present
-        assert 'total_sales' in line
-        assert type(line['total_sales']) == float
-        # Group by is present
-        assert 'shop_id' in line
-        assert type(line['shop_id']) == six.text_type
-
-    range_keys = ['1 - 5', '5+']
-    assert sorted([l['shop_id'] for l in lines]) == range_keys
-
-
 def test_nb_sales_by_product_type():
     lines = flatten_result(load_output('nb_sales_by_product_type'))
 
@@ -916,8 +1005,6 @@ def test_nb_sales_by_product_type_by_part_id():
         assert type(line['reverse_nested_root__doc_count']) == int
 
 
-import pytest
-@pytest.mark.xfail
 def test_total_and_avg_sales_by_product_type():
     lines = flatten_result(load_output('total_and_avg_sales_by_product_type'))
 
