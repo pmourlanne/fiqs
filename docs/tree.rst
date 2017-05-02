@@ -114,3 +114,38 @@ Here is a basic example with an aggregation and a metric::
     #         "doc_count": 280,
     #     },
     # ]
+
+
+A word on reverse nested aggregations
+-------------------------------------
+
+``flatten_result`` cannot distinguish between a nested bucket and a reverse nested aggregation. If you want to flatten an Elasticsearch result with reverse nested aggregations, make sure these aggregations' names start with ``reverse_nested``::
+
+    {
+        'aggs': {
+            'products': {
+                'aggs': {
+                    'product_id': {
+                        'aggs': {
+                            'reverse_nested_root': {  # This aggregation starts with `reverse_nested`
+                                'aggs': {
+                                    'avg_price': {
+                                        'avg': {
+                                            'field': 'price',
+                                        },
+                                    },
+                                },
+                                'reverse_nested': {},
+                            },
+                        },
+                        'terms': {
+                            'field': 'products.product_id',
+                        },
+                    },
+                },
+                'nested': {
+                    'path': 'products',
+                }
+            },
+        },
+    }
