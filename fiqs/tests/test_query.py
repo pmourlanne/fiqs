@@ -779,6 +779,20 @@ def test_computed_automatically_added():
 
     assert fsearch.to_dict() == search.to_dict()
 
+
+def test_cardinality():
+    search = get_search()
+    search.aggs.metric(
+        'nb_shops', 'cardinality', field='shop_id',
+    )
+
+    fquery = FQuery(get_search()).values(
+        nb_shops=Cardinality(Sale.shop_id),
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
 ###################
 # Flatten results #
 ###################
