@@ -15,9 +15,11 @@ class ResultTree(object):
         else:
             raise Exception('ResultTree expects a dict or an elasticsearch_dsl Response object')
 
-    def flatten_result(self):
+    def flatten_result(self, **kwargs):
         if 'aggregations' not in self.es_result:
             return []
+
+        self.add_others_line = kwargs.get('add_others_line', False)
 
         aggregations = self.es_result['aggregations']
         return self._extract_lines(aggregations)
@@ -107,6 +109,14 @@ class ResultTree(object):
 
         return new_line
 
+    def _create_others_line(self, base_line, key, others_doc_count):
+        new_line = base_line.copy()
+
+        new_line[key] = u'others'
+        new_line[u'doc_count'] = others_doc_count
+
+        return new_line
+
     def _is_leaf(self, node):
         # If there are still buckets, we are not on a leaf
         return 'buckets' not in node
@@ -192,6 +202,11 @@ class ResultTree(object):
                 depth -= 1
 
                 continue
+
+            if self.add_others_line and 'sum_other_doc_count' in node:
+                others_doc_count = node.pop('sum_other_doc_count')
+                others_line = self._create_others_line(base_line, current_key, others_doc_count)
+                lines.append(others_line)
 
             buckets = node['buckets']
 

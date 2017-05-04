@@ -373,3 +373,24 @@ def test_write_search_outputs(elasticsearch_sale):
         ),
         'total_sales_by_shop_range',
     )
+
+    # Nb sales by shop limited size
+    write_fquery_output(
+        FQuery(get_search(), default_size=2).values(
+            Count(Sale),
+        ).group_by(
+            Sale.shop_id,
+        ),
+        'nb_sales_by_shop_limited_size',
+    )
+
+    # Nb sales by shop by payment type limited size
+    write_fquery_output(
+        FQuery(get_search(), default_size=2).values(
+            Count(Sale),
+        ).group_by(
+            Sale.shop_id,
+            Sale.payment_type,
+        ),
+        'nb_sales_by_shop_by_payment_type_limited_size',
+    )

@@ -63,7 +63,7 @@ class FQuery(object):
 
         return self
 
-    def eval(self, flat=True, fill_missing_buckets=True):
+    def eval(self, flat=True, fill_missing_buckets=True, add_others_line=False):
         # Raise if computed fields are present, and we are not in flat mode
         if not flat:
             for expression in self._expressions.values():
@@ -74,7 +74,7 @@ class FQuery(object):
         result = search.execute()
 
         if flat:
-            lines = self._flatten_result(result)
+            lines = self._flatten_result(result, add_others_line=add_others_line)
 
             if fill_missing_buckets:
                 lines = self._add_missing_lines(result, lines)
@@ -190,8 +190,8 @@ class FQuery(object):
                     **expression.params
                 )
 
-    def _flatten_result(self, result):
-        lines = flatten_result(result)
+    def _flatten_result(self, result, **kwargs):
+        lines = flatten_result(result, **kwargs)
 
         key_to_field = {}
         for key, exp in self._expressions.items():
@@ -219,7 +219,10 @@ class FQuery(object):
             for key, value in pretty_line.items():
                 if key in key_to_field:
                     field = key_to_field[key]
-                    pretty_line[key] = field.get_casted_value(value)
+                    if value == u'others':
+                        pretty_line[key] = value  # add_others_line mode
+                    else:
+                        pretty_line[key] = field.get_casted_value(value)
 
             pretty_lines.append(pretty_line)
 
