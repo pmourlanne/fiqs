@@ -7,6 +7,8 @@ DateHistogram: handle offset in choice keys
 DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
 ReverseNested: Internal API should be closer to FQuery than to Metric?
 
+Write documentation for DateRange
+
 ##########
 # Fields #
 ##########

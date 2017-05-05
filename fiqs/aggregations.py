@@ -11,9 +11,6 @@ from fiqs.models import Model
 
 
 class Metric(object):
-    def is_range(self):
-        return False
-
     def is_field_agg(self):
         return NotImplemented
 
@@ -192,6 +189,28 @@ class DateRange(Aggregate):
             raise MissingParameterException('missing ranges parameter')
 
         return params
+
+    def _format_date(self, d):
+        # We format the date like ES does
+        return d.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+
+    def _format_date_range(self, date_range):
+        start, end = date_range['from'], date_range['to']
+        return '{}-{}'.format(self._format_date(start), self._format_date(end))
+
+    def choice_keys(self):
+        keys = []
+
+        for date_range in self.params['ranges']:
+            if 'key' in date_range:
+                keys.append(date_range['key'])
+            else:
+                keys.append(self._format_date_range(date_range))
+
+        return keys
+
+    def get_casted_value(self, v):
+        return v
 
 
 class ReverseNested(Metric):

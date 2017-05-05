@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested
+from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested, DateRange
 from fiqs.fields import FieldWithRanges
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
@@ -393,4 +393,52 @@ def test_write_search_outputs(elasticsearch_sale):
             Sale.payment_type,
         ),
         'nb_sales_by_shop_by_payment_type_limited_size',
+    )
+
+    # Nb sales by date range with keys
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+            'key': 'first_half',
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+            'key': 'second_half',
+        },
+    ]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            DateRange(
+                Sale.timestamp,
+                ranges=ranges,
+            ),
+        ),
+        'nb_sales_by_date_range_with_keys',
+    )
+
+    # Nb sales by date range without keys
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+        },
+    ]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            DateRange(
+                Sale.timestamp,
+                ranges=ranges,
+            ),
+        ),
+        'nb_sales_by_date_range_without_keys',
     )

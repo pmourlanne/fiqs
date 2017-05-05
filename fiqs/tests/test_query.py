@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import datetime
 
 import pytest
+import six
 
 from fiqs import fields
 from fiqs.aggregations import (
@@ -16,6 +17,7 @@ from fiqs.aggregations import (
     Subtraction,
     ReverseNested,
     Cardinality,
+    DateRange,
 )
 from fiqs.exceptions import ConfigurationError
 from fiqs.fields import DataExtendedField, FieldWithChoices, FieldWithRanges
@@ -1094,6 +1096,75 @@ def test_add_others_doc_count():
     assert len([l for l in lines if l['shop_id'] == 'others']) == 1
 
 
+def test_date_range_with_keys():
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+            'key': 'first_half',
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+            'key': 'second_half',
+        },
+    ]
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        DateRange(
+            Sale.timestamp,
+            ranges=ranges,
+        ),
+    )
+
+    result = load_output('nb_sales_by_date_range_with_keys')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 2
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'timestamp' in line
+        assert type(line['timestamp']) == six.text_type
+
+    assert [l['timestamp'] for l in lines] == ['first_half', 'second_half']
+
+
+def test_date_range_without_keys():
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+        },
+    ]
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        DateRange(
+            Sale.timestamp,
+            ranges=ranges,
+        ),
+    )
+
+    result = load_output('nb_sales_by_date_range_with_keys')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 2
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'timestamp' in line
+        assert type(line['timestamp']) == six.text_type
+
 ########################
 # Fill missing buckets #
 ########################
@@ -1472,3 +1543,40 @@ def test_filling_missing_buckets_reverse_nested():
         assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
         assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
         assert str(ReverseNested(Sale, Count(Sale))) in line
+
+
+def test_filling_missing_buckets_date_range_with_keys():
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+            'key': 'first_half',
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+            'key': 'second_half',
+        },
+    ]
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        DateRange(
+            Sale.timestamp,
+            ranges=ranges,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_date_range_with_keys')
+    buckets = result['aggregations']['timestamp']['buckets']
+    buckets = buckets[1:]
+    result['aggregations']['timestamp']['buckets'] = buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 1
+    assert [l['timestamp'] for l in lines] == ['second_half']
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 2
+    assert [l['timestamp'] for l in lines] == ['second_half', 'first_half']
