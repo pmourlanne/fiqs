@@ -266,6 +266,40 @@ def test_total_sales_by_shop_range():
     range_keys = ['1 - 5', '5+']
     assert sorted([l['shop_id'] for l in lines]) == range_keys
 
+
+def test_nb_sales_by_payment_type_by_date_range():
+    lines = flatten_result(load_output('nb_sales_by_payment_type_by_date_range'))
+
+    assert len(lines) == 6  # 2 date periods, 3 payment types
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Date range is present
+        assert 'timestamp' in line
+        assert type(line['timestamp']) == six.text_type
+        # Payment type is present
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
+
+def test_nb_sales_by_date_range_by_payment_type():
+    lines = flatten_result(load_output('nb_sales_by_date_range_by_payment_type'))
+
+    assert len(lines) == 6  # 2 date periods, 3 payment types
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Date range is present
+        assert 'timestamp' in line
+        assert type(line['timestamp']) == six.text_type
+        # Payment type is present
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
 ##########
 # Nested #
 ##########

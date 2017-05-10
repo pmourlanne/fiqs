@@ -396,7 +396,7 @@ def test_write_search_outputs(elasticsearch_sale):
     )
 
     # Nb sales by date range with keys
-    ranges = [
+    ranges_with_keys = [
         {
             'from': datetime(2016, 1, 1),
             'to': datetime(2016, 1, 15),
@@ -414,14 +414,14 @@ def test_write_search_outputs(elasticsearch_sale):
         ).group_by(
             DateRange(
                 Sale.timestamp,
-                ranges=ranges,
+                ranges=ranges_with_keys,
             ),
         ),
         'nb_sales_by_date_range_with_keys',
     )
 
     # Nb sales by date range without keys
-    ranges = [
+    ranges_without_keys = [
         {
             'from': datetime(2016, 1, 1),
             'to': datetime(2016, 1, 15),
@@ -437,8 +437,36 @@ def test_write_search_outputs(elasticsearch_sale):
         ).group_by(
             DateRange(
                 Sale.timestamp,
-                ranges=ranges,
+                ranges=ranges_without_keys,
             ),
         ),
         'nb_sales_by_date_range_without_keys',
+    )
+
+    # Nb sales by date range by payment type
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            DateRange(
+                Sale.timestamp,
+                ranges=ranges_with_keys,
+            ),
+            Sale.payment_type,
+        ),
+        'nb_sales_by_date_range_by_payment_type',
+    )
+
+    # Nb sales by payment type by date range
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            Sale.payment_type,
+            DateRange(
+                Sale.timestamp,
+                ranges=ranges_with_keys,
+            ),
+        ),
+        'nb_sales_by_payment_type_by_date_range',
     )

@@ -1580,3 +1580,75 @@ def test_filling_missing_buckets_date_range_with_keys():
     lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 2
     assert [l['timestamp'] for l in lines] == ['second_half', 'first_half']
+
+
+def test_filling_missing_buckets_date_range_multiple_group_by():
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+            'key': 'first_half',
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+            'key': 'second_half',
+        },
+    ]
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        DateRange(
+            Sale.timestamp,
+            ranges=ranges,
+        ),
+        Sale.payment_type,
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_payment_type_by_date_range')
+    payment_type_buckets = result['aggregations']['payment_type']['buckets']
+    payment_type_buckets = [b for b in payment_type_buckets if b['key'] != 'wire_transfer']
+    result['aggregations']['payment_type']['buckets'] = payment_type_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 4  # 2 date periods, 2 payment types
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 6  # 2 date periods, 2 + 1 payment types
+
+
+def test_filling_missing_buckets_date_range_multiple_group_by_2():
+    ranges = [
+        {
+            'from': datetime(2016, 1, 1),
+            'to': datetime(2016, 1, 15),
+            'key': 'first_half',
+        },
+        {
+            'from': datetime(2016, 1, 15),
+            'to': datetime(2016, 1, 31),
+            'key': 'second_half',
+        },
+    ]
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.payment_type,
+        DateRange(
+            Sale.timestamp,
+            ranges=ranges,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_date_range_by_payment_type')
+    timestamp_buckets = result['aggregations']['timestamp']['buckets']
+    timestamp_buckets = [b for b in timestamp_buckets if b['key'] != 'second_half']
+    result['aggregations']['timestamp']['buckets'] = timestamp_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 3  # 1 date period, 3 payment types
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 6  # 1 + 1 date periods, 3 payment types

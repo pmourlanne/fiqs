@@ -3,7 +3,12 @@
 import copy
 
 
-RESERVED_KEYS = ['key', 'key_as_string', 'doc_count', 'from', 'to', ]
+RESERVED_KEYS = [
+    'key', 'key_as_string',
+    'doc_count',
+    'from', 'from_as_string',
+    'to', 'to_as_string',
+]
 
 
 class ResultTree(object):
