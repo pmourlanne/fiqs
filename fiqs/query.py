@@ -74,7 +74,11 @@ class FQuery(object):
         result = search.execute()
 
         if flat:
-            lines = self._flatten_result(result, add_others_line=add_others_line)
+            lines = self._flatten_result(
+                result,
+                add_others_line=add_others_line,
+                remove_nested_aggregations=self._contains_nested_expressions(),
+            )
 
             if fill_missing_buckets:
                 lines = self._add_missing_lines(result, lines)
@@ -105,6 +109,9 @@ class FQuery(object):
                 break
 
             self._expressions.update(exps_to_add)
+
+    def _contains_nested_expressions(self):
+        return any([isinstance(field, NestedField) for field in self._group_by])
 
     def _check_nested_parents_are_present(self):
         while True:

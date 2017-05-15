@@ -300,6 +300,60 @@ def test_nb_sales_by_date_range_by_payment_type():
         assert 'payment_type' in line
         assert type(line['payment_type']) == six.text_type
 
+
+def test_nb_sales_by_shop_limited_size_add_others_line():
+    lines = flatten_result(load_output('nb_sales_by_shop_limited_size'), add_others_line=True)
+
+    assert len(lines) == 3  # size 2 plus others
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'shop_id' in line
+
+    # 2 shop id lines, one others line
+    assert len([l for l in lines if type(l['shop_id']) == int]) == 2
+    assert len([l for l in lines if l['shop_id'] == 'others']) == 1
+
+
+def test_nb_sales_by_shop_by_payment_type_limited_size_add_others_line():
+    lines = flatten_result(
+        load_output('nb_sales_by_shop_by_payment_type_limited_size'), add_others_line=True)
+
+    assert len(lines) == 7  # size 2 * 2 plus 3 others
+
+    full_lines = [l for l in lines if 'payment_type' in l and l['payment_type'] != 'others']
+    assert len(full_lines) == 4
+    for line in full_lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by are both present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
+    other_shops_line = [l for l in lines if 'payment_type' not in l]
+    assert len(other_shops_line) == 1
+    other_shops_line = other_shops_line[0]
+    assert 'doc_count' in other_shops_line
+    assert type(other_shops_line['doc_count']) == int
+    assert 'shop_id' in line
+    assert other_shops_line['shop_id'] == 'others'
+
+    other_payments_lines = [l for l in lines if l.get('payment_type') == 'others']
+    assert len(other_payments_lines) == 2
+    for line in other_payments_lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Shop group by is present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == int
+
 ##########
 # Nested #
 ##########
@@ -1082,55 +1136,18 @@ def test_avg_product_price_and_avg_sales_by_product_type():
         assert type(line['avg_product_price']) == float
 
 
-def test_nb_sales_by_shop_limited_size_add_others_line():
-    lines = flatten_result(load_output('nb_sales_by_shop_limited_size'), add_others_line=True)
+def test_force_not_remove_nested_aggregation():
+    lines = flatten_result(load_output('nb_sales_by_shop'), remove_nested_aggregations=False)
 
-    assert len(lines) == 3  # size 2 plus others
+    assert len(lines) == 10  # One for each shop
+
+    # Lines are sorted by doc_count
+    assert lines == sorted(lines, key=(lambda l: l['doc_count']), reverse=True)
 
     for line in lines:
         # Doc count is present
         assert 'doc_count' in line
         assert type(line['doc_count']) == int
-        # Group by is present
-        assert 'shop_id' in line
-
-    # 2 shop id lines, one others line
-    assert len([l for l in lines if type(l['shop_id']) == int]) == 2
-    assert len([l for l in lines if l['shop_id'] == 'others']) == 1
-
-
-def test_nb_sales_by_shop_by_payment_type_limited_size_add_others_line():
-    lines = flatten_result(
-        load_output('nb_sales_by_shop_by_payment_type_limited_size'), add_others_line=True)
-
-    assert len(lines) == 7  # size 2 * 2 plus 3 others
-
-    full_lines = [l for l in lines if 'payment_type' in l and l['payment_type'] != 'others']
-    assert len(full_lines) == 4
-    for line in full_lines:
-        # Doc count is present
-        assert 'doc_count' in line
-        assert type(line['doc_count']) == int
-        # Group by are both present
-        assert 'shop_id' in line
-        assert type(line['shop_id']) == int
-        assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
-
-    other_shops_line = [l for l in lines if 'payment_type' not in l]
-    assert len(other_shops_line) == 1
-    other_shops_line = other_shops_line[0]
-    assert 'doc_count' in other_shops_line
-    assert type(other_shops_line['doc_count']) == int
-    assert 'shop_id' in line
-    assert other_shops_line['shop_id'] == 'others'
-
-    other_payments_lines = [l for l in lines if l.get('payment_type') == 'others']
-    assert len(other_payments_lines) == 2
-    for line in other_payments_lines:
-        # Doc count is present
-        assert 'doc_count' in line
-        assert type(line['doc_count']) == int
-        # Shop group by is present
+        # Aggregation is present
         assert 'shop_id' in line
         assert type(line['shop_id']) == int

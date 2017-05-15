@@ -25,6 +25,7 @@ class ResultTree(object):
             return []
 
         self.add_others_line = kwargs.get('add_others_line', False)
+        self.remove_nested_aggregations = kwargs.get('remove_nested_aggregations', True)
 
         aggregations = self.es_result['aggregations']
         return self._extract_lines(aggregations)
@@ -174,9 +175,10 @@ class ResultTree(object):
                 for key in aggregations.keys()
             }]
 
-        # We remove nested aggregations, I don't see the point
-        # of exposing them and they are annoying to deal with
-        aggregations = self._remove_nested_aggregations(aggregations)
+        if self.remove_nested_aggregations:
+            # We remove nested aggregations, I don't see the point
+            # of exposing them and they are annoying to deal with
+            aggregations = self._remove_nested_aggregations(aggregations)
 
         current_key = self._bootstrap_current_key(aggregations)
         path = [current_key]
