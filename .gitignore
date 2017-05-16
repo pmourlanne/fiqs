@@ -10,3 +10,4 @@ coverage.xml
 .coverage
 junit.xml
 docs/_build/*
+prof/*
