@@ -214,9 +214,9 @@ class FQuery(object):
 
         for field_or_exp in self._group_by:
             if isinstance(field_or_exp, Aggregate):
-                key_to_field[field_or_exp.field.storage_field] = field_or_exp
+                key_to_field[field_or_exp.field.key] = field_or_exp
             else:
-                key_to_field[field_or_exp.storage_field] = field_or_exp
+                key_to_field[field_or_exp.key] = field_or_exp
 
         pretty_lines = []
         for line in lines:
