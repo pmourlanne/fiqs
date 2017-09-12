@@ -114,10 +114,6 @@ class Histogram(Aggregate):
         return params
 
 
-def get_timedelta_from_timestring(timestring):
-    pass
-
-
 TIME_UNIT_CONVERSION = {
     'd': 'days',
     'day': 'days',
@@ -146,6 +142,23 @@ def get_timedelta_from_interval(interval):
     return None
 
 
+def get_timedelta_from_timestring(timestring):
+    if timestring.startswith('-'):
+        minus = True
+        timestring = timestring.lstrip('-')
+    elif timestring.startswith('+'):
+        minus = False
+        timestring = timestring.lstrip('+')
+    else:
+        minus = False
+
+    timedelta = get_timedelta_from_interval(timestring)
+    if minus:
+        return -timedelta
+    else:
+        return timedelta
+
+
 def get_rounded_date_from_timedelta(d, delta):
     epoch = datetime(1970, 1, 1)
     nb_seconds = int((d - epoch).total_seconds())
@@ -167,6 +180,10 @@ class DateHistogram(Histogram):
             return None
 
         start = get_rounded_date_from_timedelta(self.min, delta)
+        agg_params = self.agg_params()
+        if 'offset' in agg_params:
+            start += get_timedelta_from_timestring(agg_params['offset'])
+
         end = self.max
 
         choice_keys = []

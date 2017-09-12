@@ -49,6 +49,34 @@ def test_date_histogram_choice_keys_day_intervals_2():
     assert expected_keys == keys
 
 
+def test_date_histogram_choice_keys_day_intervals_offset():
+    start = datetime(2016, 1, 1, 6)
+    end = datetime(2016, 2, 1, 6)
+    delta_days = 1
+    nb_days = (end - start).days + delta_days
+
+    expected_start = start
+
+    date_histogram = get_date_histogram(min=start, max=end, interval='1d', offset='+6h')
+    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    keys = date_histogram.choice_keys()
+    assert expected_keys == keys
+
+
+def test_date_histogram_choice_keys_day_intervals_negative_offset():
+    start = datetime(2015, 1, 1)
+    end = datetime(2016, 2, 1)
+    delta_days = 1
+    nb_days = (end - start).days + delta_days
+
+    expected_start = start - timedelta(hours=6)
+
+    date_histogram = get_date_histogram(min=start, max=end, interval='1d', offset='-6h')
+    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    keys = date_histogram.choice_keys()
+    assert expected_keys == keys
+
+
 def test_date_histogram_choice_keys_second_intervals():
     start = datetime(2016, 1, 1, 6, microsecond=123)
     end = start + timedelta(days=1)
