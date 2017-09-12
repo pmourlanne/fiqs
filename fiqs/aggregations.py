@@ -127,8 +127,25 @@ TIME_UNIT_CONVERSION = {
 }
 
 
+def is_interval_standard(interval):
+    for key, _ in TIME_UNIT_CONVERSION.items():
+        if interval.endswith(key):
+            return True
+
+    return False
+
+
+def is_interval_monthly(interval):
+    # Naive approach
+    return interval.endswith('M')
+
+
+def is_interval_handled(interval):
+    return is_interval_standard(interval) or is_interval_monthly(interval)
+
+
 def get_timedelta_from_interval(interval):
-    # Some intervals are still missing: year, quarter, month, week
+    # Some intervals are still missing: year, month, week
     for key, param in TIME_UNIT_CONVERSION.items():
         if interval.endswith(key):
             value = interval.rstrip(key)
@@ -159,6 +176,28 @@ def get_timedelta_from_timestring(timestring):
         return timedelta
 
 
+def get_offset_date(d, timestring):
+    timedelta = get_timedelta_from_timestring(timestring)
+
+    return d + timedelta
+
+
+def get_rounded_date_from_interval(d, interval):
+    if is_interval_standard(interval):
+        return get_rounded_date_from_timedelta(d, get_timedelta_from_interval(interval))
+
+    if is_interval_monthly(interval):
+        return d.replace(
+            day=1,
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+        )
+
+    return d
+
+
 def get_rounded_date_from_timedelta(d, delta):
     epoch = datetime(1970, 1, 1)
     nb_seconds = int((d - epoch).total_seconds())
@@ -171,20 +210,8 @@ def get_rounded_date_from_timedelta(d, delta):
 class DateHistogram(Histogram):
     ref = 'date_histogram'
 
-    def choice_keys(self):
-        if not hasattr(self, 'min') or not hasattr(self, 'max'):
-            return None
-
+    def _choice_keys_standard(self, start, end, interval):
         delta = get_timedelta_from_interval(self.interval)
-        if not delta:
-            return None
-
-        start = get_rounded_date_from_timedelta(self.min, delta)
-        agg_params = self.agg_params()
-        if 'offset' in agg_params:
-            start += get_timedelta_from_timestring(agg_params['offset'])
-
-        end = self.max
 
         choice_keys = []
         current = start
@@ -193,6 +220,46 @@ class DateHistogram(Histogram):
             current += delta
 
         return choice_keys
+
+    def _choice_keys_monthly(self, start, end, interval):
+        nb_months = int(interval.rstrip('M'))
+
+        choice_keys = []
+        current = start
+        while current <= end:
+            choice_keys.append(current)
+
+            next_ = current
+            for i in range(nb_months):
+                next_ = next_ + timedelta(days=32)  # 32 days to be sure to change month
+                next_ = next_.replace(day=current.day)
+
+            current = next_
+
+        return choice_keys
+
+    def choice_keys(self):
+        if not hasattr(self, 'min') or not hasattr(self, 'max'):
+            return None
+
+        if not is_interval_handled(self.interval):
+            return None
+
+        start = get_rounded_date_from_interval(self.min, self.interval)
+        agg_params = self.agg_params()
+        if 'offset' in agg_params:
+            start = get_offset_date(start, agg_params['offset'])
+
+        end = self.max
+
+        if is_interval_standard(self.interval):
+            return self._choice_keys_standard(start, end, self.interval)
+
+        elif is_interval_monthly(self.interval):
+            return self._choice_keys_monthly(start, end, self.interval)
+
+        else:
+            return None
 
 
 class DateRange(Aggregate):

@@ -3,7 +3,7 @@ Sample application with front-end?
 units for fields?
 Move doc_type into Meta subclass?
 Different documentation for different major versions
-DateHistogram: handle remaining intervals in choice keys (year, quarter, month, week)
+DateHistogram: handle remaining intervals in choice keys (year, week)
 ReverseNested: Internal API should be closer to FQuery than to Metric?
 
 Write documentation for DateRange

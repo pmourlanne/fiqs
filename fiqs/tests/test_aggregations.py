@@ -92,3 +92,17 @@ def test_date_histogram_choice_keys_second_intervals():
     ]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
+
+
+def test_date_histogram_choice_keys_month_intervals_offset():
+    start = datetime(2016, 1, 1, 6)
+    end = datetime(2016, 6, 1, 6)
+
+    date_histogram = get_date_histogram(min=start, max=end, interval='2M', offset='+6h')
+    expected_keys = [
+        datetime(2016, 1, 1, 6),
+        datetime(2016, 3, 1, 6),
+        datetime(2016, 5, 1, 6),
+    ]
+    keys = date_histogram.choice_keys()
+    assert expected_keys == keys

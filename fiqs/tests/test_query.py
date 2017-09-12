@@ -193,6 +193,42 @@ def test_date_histogram():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_date_histogram_month():
+    start = datetime(2016, 1, 1)
+    end = datetime(2016, 6, 1)
+
+    date_histogram_params = {
+        'field': 'timestamp',
+        'interval': '1M',
+        'min_doc_count': 0,
+        'extended_bounds': {
+            'min': start,
+            'max': end,
+        },
+    }
+
+    search = get_search()
+    search.aggs.bucket(
+        'timestamp', 'date_histogram', **date_histogram_params
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1M',
+            min=start,
+            max=end,
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_one_nested_aggregation_one_metric():
     search = get_search()
     search.aggs.bucket(
@@ -1389,6 +1425,48 @@ def test_fill_missing_buckets_date_histogram():
     lines = fquery._flatten_result(result)
     lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 62
+
+
+def test_fill_missing_buckets_date_histogram_month_nothing_to_do():
+    search = get_search()
+    fquery = FQuery(search).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1M',
+            min=datetime(2016, 1, 1),
+            max=datetime(2016, 1, 31),
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_month_by_month')
+
+    lines = fquery._flatten_result(result)
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 2
+
+
+def test_fill_missing_buckets_date_histogram_month():
+    search = get_search()
+    fquery = FQuery(search).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1M',
+            min=datetime(2015, 12, 1),
+            max=datetime(2016, 6, 1),
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_month_by_month')
+
+    lines = fquery._flatten_result(result)
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 7
 
 
 def test_filling_missing_buckets_ranges():
