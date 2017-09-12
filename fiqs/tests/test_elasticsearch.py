@@ -17,8 +17,7 @@ def test_count(elasticsearch_sale):
     assert get_search().count() == 500
 
 
-@pytest.mark.xfail  # See https://github.com/elastic/elasticsearch/issues/23776
-@pytest.mark.docker
+@pytest.mark.docker  # See https://github.com/elastic/elasticsearch/issues/23776
 def test_offset_date_histogram(elasticsearch_sale):
     start = datetime(2016, 2, 1, 6)
     end = start + timedelta(days=2, hours=2)
