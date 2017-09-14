@@ -65,6 +65,7 @@ class Field(object):
         d = {
             'name': self.key,
             'field': self.get_storage_field(),
+            'agg_type': 'terms',
         }
 
         if 'script' in self.data:
@@ -330,3 +331,36 @@ class DataExtendedField(Field):
             parent=field.parent,
             model=field.model,
         )
+
+
+class GroupedField(Field):
+    def __init__(self, field, groups):
+        self.groups = groups
+
+        return super(GroupedField, self).__init__(
+            field.type,
+            key=field.key,
+            verbose_name=field.verbose_name,
+            storage_field=field.storage_field,
+            unit=field.unit,
+            choices=field.choices,
+            data=field.data,
+            parent=field.parent,
+            model=field.model,
+        )
+
+    def bucket_params(self):
+        filters = {
+            key: {
+                'terms': {
+                    self.get_storage_field(): field_values,
+                }
+            }
+            for key, field_values in self.groups.items()
+        }
+
+        return {
+            'name': self.key,
+            'filters': filters,
+            'agg_type': 'filters',
+        }

@@ -7,7 +7,7 @@ from six import text_type as unicode
 from fiqs import flatten_result
 from fiqs.aggregations import Aggregate, ReverseNested
 from fiqs.exceptions import ConfigurationError
-from fiqs.fields import NestedField, Field
+from fiqs.fields import NestedField, Field, GroupedField
 
 
 def calc_group_by_keys(group_by_fields, nested=True):
@@ -162,7 +162,6 @@ class FQuery(object):
 
             elif isinstance(field_or_exp, Field):
                 params = field_or_exp.bucket_params()
-                params['agg_type'] = 'terms'
                 if self.default_size:
                     params['size'] = self.default_size
 

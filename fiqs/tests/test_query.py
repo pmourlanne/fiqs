@@ -6,7 +6,6 @@ from datetime import datetime
 import pytest
 import six
 
-from fiqs import fields
 from fiqs.aggregations import (
     Sum,
     Count,
@@ -20,7 +19,13 @@ from fiqs.aggregations import (
     DateRange,
 )
 from fiqs.exceptions import ConfigurationError
-from fiqs.fields import DataExtendedField, FieldWithChoices, FieldWithRanges
+from fiqs.fields import (
+    IntegerField,
+    DataExtendedField,
+    FieldWithChoices,
+    FieldWithRanges,
+    GroupedField,
+)
 from fiqs.models import Model
 from fiqs.query import FQuery
 
@@ -831,6 +836,35 @@ def test_cardinality():
 
     assert fsearch.to_dict() == search.to_dict()
 
+
+def test_filters_aggregation():
+    shops_by_country = {
+        'country_a': range(1, 6),
+        'country_b': range(6, 11),
+    }
+
+    filters = {}
+    for country, shop_ids in shops_by_country.items():
+        filters[country] = {
+            'terms': {'shop_id': shop_ids},
+        }
+    search = get_search()
+    search.aggs.metric(
+        'shop_id', 'filters', filters=filters,
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_country,
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
 ###################
 # Flatten results #
 ###################
@@ -1270,8 +1304,8 @@ def test_fill_missing_buckets_custom_choices():
 
 def test_fill_missing_buckets_field_choices():
     class SaleWithChoices(Model):
-        shop_id = fields.IntegerField(choices=range(1, 11))
-        price = fields.IntegerField()
+        shop_id = IntegerField(choices=range(1, 11))
+        price = IntegerField()
 
     search = get_search()
     fquery = FQuery(search).values(
@@ -1306,8 +1340,8 @@ def test_fill_missing_buckets_field_choices_pretty():
     pretty_choices = [(i, 'Shop {}'.format(i)) for i in range(1, 11)]
 
     class SaleWithPrettyChoices(Model):
-        shop_id = fields.IntegerField(choices=pretty_choices)
-        price = fields.IntegerField()
+        shop_id = IntegerField(choices=pretty_choices)
+        price = IntegerField()
 
     search = get_search()
     fquery = FQuery(search).values(
