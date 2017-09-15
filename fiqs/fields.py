@@ -343,7 +343,7 @@ class GroupedField(Field):
             verbose_name=field.verbose_name,
             storage_field=field.storage_field,
             unit=field.unit,
-            choices=self.groups.keys(),
+            choices=list(self.groups),
             data=field.data,
             parent=field.parent,
             model=field.model,
