@@ -865,6 +865,60 @@ def test_filters_aggregation():
 
     assert fsearch.to_dict() == search.to_dict()
 
+
+def test_filters_aggregation_multiple_aggregations():
+    shops_by_country = {
+        'country_a': range(1, 6),
+        'country_b': range(6, 11),
+    }
+    filters = {
+        country: {
+            'terms': {'shop_id': shop_ids},
+        }
+        for country, shop_ids in shops_by_country.items()
+    }
+
+    search = get_search()
+    search.aggs.bucket(
+        'payment_type', 'terms', field='payment_type',
+    ).bucket(
+        'shop_id', 'filters', filters=filters,
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.payment_type,
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_country,
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
+    # We switch the order, for fun.
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'filters', filters=filters,
+    ).bucket(
+        'payment_type', 'terms', field='payment_type',
+    )
+
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_country,
+        ),
+        Sale.payment_type,
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
 ###################
 # Flatten results #
 ###################

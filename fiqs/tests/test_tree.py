@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pytest
 import six
 
 from fiqs import flatten_result
@@ -1172,3 +1173,47 @@ def test_nb_sales_by_grouped_shop():
 
     # Two groups of shop id
     assert sorted([line['shop_id'] for line in lines]) == sorted(['group_a', 'group_b'])
+
+
+@pytest.mark.xfail
+def test_nb_sales_by_grouped_shop_by_payment_type():
+    lines = flatten_result(load_output('nb_sales_by_grouped_shop_by_payment_type'))
+
+    assert len(lines) == 6  # 2 groups, 3 payment types
+
+    # Lines are not sorted by doc_count but by the order of the groups
+    assert lines == sorted(lines, key=(lambda l: l['shop_id']))
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Shop aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type
+        # Payment type aggregation is present
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
+
+@pytest.mark.xfail
+def test_nb_sales_by_payment_type_by_grouped_shop():
+    lines = flatten_result(load_output('nb_sales_by_payment_type_by_grouped_shop'))
+
+    assert len(lines) == 6  # 2 groups, 3 payment types
+
+    # Lines are not sorted by doc_count but by the order of the groups
+    assert lines == sorted(lines, key=(lambda l: l['shop_id']))
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Shop aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type
+        # Payment type aggregation is present
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type

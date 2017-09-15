@@ -470,7 +470,7 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_payment_type_by_date_range',
     )
 
-    # Nb sales by groupes shop id
+    # Nb sales by grouped shop id
     shops_by_group = {
         'group_a': range(1, 6),
         'group_b': range(6, 11),
@@ -485,4 +485,32 @@ def test_write_search_outputs(elasticsearch_sale):
             ),
         ),
         'nb_sales_by_grouped_shop',
+    )
+
+    # Nb sales by grouped shop id by payment type
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            GroupedField(
+                Sale.shop_id,
+                groups=shops_by_group,
+            ),
+            Sale.payment_type,
+        ),
+        'nb_sales_by_grouped_shop_by_payment_type',
+    )
+
+    # Nb sales by payment type by grouped shop id
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            Sale.payment_type,
+            GroupedField(
+                Sale.shop_id,
+                groups=shops_by_group,
+            ),
+        ),
+        'nb_sales_by_payment_type_by_grouped_shop',
     )
