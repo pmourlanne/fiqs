@@ -1235,6 +1235,34 @@ def test_date_range_without_keys():
         assert 'timestamp' in line
         assert type(line['timestamp']) == six.text_type
 
+
+def test_flatten_result_grouped_field():
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_group,
+        ),
+    )
+
+    result = load_output('nb_sales_by_grouped_shop')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 2
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Group by is present
+        assert 'shop_id' in line
+        # But was not casted to int
+        assert type(line['shop_id']) == six.text_type
+
 ########################
 # Fill missing buckets #
 ########################

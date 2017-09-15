@@ -1151,3 +1151,24 @@ def test_force_not_remove_nested_aggregation():
         # Aggregation is present
         assert 'shop_id' in line
         assert type(line['shop_id']) == int
+
+
+def test_nb_sales_by_grouped_shop():
+    lines = flatten_result(load_output('nb_sales_by_grouped_shop'))
+
+    assert len(lines) == 2
+
+    # Lines are not sorted by doc_count but by the order of the groups
+    assert lines == sorted(lines, key=(lambda l: l['shop_id']))
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type
+
+    # Two groups of shop id
+    assert sorted([line['shop_id'] for line in lines]) == sorted(['group_a', 'group_b'])

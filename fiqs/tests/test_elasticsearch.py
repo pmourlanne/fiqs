@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import pytest
 
 from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested, DateRange
-from fiqs.fields import FieldWithRanges
+from fiqs.fields import FieldWithRanges, GroupedField
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
@@ -468,4 +468,21 @@ def test_write_search_outputs(elasticsearch_sale):
             ),
         ),
         'nb_sales_by_payment_type_by_date_range',
+    )
+
+    # Nb sales by groupes shop id
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    write_fquery_output(
+        FQuery(get_search()).values(
+            Count(Sale),
+        ).group_by(
+            GroupedField(
+                Sale.shop_id,
+                groups=shops_by_group,
+            ),
+        ),
+        'nb_sales_by_grouped_shop',
     )
