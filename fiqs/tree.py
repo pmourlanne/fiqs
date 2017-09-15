@@ -27,7 +27,7 @@ class ResultTree(object):
         aggregations = self.es_result['aggregations']
         return self._extract_lines(aggregations)
 
-    def _is_nested_node(self, node):
+    def _is_nested_node(self, node, parent_is_root=True, same_level_keys=None):
         # Not even a node, or a list of buckets
         if not isinstance(node, dict):
             return False
@@ -44,12 +44,27 @@ class ResultTree(object):
         if 'from' in node or 'to' in node:
             return False
 
+        # Nested nodes have a doc_count
+        if 'doc_count' not in node:
+            return False
+
+        # Can happen with filters aggregations
+        if same_level_keys is not None:
+            if not parent_is_root and 'doc_count' not in same_level_keys:
+                return False
+
         dict_child_nodes = [
             child_node for child_node in node.values()
             if isinstance(child_node, dict)
         ]
+        child_keys = node.keys()
         for child_node in dict_child_nodes:
-            if 'doc_count' in child_node and not self._is_nested_node(child_node):
+            is_nested_child_node = self._is_nested_node(
+                child_node,
+                parent_is_root=False,
+                same_level_keys=child_keys,
+            )
+            if 'doc_count' in child_node and not is_nested_child_node:
                 return False
 
         # Node like {'value': 123.456}
@@ -58,9 +73,14 @@ class ResultTree(object):
 
         return True
 
-    def _remove_nested_aggregations(self, node):
+    def _remove_nested_aggregations(self, node, parent_is_root=True, same_level_keys=None):
         while True:
-            new_node = self.__remove_nested_aggregations(node)
+            new_node = self.__remove_nested_aggregations(
+                node,
+                parent_is_root,
+                same_level_keys=same_level_keys,
+            )
+
             if new_node == node:
                 break
             else:
@@ -68,24 +88,42 @@ class ResultTree(object):
 
         return new_node
 
-    def __remove_nested_aggregations(self, node):
+    def __remove_nested_aggregations(self, node, parent_is_root, same_level_keys=None):
         _node = {}
 
         # We force an ordering to have a deterministic result
-        for key, child_node in sorted(node.items(), reverse=True):
+        child_keys = sorted(node.keys(), reverse=True)
+        for key in child_keys:
+            child_node = node[key]
+
             if key.startswith('reverse_nested'):
                 _node[key] = child_node
+
             elif isinstance(child_node, dict):
-                if self._is_nested_node(child_node):
-                    _node.update(self._remove_nested_aggregations(child_node))
+                if self._is_nested_node(child_node, parent_is_root, same_level_keys):
+                    _node.update(self._remove_nested_aggregations(
+                        child_node,
+                        parent_is_root=False,
+                        same_level_keys=child_keys,
+                    ))
                 else:
-                    _node[key] = self._remove_nested_aggregations(child_node)
+                    _node[key] = self._remove_nested_aggregations(
+                        child_node,
+                        parent_is_root=False,
+                        same_level_keys=child_keys,
+                    )
+
             elif isinstance(child_node, list):
                 _node[key] = [
-                    self._remove_nested_aggregations(gchild_node)
+                    self._remove_nested_aggregations(
+                        gchild_node,
+                        parent_is_root=False,
+                        same_level_keys=None,
+                    )
                     if isinstance(gchild_node, dict) else gchild_node
                     for gchild_node in child_node
                 ]
+
             else:
                 _node[key] = child_node
 

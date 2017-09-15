@@ -402,7 +402,14 @@ def test_is_nested_node():
     assert not tree._is_nested_node(node['products']['product']['buckets'][0])
     assert not tree._is_nested_node(node['products']['product']['buckets'][0]['doc_count'])
     assert not tree._is_nested_node(node['products']['product']['buckets'][0]['key'])
+    # Naive call
     assert tree._is_nested_node(node['products']['product']['buckets'][0]['parts'])
+    # In situation call
+    assert tree._is_nested_node(
+        node['products']['product']['buckets'][0]['parts'],
+        parent_is_root=False,
+        same_level_keys=['parts', 'key', 'doc_count', ],
+    )
     assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
                 ['parts']['doc_count'])
     assert not tree._is_nested_node(node['products']['product']['buckets'][0]\
@@ -614,6 +621,82 @@ def test_is_nested_node_ranges_node_3():
                 ['payment_type']['buckets'][0]['total_sales'])
     assert not tree._is_nested_node(node['shop_id']['buckets']['5+']\
                 ['payment_type']['buckets'][0]['total_sales']['value'])
+
+
+def test_is_nested_node_filters_aggregation():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "group_a": {
+                    "doc_count": 238,
+                    "payment_type": {
+                        "buckets": [
+                            {
+                                "doc_count": 86,
+                                "key": "store_credit",
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                },
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['shop_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'])
+
+    # Naive call
+    assert tree._is_nested_node(node['shop_id']['buckets']['group_a'])
+    # In-situation call
+    assert not tree._is_nested_node(
+        node['shop_id']['buckets']['group_a'],
+        parent_is_root=False,
+        same_level_keys=['group_a', ],
+    )
+
+    assert not tree._is_nested_node(node['shop_id']['buckets']['group_a']\
+                ['payment_type'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['group_a']\
+                ['payment_type']['buckets'])
+
+
+def test_is_nested_node_filters_aggregation_2():
+    node = {
+        "payment_type": {
+            "buckets": [
+                {
+                    "doc_count": 172,
+                    "key": "wire_transfer",
+                    "shop_id": {
+                        "buckets": {
+                            "group_a": {
+                                "doc_count": 84,
+                            },
+                            "group_b": {
+                                "doc_count": 88,
+                            },
+                        },
+                    },
+                },
+            ],
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['payment_type'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['payment_type']['buckets'][0]\
+                ['shop_id']['buckets']['group_a'])
 
 
 def test_remove_nested_aggregations():
@@ -937,6 +1020,63 @@ def test_remove_nested_aggregations_reverse_nested_2():
     assert expected == result
 
 
+def test_remove_nested_filters_aggregations():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "group_a": {
+                    "doc_count": 238,
+                    "payment_type": {
+                        "buckets": [
+                            {
+                                "doc_count": 86,
+                                "key": "store_credit",
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                },
+            },
+        },
+    }
+    expected = node
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
+def test_remove_nested_filters_aggregations_2():
+    node = {
+        "payment_type": {
+            "buckets": [
+                {
+                    "doc_count": 172,
+                    "key": "wire_transfer",
+                    "shop_id": {
+                        "buckets": {
+                            "group_a": {
+                                "doc_count": 84,
+                            },
+                            "group_b": {
+                                "doc_count": 88,
+                            },
+                        },
+                    },
+                },
+            ],
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+        },
+    }
+    expected = node
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
 def test_avg_product_price_by_product_type():
     lines = flatten_result(load_output('avg_product_price_by_product_type'))
 
@@ -1175,7 +1315,6 @@ def test_nb_sales_by_grouped_shop():
     assert sorted([line['shop_id'] for line in lines]) == sorted(['group_a', 'group_b'])
 
 
-@pytest.mark.xfail
 def test_nb_sales_by_grouped_shop_by_payment_type():
     lines = flatten_result(load_output('nb_sales_by_grouped_shop_by_payment_type'))
 
