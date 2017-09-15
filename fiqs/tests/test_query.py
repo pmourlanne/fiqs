@@ -1317,6 +1317,38 @@ def test_flatten_result_grouped_field():
         # But was not casted to int
         assert type(line['shop_id']) == six.text_type
 
+
+def test_flatten_result_grouped_field_multiple_aggregations():
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.payment_type,
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_group,
+        ),
+    )
+
+    result = load_output('nb_sales_by_payment_type_by_grouped_shop')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 3 * 2
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Shop aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type
+        # Payment type aggregation is present
+        assert 'payment_type' in line
+        assert type(line['payment_type']) == six.text_type
+
 ########################
 # Fill missing buckets #
 ########################
@@ -1585,7 +1617,7 @@ def test_fill_missing_buckets_date_histogram_month():
     assert len(lines) == 7
 
 
-def test_filling_missing_buckets_ranges():
+def test_fill_missing_buckets_ranges():
     ranges = [[1, 5], [5, 11], [11, 15]]
     search = get_search()
     fquery = FQuery(search).values(
@@ -1615,7 +1647,7 @@ def test_filling_missing_buckets_ranges():
     assert sorted([l['shop_id'] for l in added_lines]) == sorted(range_keys)
 
 
-def test_filling_missing_buckets_nested_nothing_to_do():
+def test_fill_missing_buckets_nested_nothing_to_do():
     fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
@@ -1632,7 +1664,7 @@ def test_filling_missing_buckets_nested_nothing_to_do():
     assert len(lines) == 10
 
 
-def test_filling_missing_buckets_nested():
+def test_fill_missing_buckets_nested():
     fquery = FQuery(get_search()).values(
         avg_part_price=Avg(Sale.part_price),
     ).group_by(
@@ -1657,7 +1689,7 @@ def test_filling_missing_buckets_nested():
     assert len(lines) == 100
 
 
-def test_filling_missing_buckets_reverse_nested_doc_count():
+def test_fill_missing_buckets_reverse_nested_doc_count():
     product_types = [
         'product_type_{}'.format(i)
         for i in range(5)
@@ -1697,7 +1729,7 @@ def test_filling_missing_buckets_reverse_nested_doc_count():
         )) in line
 
 
-def test_filling_missing_buckets_reverse_nested():
+def test_fill_missing_buckets_reverse_nested():
     product_types = [
         'product_type_{}'.format(i)
         for i in range(5)
@@ -1739,7 +1771,7 @@ def test_filling_missing_buckets_reverse_nested():
         assert str(ReverseNested(Sale, Count(Sale))) in line
 
 
-def test_filling_missing_buckets_date_range_with_keys():
+def test_fill_missing_buckets_date_range_with_keys():
     ranges = [
         {
             'from': datetime(2016, 1, 1),
@@ -1776,7 +1808,7 @@ def test_filling_missing_buckets_date_range_with_keys():
     assert [l['timestamp'] for l in lines] == ['second_half', 'first_half']
 
 
-def test_filling_missing_buckets_date_range_multiple_group_by():
+def test_fill_missing_buckets_date_range_multiple_group_by():
     ranges = [
         {
             'from': datetime(2016, 1, 1),
@@ -1812,7 +1844,7 @@ def test_filling_missing_buckets_date_range_multiple_group_by():
     assert len(lines) == 6  # 2 date periods, 2 + 1 payment types
 
 
-def test_filling_missing_buckets_date_range_multiple_group_by_2():
+def test_fill_missing_buckets_date_range_multiple_group_by_2():
     ranges = [
         {
             'from': datetime(2016, 1, 1),
@@ -1846,3 +1878,63 @@ def test_filling_missing_buckets_date_range_multiple_group_by_2():
 
     lines = fquery._add_missing_lines(result, lines)
     assert len(lines) == 6  # 1 + 1 date periods, 3 payment types
+
+
+def test_fill_missing_buckets_grouped_field():
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        Sale.payment_type,
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_group,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_payment_type_by_grouped_shop')
+    payment_type_buckets = result['aggregations']['payment_type']['buckets']
+    payment_type_buckets = [b for b in payment_type_buckets if b['key'] != 'wire_transfer']
+    result['aggregations']['payment_type']['buckets'] = payment_type_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 4  # 2 payment types, 2 groups
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 6  # 3 payment types, 2 groups
+
+
+def test_fill_missing_buckets_grouped_field_2():
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    fquery = FQuery(get_search()).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_group,
+        ),
+        Sale.payment_type,
+    )
+    fquery._configure_search()
+
+    result = load_output('nb_sales_by_grouped_shop_by_payment_type')
+    shop_group_buckets = result['aggregations']['shop_id']['buckets']
+    shop_group_buckets = {
+        key: bucket
+        for key, bucket in shop_group_buckets.items()
+        if key != 'group_a'
+    }
+    result['aggregations']['shop_id']['buckets'] = shop_group_buckets
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 3  # 3 payment types, 1 group
+
+    lines = fquery._add_missing_lines(result, lines)
+    assert len(lines) == 6  # 3 payment types, 2 groups
