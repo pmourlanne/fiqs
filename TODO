@@ -5,7 +5,8 @@ Move doc_type into Meta subclass?
 Different documentation for different major versions
 DateHistogram: handle remaining intervals in choice keys (year, week)
 ReverseNested: Internal API should be closer to FQuery than to Metric?
-GroupedField: Test flatten result, cast value and fill missing buckets
+GroupedField: Test cast value and fill missing buckets
+GroupedField: Test flatten result with an actual aggregation (Avg etc.)
 GroupedField: Possibility to change the name?
 GroupedField: Handle size?
 

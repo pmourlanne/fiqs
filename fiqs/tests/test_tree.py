@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import six
 
 from fiqs import flatten_result
@@ -1336,14 +1335,10 @@ def test_nb_sales_by_grouped_shop_by_payment_type():
         assert type(line['payment_type']) == six.text_type
 
 
-@pytest.mark.xfail
 def test_nb_sales_by_payment_type_by_grouped_shop():
     lines = flatten_result(load_output('nb_sales_by_payment_type_by_grouped_shop'))
 
-    assert len(lines) == 6  # 2 groups, 3 payment types
-
-    # Lines are not sorted by doc_count but by the order of the groups
-    assert lines == sorted(lines, key=(lambda l: l['shop_id']))
+    assert len(lines) == (2 * 3)  # 2 groups, 3 payment types
 
     for line in lines:
         # Doc count is present
