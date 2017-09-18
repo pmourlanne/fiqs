@@ -239,6 +239,24 @@ A ``DataExtendedField`` takes as argument an existing field, and a data dictiona
 
 This field is useful if you want to to fine tune the aggregation. In the example we changed the ``size`` parameter that will be used in the Elasticsearch aggregation.
 
+GroupedField
+^^^^^^^^^^^^
+
+A ``GroupedField`` aims to replicate the behavior of a `filters aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-filters-aggregation.html>`_. It takes as argument an existing field and a dictionary used to build the buckets::
+
+    shop_groups = {
+        'group_a': [1, 2, 3, ],
+        'group_b': [4, 5, 6, ],
+    }
+    # Number of Sale objects, grouped according to the `groups` argument
+    # One bucket will contain the Sale objects with shop_id in [1, 2, 3, ]
+    # The other bucket will contain the Sale objects with shop_id in [4, 5, 6, ]
+    fquery = FQuery(search).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(Sale.shop_id, groups=groups),
+    )
+
 
 Order by
 ********
