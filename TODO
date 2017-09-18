@@ -6,7 +6,7 @@ Different documentation for different major versions
 DateHistogram: handle remaining intervals in choice keys (year, week)
 ReverseNested: Internal API should be closer to FQuery than to Metric?
 GroupedField: Possibility to change the name?
-GroupedField: Handle size?
+GroupedField: Cast group name when appropriate?
 
 Write documentation for DateRange
 
