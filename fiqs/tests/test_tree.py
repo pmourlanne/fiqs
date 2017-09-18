@@ -1351,3 +1351,24 @@ def test_nb_sales_by_payment_type_by_grouped_shop():
         # Payment type aggregation is present
         assert 'payment_type' in line
         assert type(line['payment_type']) == six.text_type
+
+
+def test_avg_sales_by_grouped_shop():
+    lines = flatten_result(load_output('avg_sales_by_grouped_shop'))
+
+    assert len(lines) == 2
+
+    # lines are sorted by the order of the groups
+    assert lines == sorted(lines, key=(lambda l: l['shop_id']))
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'avg_sales' in line
+        assert type(line['avg_sales']) == float
+        # Shop aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type

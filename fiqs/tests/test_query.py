@@ -1349,6 +1349,37 @@ def test_flatten_result_grouped_field_multiple_aggregations():
         assert 'payment_type' in line
         assert type(line['payment_type']) == six.text_type
 
+
+def test_flatten_result_grouped_field_with_metric():
+    shops_by_group = {
+        'group_a': range(1, 6),
+        'group_b': range(6, 11),
+    }
+    fquery = FQuery(get_search()).values(
+        avg_sales=Avg(Sale.price),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_group,
+        ),
+    )
+
+    result = load_output('avg_sales_by_grouped_shop')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 2
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'avg_sales' in line
+        assert type(line['avg_sales']) == float
+        # Shop aggregation is present
+        assert 'shop_id' in line
+        # Shop id was a string in the GroupedField
+        assert type(line['shop_id']) == six.text_type
+
 ########################
 # Fill missing buckets #
 ########################

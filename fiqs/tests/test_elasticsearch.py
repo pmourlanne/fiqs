@@ -514,3 +514,16 @@ def test_write_search_outputs(elasticsearch_sale):
         ),
         'nb_sales_by_payment_type_by_grouped_shop',
     )
+
+    # Avg price by grouped shop id
+    write_fquery_output(
+        FQuery(get_search()).values(
+            avg_sales=Avg(Sale.price),
+        ).group_by(
+            GroupedField(
+                Sale.shop_id,
+                groups=shops_by_group,
+            ),
+        ),
+        'avg_sales_by_grouped_shop',
+    )
