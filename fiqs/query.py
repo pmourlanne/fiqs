@@ -7,7 +7,7 @@ from six import text_type as unicode
 from fiqs import flatten_result
 from fiqs.aggregations import Aggregate, ReverseNested
 from fiqs.exceptions import ConfigurationError
-from fiqs.fields import NestedField, Field, GroupedField
+from fiqs.fields import NestedField, Field
 
 
 def calc_group_by_keys(group_by_fields, nested=True):
