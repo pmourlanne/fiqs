@@ -600,6 +600,57 @@ def test_aggregation_size():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_size_ignored_by_grouped_field():
+    shops_by_country = {
+        'country_a': range(1, 6),
+        'country_b': range(6, 11),
+    }
+    filters = {}
+    for country, shop_ids in shops_by_country.items():
+        filters[country] = {
+            'terms': {'shop_id': shop_ids},
+        }
+
+    # Default size is ignored for grouped fields
+    search = get_search()
+    search.aggs.metric(
+        'shop_id', 'filters', filters=filters,
+    )
+
+    fquery = FQuery(get_search(), default_size=5).values(
+        Count(Sale),
+    ).group_by(
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_country,
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
+    # It is still applied on other aggregations though
+    search = get_search()
+    search.aggs.bucket(
+        'payment_type', 'terms', field='payment_type', size=5,
+    ).metric(
+        'shop_id', 'filters', filters=filters,
+    )
+
+    fquery = FQuery(get_search(), default_size=5).values(
+        Count(Sale),
+    ).group_by(
+        Sale.payment_type,
+        GroupedField(
+            Sale.shop_id,
+            groups=shops_by_country,
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert fsearch.to_dict() == search.to_dict()
+
+
 def test_ranges():
     ranges = [
         {
