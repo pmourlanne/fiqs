@@ -622,6 +622,63 @@ def test_is_nested_node_ranges_node_3():
                 ['payment_type']['buckets'][0]['total_sales']['value'])
 
 
+def test_is_nested_node_ranges_node_4():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "1 - 5": {
+                    "doc_count": 181,
+                    "from": 1.0,
+                    "products": {
+                        "doc_count": 570,
+                        "parts": {
+                            "doc_count": 3088,
+                            "part_id": {
+                                "buckets": [
+                                    {
+                                        "avg_part_price": {
+                                            "value": 21.15497076023392,
+                                        },
+                                        "doc_count": 342,
+                                        "key": "part_5",
+                                    },
+                                ],
+                                "doc_count_error_upper_bound": 0,
+                                "sum_other_doc_count": 0,
+                            },
+                        },
+                    },
+                    "to": 5.0,
+                },
+            },
+        },
+    }
+
+    tree = ResultTree({})
+    assert not tree._is_nested_node(node['shop_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5'])
+    # Naive call
+    assert tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products'])
+    # In-situation call
+    assert tree._is_nested_node(
+        node['shop_id']['buckets']['1 - 5']['products'],
+        parent_is_root=False,
+        same_level_keys=['doc_count', 'from', 'products', 'to', ],
+    )
+    assert tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products']['parts'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products']['parts']['part_id'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products']['parts']['part_id']['buckets'])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products']['parts']['part_id']['buckets'][0])
+    assert not tree._is_nested_node(node['shop_id']['buckets']['1 - 5']\
+                ['products']['parts']['part_id']['buckets'][0]['avg_part_price'])
+
+
 def test_is_nested_node_filters_aggregation():
     node = {
         "shop_id": {
@@ -929,6 +986,68 @@ def test_remove_nested_aggregations_ranges_node():
     assert expected == result
 
 
+def test_remove_nested_aggregations_ranges_node_2():
+    node = {
+        "shop_id": {
+            "buckets": {
+                "1 - 5": {
+                    "doc_count": 181,
+                    "from": 1.0,
+                    "products": {
+                        "doc_count": 570,
+                        "parts": {
+                            "doc_count": 3088,
+                            "part_id": {
+                                "buckets": [
+                                    {
+                                        "avg_part_price": {
+                                            "value": 21.15497076023392,
+                                        },
+                                        "doc_count": 342,
+                                        "key": "part_5",
+                                    },
+                                ],
+                                "doc_count_error_upper_bound": 0,
+                                "sum_other_doc_count": 0,
+                            },
+                        },
+                    },
+                    "to": 5.0,
+                },
+            },
+        },
+    }
+
+    expected = {
+        "shop_id": {
+            "buckets": {
+                "1 - 5": {
+                    "from": 1.0,
+                    "doc_count": 181,
+                    "part_id": {
+                        "buckets": [
+                            {
+                                "avg_part_price": {
+                                    "value": 21.15497076023392,
+                                },
+                                "doc_count": 342,
+                                "key": "part_5",
+                            },
+                        ],
+                        "doc_count_error_upper_bound": 0,
+                        "sum_other_doc_count": 0,
+                    },
+                    "to": 5.0,
+                },
+            },
+        },
+    }
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
 def test_remove_nested_aggregations_reverse_nested():
     # Reverse nested aggregations need to begin with 'reverse_nested'
     # Otherwise fiqs cannot distinguish nested nodes from reverse nested ones
@@ -1167,6 +1286,24 @@ def test_avg_product_price_by_shop_by_product_type():
         assert type(line['product_type']) == six.text_type
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
+
+
+def test_avg_part_price_by_shop_range_by_part_id():
+    lines = flatten_result(load_output('avg_part_price_by_shop_range_by_part_id'))
+
+    assert len(lines) == 2 * 10  # 2 shop ranges, 10 part ids
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Both aggregations and metric are present
+        assert 'shop_id' in line
+        assert type(line['shop_id']) == six.text_type
+        assert 'part_id' in line
+        assert type(line['part_id']) == six.text_type
+        assert 'avg_part_price' in line
+        assert type(line['avg_part_price']) == float
 
 
 def test_avg_part_price_by_product_and_by_part():

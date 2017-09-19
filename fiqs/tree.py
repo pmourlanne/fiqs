@@ -73,12 +73,11 @@ class ResultTree(object):
 
         return True
 
-    def _remove_nested_aggregations(self, node, parent_is_root=True, same_level_keys=None):
+    def _remove_nested_aggregations(self, node, parent_is_root=True):
         while True:
             new_node = self.__remove_nested_aggregations(
                 node,
                 parent_is_root,
-                same_level_keys=same_level_keys,
             )
 
             if new_node == node:
@@ -88,7 +87,7 @@ class ResultTree(object):
 
         return new_node
 
-    def __remove_nested_aggregations(self, node, parent_is_root, same_level_keys=None):
+    def __remove_nested_aggregations(self, node, parent_is_root):
         _node = {}
 
         # We force an ordering to have a deterministic result
@@ -100,17 +99,15 @@ class ResultTree(object):
                 _node[key] = child_node
 
             elif isinstance(child_node, dict):
-                if self._is_nested_node(child_node, parent_is_root, same_level_keys):
+                if self._is_nested_node(child_node, parent_is_root, child_keys):
                     _node.update(self._remove_nested_aggregations(
                         child_node,
                         parent_is_root=False,
-                        same_level_keys=child_keys,
                     ))
                 else:
                     _node[key] = self._remove_nested_aggregations(
                         child_node,
                         parent_is_root=False,
-                        same_level_keys=child_keys,
                     )
 
             elif isinstance(child_node, list):
@@ -118,7 +115,6 @@ class ResultTree(object):
                     self._remove_nested_aggregations(
                         gchild_node,
                         parent_is_root=False,
-                        same_level_keys=None,
                     )
                     if isinstance(gchild_node, dict) else gchild_node
                     for gchild_node in child_node

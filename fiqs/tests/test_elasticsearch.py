@@ -133,6 +133,25 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_product_price_by_shop_by_product_type',
     )
 
+    # Average part price by shop range by part id
+    ranges = [{
+        'from': 1,
+        'to': 5,
+        'key': '1 - 5',
+    }, {
+        'from': 5,
+        'key': '5+',
+    }]
+    write_fquery_output(
+        FQuery(get_search()).values(
+            avg_part_price=Avg(Sale.part_price),
+        ).group_by(
+            FieldWithRanges(Sale.shop_id, ranges=ranges),
+            Sale.part_id,
+        ),
+        'avg_part_price_by_shop_range_by_part_id',
+    )
+
     # Average part price by product and by part
     # This type of query is not possible with FQuery
     search = get_search()
