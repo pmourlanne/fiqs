@@ -558,6 +558,27 @@ def test_default_size():
     assert search.to_dict() == fsearch.to_dict()
 
 
+def test_agg_size_overrides_default_size():
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id', 'terms', field='shop_id', size=2,
+    ).bucket(
+        'client_id', 'terms', field='client_id', size=5,
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    fquery = FQuery(get_search(), default_size=5).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DataExtendedField(Sale.shop_id, size=2),
+        Sale.client_id,
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
 def test_default_size_with_choices():
     search = get_search()
     search.aggs.bucket(

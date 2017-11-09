@@ -163,7 +163,7 @@ class FQuery(object):
             elif isinstance(field_or_exp, Field):
                 params = field_or_exp.bucket_params()
                 if not isinstance(field_or_exp, GroupedField) and self.default_size:
-                    params['size'] = self.default_size
+                    params.setdefault('size', self.default_size)
 
             else:
                 raise NotImplementedError
