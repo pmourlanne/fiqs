@@ -4,3 +4,10 @@ docker run -d -p 8200:9200 -p 8300:9300 -e http.host=0.0.0.0 -e transport.host=1
 # Launch perfomance tests
 pip install pytest-profiling==1.2.6
 py.test -m performance -k test_flatten_performance --profile-svg
+
+# Publish a new version
+# Bump the version number in the setup.py
+git commit -m 'Bumped version number'
+git tag -a vx.x.x -m 'vx.x.x'
+git push
+python setup.py sdist upload -r pypi
