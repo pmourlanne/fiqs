@@ -1,6 +1,8 @@
 fiqs
 ====
 
+[![Build Status](https://travis-ci.org/pmourlanne/fiqs.svg?branch=master)](https://travis-ci.org/pmourlanne/fiqs)
+
 fiqs is an opinionated high-level library whose goal is to help you write concise queries
 agains Elasticsearch and better consume the results. It is built on top of the awesome [Elasticsearch
 DSL](<https://github.com/elastic/elasticsearch-dsl-py>) library.
