@@ -44,7 +44,7 @@ setup(
     name='fiqs',
     description="Python client for Elasticsearch built on top of elasticsearch-dsl",
     license="MIT License",
-    url="https://gitlab.com/pmourlanne/fiqs",
+    url="https://github.com/pmourlanne/fiqs",
     long_description=long_description,
     version=__versionstr__,
     author="Pierre Mourlanne",
