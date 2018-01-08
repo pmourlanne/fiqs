@@ -16,9 +16,8 @@ f.close()
 
 
 install_requires = [
-    'urllib3>=1.8, <2.0',
-    'elasticsearch>=5.4.0',
-    'elasticsearch-dsl>=5.3.0',
+    'elasticsearch>=5.0.0,<6.0.0',
+    'elasticsearch-dsl>=5.0.0,<6.0.0',
 ]
 setup_requires = [
     'Babel>=2.3.4',
