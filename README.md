@@ -18,6 +18,12 @@ Compatibility
 fiqs is compatible with Elasticsearch 5.X and works with both Python 2.7 and Python 3.3
 
 
+Documentation
+-------------
+
+Documentation is available at https://fiqs.readthedocs.io/
+
+
 Code example
 ------------
 
@@ -88,18 +94,12 @@ And let fiqs organise the results:
 ```
 
 
-Documentation
--------------
-
-Documentation is available at https://fiqs.readthedocs.io/
-
-
 Contributing
 ------------
 
 The fiqs project is hosted on [Github](<https://github.com/pmourlanne/fiqs>)
 
-To run the tests on your machine use this command: ``python setup.py test`` Some tests are used to generate results output from Elasticsearch. To run them you will need to run a docker container on your machine: ``docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:5.0.2`` and then run ``py.test -k docker``.
+To run the tests on your machine use this command: ``python setup.py test`` Some tests are used to generate results output from Elasticsearch. To run them you will need to run a docker container on your machine: ``docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:5.x.x`` and then run ``py.test -k docker``.
 
 
 License
