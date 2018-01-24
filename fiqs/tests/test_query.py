@@ -1292,6 +1292,32 @@ def test_add_others_doc_count():
     assert len([l for l in lines if l['shop_id'] == 'others']) == 1
 
 
+def test_add_others_metric():
+    fquery = FQuery(get_search(), default_size=2).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Sale.shop_id,
+    )
+
+    result = load_output('total_sales_by_shop_limited_size')
+    lines = fquery._flatten_result(result, add_others_line=True)
+
+    assert len(lines) == 3  # size 2 plus others
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Metric is present
+        assert 'total_sales' in line
+        # Group by is present
+        assert 'shop_id' in line
+
+    # 2 shop id lines, one others line
+    assert len([l for l in lines if type(l['shop_id']) == int]) == 2
+    assert len([l for l in lines if l['shop_id'] == 'others']) == 1
+
+
 def test_date_range_with_keys():
     ranges = [
         {

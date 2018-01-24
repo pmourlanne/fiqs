@@ -413,6 +413,16 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_shop_by_payment_type_limited_size',
     )
 
+    # Total sales by shop limited size
+    write_fquery_output(
+        FQuery(get_search(), default_size=2).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Sale.shop_id,
+        ),
+        'total_sales_by_shop_limited_size',
+    )
+
     # Nb sales by date range with keys
     ranges_with_keys = [
         {

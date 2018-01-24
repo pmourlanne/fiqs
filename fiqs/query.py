@@ -222,13 +222,21 @@ class FQuery(object):
             pretty_line = line.copy()
             self._add_computed_results(pretty_line)
 
+            others_line = False
             for key, value in pretty_line.items():
                 if key in key_to_field:
                     field = key_to_field[key]
                     if value == u'others':
                         pretty_line[key] = value  # add_others_line mode
+                        others_line = True
                     else:
                         pretty_line[key] = field.get_casted_value(value)
+
+            if others_line:
+                # We make sure all metrics are present
+                for key in key_to_field.keys():
+                    if key not in pretty_line:
+                        pretty_line[key] = None
 
             pretty_lines.append(pretty_line)
 
