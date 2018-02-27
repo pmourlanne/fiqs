@@ -9,6 +9,7 @@ GroupedField: Possibility to change the name?
 GroupedField: Cast group name when appropriate?
 
 Write documentation for DateRange
+Improve behavior with filter aggregation
 
 ##########
 # Fields #

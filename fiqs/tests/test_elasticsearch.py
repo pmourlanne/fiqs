@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 
 import pytest
+from elasticsearch_dsl import A
 
 from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested, DateRange
 from fiqs.fields import FieldWithRanges, GroupedField
@@ -556,3 +557,64 @@ def test_write_search_outputs(elasticsearch_sale):
         ),
         'avg_sales_by_grouped_shop',
     )
+
+
+@pytest.mark.docker
+def test_write_filter_aggregation_search_outputs(elasticsearch_sale):
+    # All these still use elasticsearch_dsl (for the time being?)
+
+    # Avg price for shop_id 1
+    a = A('filter', term={'shop_id': 1})
+    a.bucket(
+        'avg_price',
+        'avg',
+        field='price',
+    )
+    search = get_search()
+    search.aggs.bucket(
+        'shop_id_1',
+        a,
+    )
+    write_output(search, 'avg_price_filter_shop_id_1')
+
+    # Number of sales, by product type, for product_type_1
+    a = A('filter', term={'products.product_type': 'product_type_1'})
+    a.bucket(
+        'reverse_nested_root',
+        'reverse_nested',
+    )
+    search = get_search()
+    search.aggs.bucket(
+        'products',
+        'nested',
+        path='products',
+    ).bucket(
+        'product_type_1',
+        a,
+    )
+    write_output(search, 'nb_sales_by_product_type_filter_product_type_1')
+
+    # Number of sales, by product type, by part id, for product_type_1
+    a = A('filter', term={'products.product_type': 'product_type_1'})
+    a.bucket(
+        'parts',
+        'nested',
+        path='products.parts',
+    ).bucket(
+        'part_id',
+        'terms',
+        field='products.parts.part_id',
+    ).metric(
+        'reverse_nested_root',
+        'reverse_nested',
+    )
+    search = get_search()
+    search.aggs.bucket(
+        'products',
+        'nested',
+        path='products',
+    ).bucket(
+        'product_type_1',
+        a,
+    )
+    write_output(search, 'nb_sales_by_product_type_by_part_id_filter_product_type_1')

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pytest
 import six
 
 from fiqs import flatten_result
@@ -1509,3 +1510,33 @@ def test_avg_sales_by_grouped_shop():
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
         assert type(line['shop_id']) == six.text_type
+
+
+@pytest.mark.xfail
+def test_avg_price_filter_shop_id_1():
+    lines = flatten_result(load_output('avg_price_filter_shop_id_1'))
+
+
+@pytest.mark.xfail
+def test_nb_sales_by_product_type_filter_product_type_1():
+    lines = flatten_result(load_output('nb_sales_by_product_type_filter_product_type_1'))
+
+
+def test_nb_sales_by_product_type_by_part_id_filter_product_type_1():
+    lines = flatten_result(load_output('nb_sales_by_product_type_by_part_id_filter_product_type_1'))
+
+    # 1 product type, 10 part ids
+    assert len(lines) == 10
+
+    # Each part_id is present
+    assert set([l['part_id'] for l in lines]) == set(['part_{}'.format(i) for i in range(1, 11)])
+
+    for line in lines:
+        assert set(l.keys()) == set([
+            'doc_count',
+            'part_id',
+            'reverse_nested_root__doc_count',
+        ])
+        assert type(line['doc_count']) == int
+        assert type(line['part_id']) == six.text_type
+        assert type(line['reverse_nested_root__doc_count']) == int
