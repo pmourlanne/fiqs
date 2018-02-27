@@ -1532,7 +1532,7 @@ def test_nb_sales_by_product_type_by_part_id_filter_product_type_1():
     assert set([l['part_id'] for l in lines]) == set(['part_{}'.format(i) for i in range(1, 11)])
 
     for line in lines:
-        assert set(l.keys()) == set([
+        assert set(line.keys()) == set([
             'doc_count',
             'part_id',
             'reverse_nested_root__doc_count',
