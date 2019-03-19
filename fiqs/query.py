@@ -63,12 +63,15 @@ class FQuery(object):
 
         return self
 
-    def eval(self, flat=True, fill_missing_buckets=True, add_others_line=False):
+    def eval(self, flat=True, fill_missing_buckets=True,
+             add_others_line=False):
+
         # Raise if computed fields are present, and we are not in flat mode
         if not flat:
             for expression in self._expressions.values():
                 if expression.is_computed():
-                    raise ConfigurationError(u'Cannot use computed fields in non-flat mode')
+                    raise ConfigurationError(
+                        u'Cannot use computed fields in non-flat mode')
 
         search = self._configure_search()
         result = search.execute()
@@ -111,7 +114,8 @@ class FQuery(object):
             self._expressions.update(exps_to_add)
 
     def _contains_nested_expressions(self):
-        return any([isinstance(field, NestedField) for field in self._group_by])
+        return any(
+            [isinstance(field, NestedField) for field in self._group_by])
 
     def _check_nested_parents_are_present(self):
         while True:
@@ -162,7 +166,8 @@ class FQuery(object):
 
             elif isinstance(field_or_exp, Field):
                 params = field_or_exp.bucket_params()
-                if not isinstance(field_or_exp, GroupedField) and self.default_size:
+                if not isinstance(field_or_exp, GroupedField)\
+                        and self.default_size:
                     params.setdefault('size', self.default_size)
 
             else:
@@ -174,7 +179,8 @@ class FQuery(object):
                     # If we're at the latest group_by, we can order by
                     if idx == last_idx:
                         params['order'] = self._order_by
-                    # If the order_by is a doc count, we can add it at any level
+                    # If the order_by is a doc count
+                    # we can add it at any level
                     elif self._order_by.keys() == ['_count']:
                         params['order'] = self._order_by
 
@@ -275,9 +281,11 @@ class FQuery(object):
             return lines
 
         group_by_keys_without_nested = self._group_by_keys(nested=False)
-        # We cast everything as str for easier matching, it won't change the type of keys in lines
+        # We cast everything as str for easier matching
+        # it won't change the type of keys in lines
         treated_hashes = [
-            u','.join([unicode(line[key]) for key in group_by_keys_without_nested])
+            u','.join(
+                [unicode(line[key]) for key in group_by_keys_without_nested])
             for line in lines
         ]
         treated_hashes = set(treated_hashes)
@@ -298,7 +306,8 @@ class FQuery(object):
         enums = []
 
         for field in self._group_by:
-            if isinstance(field, NestedField) or isinstance(field, ReverseNested):
+            if isinstance(field, NestedField)\
+                    or isinstance(field, ReverseNested):
                 continue
 
             if isinstance(field, Aggregate):

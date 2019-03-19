@@ -80,10 +80,20 @@ class Avg(Aggregate):
         return v
 
 
-class Max(Aggregate): pass
-class Min(Aggregate): pass
-class Sum(Aggregate): pass
-class Cardinality(Aggregate): pass
+class Max(Aggregate):
+    pass
+
+
+class Min(Aggregate):
+    pass
+
+
+class Sum(Aggregate):
+    pass
+
+
+class Cardinality(Aggregate):
+    pass
 
 
 class Histogram(Aggregate):
@@ -184,7 +194,8 @@ def get_offset_date(d, timestring):
 
 def get_rounded_date_from_interval(d, interval):
     if is_interval_standard(interval):
-        return get_rounded_date_from_timedelta(d, get_timedelta_from_interval(interval))
+        return get_rounded_date_from_timedelta(
+            d, get_timedelta_from_interval(interval))
 
     if is_interval_monthly(interval):
         return d.replace(
@@ -231,7 +242,8 @@ class DateHistogram(Histogram):
 
             next_ = current
             for i in range(nb_months):
-                next_ = next_ + timedelta(days=32)  # 32 days to be sure to change month
+                # 32 days to be sure to change month
+                next_ = next_ + timedelta(days=32)
                 next_ = next_.replace(day=current.day)
 
             current = next_
@@ -298,13 +310,17 @@ class DateRange(Aggregate):
 
 
 class ReverseNested(Metric):
-    def __init__(self, path_or_field_or_model, *expressions, **named_expressions):
+    def __init__(self, path_or_field_or_model,
+                 *expressions, **named_expressions):
+
         # /!\ named_expressions may not be correctly ordered
         if isinstance(path_or_field_or_model, six.text_type)\
-        or isinstance(path_or_field_or_model, str):
+                or isinstance(path_or_field_or_model, str):
             self.path = path_or_field_or_model or 'root'
+
         elif isinstance(path_or_field_or_model, Field):
             self.path = path_or_field_or_model.get_storage_field()
+
         elif issubclass(path_or_field_or_model, Model):
             self.path = 'root'
 

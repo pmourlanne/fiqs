@@ -15,14 +15,17 @@ class ResultTree(object):
         elif hasattr(es_result, '_d_'):
             self.es_result = es_result._d_
         else:
-            raise Exception('ResultTree expects a dict or an elasticsearch_dsl Response object')
+            raise Exception(
+                'ResultTree expects a dict or '
+                'an elasticsearch_dsl Response object')
 
     def flatten_result(self, **kwargs):
         if 'aggregations' not in self.es_result:
             return []
 
         self.add_others_line = kwargs.get('add_others_line', False)
-        self.remove_nested_aggregations = kwargs.get('remove_nested_aggregations', True)
+        self.remove_nested_aggregations = kwargs.get(
+            'remove_nested_aggregations', True)
 
         aggregations = self.es_result['aggregations']
         return self._extract_lines(aggregations)
@@ -68,7 +71,9 @@ class ResultTree(object):
                 return False
 
         # Node like {'value': 123.456}
-        if all([not isinstance(child_node, dict) for child_node in node.values()]):
+        if all([
+                not isinstance(child_node, dict)
+                for child_node in node.values()]):
             return False
 
         return True
@@ -99,7 +104,8 @@ class ResultTree(object):
                 _node[key] = child_node
 
             elif isinstance(child_node, dict):
-                if self._is_nested_node(child_node, parent_is_root, child_keys):
+                if self._is_nested_node(
+                        child_node, parent_is_root, child_keys):
                     _node.update(self._remove_nested_aggregations(
                         child_node,
                         parent_is_root=False,
@@ -159,7 +165,8 @@ class ResultTree(object):
         return 'buckets' not in node
 
     def _find_deeper_path(self, node):
-        # The path should always end right before a buckets node, or lead to a leaf
+        # The path should always end right before
+        # a buckets node, or lead to a leaf
         path = []
         current_key = None
 
@@ -243,7 +250,8 @@ class ResultTree(object):
 
             if self.add_others_line and 'sum_other_doc_count' in node:
                 others_doc_count = node.pop('sum_other_doc_count')
-                others_line = self._create_others_line(base_line, current_key, others_doc_count)
+                others_line = self._create_others_line(
+                    base_line, current_key, others_doc_count)
                 lines.append(others_line)
 
             buckets = node['buckets']
@@ -268,7 +276,8 @@ class ResultTree(object):
             # If there are no more buckets but we're not at depth 0,
             # either there is another aggregation at our depth or we go higher
             if not buckets:
-                base_line.pop(current_key, None)  # Buckets may have been empty from the start
+                # Buckets may have been empty from the start
+                base_line.pop(current_key, None)
 
                 parent_bucket = aggregations
                 for key in path[:-2]:

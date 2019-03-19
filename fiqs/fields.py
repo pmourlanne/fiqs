@@ -27,8 +27,9 @@ class Field(object):
 
     def get_copy(self):
         return self.__class__(
-            key=self.key, verbose_name=self.verbose_name, storage_field=self.storage_field,
-            unit=self.unit, choices=self.choices, data=self.data, parent=self.parent,
+            key=self.key, verbose_name=self.verbose_name,
+            storage_field=self.storage_field, unit=self.unit,
+            choices=self.choices, data=self.data, parent=self.parent,
         )
 
     def __repr__(self):
@@ -94,7 +95,7 @@ class Field(object):
             return self.data['ranges']
 
         if isinstance(self.data['ranges'][0], tuple) or\
-             isinstance(self.data['ranges'][0], list):
+                isinstance(self.data['ranges'][0], list):
             ranges = []
             for start, end in self.data['ranges']:
                 ranges.append({
@@ -255,7 +256,8 @@ class DayOfWeekField(ByteField):
 
 class HourOfDayField(ByteField):
     def __init__(self, **kwargs):
-        kwargs['choices'] = [(i, _('{hour}h').format(hour=i)) for i in range(24)]
+        kwargs['choices'] = [
+            (i, _('{hour}h').format(hour=i)) for i in range(24)]
         kwargs['data'] = {'min': 0, 'max': 23}
 
         super(HourOfDayField, self).__init__(**kwargs)
