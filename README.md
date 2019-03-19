@@ -69,7 +69,7 @@ You can then write clean queries:
 And let fiqs organise the results:
 
 ```python
-    print result
+    print(result)
     # [
     #     {
     #         "shop_id": 1,
