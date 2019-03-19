@@ -25,8 +25,8 @@ setup_requires = [
 tests_require = [
     'six==1.10.0',
     'Faker==0.7.3',
-    'pytest==3.0.5',
-    'pytest-cov',
+    'pytest==4.3.1',
+    'pytest-cov==2.6.1',
 ]
 
 
