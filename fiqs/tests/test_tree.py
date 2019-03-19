@@ -977,6 +977,94 @@ def test_remove_nested_aggregations_3():
     assert expected == result
 
 
+def test_remove_nested_aggregations_three_levels_deep():
+    node = {
+        'products': {
+            'doc_count': 123,
+            'product': {
+                'buckets': [
+                    {
+                        'doc_count': 12,
+                        'key': 'product_abc',
+                        'parts': {
+                            'doc_count': 34,
+                            'part': {
+                                'buckets': [
+                                    {
+                                        'doc_count': 56,
+                                        'key': 'part_def',
+                                        'smaller_parts': {
+                                            'doc_count': 78,
+                                            'smaller_part': {
+                                                'buckets': [
+                                                    {
+                                                        'doc_count': 90,
+                                                        'key': 'smaller_part_1',  # noqa
+                                                        'avg_smaller_part_price': {  # noqa
+                                                            'value': 98,
+                                                        },
+                                                    },
+                                                ],
+                                                'doc_count_error_upper_bound': 76,  # noqa
+                                                'sum_other_doc_count': 54,
+                                            },
+                                        },
+                                    },
+                                ],
+                                'doc_count_error_upper_bound': 32,
+                                'sum_other_doc_count': 10,
+                            },
+                        },
+                    },
+                ],
+                'doc_count_error_upper_bound': 456,
+                'sum_other_doc_count': 789,
+            }
+        }
+    }
+
+    expected = {
+        'doc_count': 123,
+        'product': {
+            'buckets': [
+                {
+                    'doc_count': 12,
+                    'key': 'product_abc',
+                    'part': {
+                        'buckets': [
+                            {
+                                'doc_count': 56,
+                                'key': 'part_def',
+                                'smaller_part': {
+                                    'buckets': [
+                                        {
+                                            'avg_smaller_part_price': {
+                                                'value': 98,
+                                            },
+                                            'doc_count': 90,
+                                            'key': 'smaller_part_1',
+                                        }
+                                    ],
+                                    'doc_count_error_upper_bound': 76,
+                                    'sum_other_doc_count': 54,
+                                },
+                            },
+                        ],
+                        'doc_count_error_upper_bound': 32,
+                        'sum_other_doc_count': 10,
+                    },
+                },
+            ],
+            'doc_count_error_upper_bound': 456,
+            'sum_other_doc_count': 789,
+        },
+    }
+
+    result = ResultTree({})._remove_nested_aggregations(node)
+
+    assert expected == result
+
+
 def test_remove_nested_aggregations_standard_node():
     result = load_output('total_sales_by_shop')
     node = result['aggregations']

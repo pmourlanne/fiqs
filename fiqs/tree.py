@@ -79,20 +79,6 @@ class ResultTree(object):
         return True
 
     def _remove_nested_aggregations(self, node, parent_is_root=True):
-        while True:
-            new_node = self.__remove_nested_aggregations(
-                node,
-                parent_is_root,
-            )
-
-            if new_node == node:
-                break
-            else:
-                node = new_node
-
-        return new_node
-
-    def __remove_nested_aggregations(self, node, parent_is_root):
         _node = {}
 
         # We force an ordering to have a deterministic result
