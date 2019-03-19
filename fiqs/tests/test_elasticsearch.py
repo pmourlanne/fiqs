@@ -5,7 +5,14 @@ from datetime import datetime, timedelta
 import pytest
 from elasticsearch_dsl import A
 
-from fiqs.aggregations import Avg, Sum, DateHistogram, Count, ReverseNested, DateRange
+from fiqs.aggregations import (
+    Avg,
+    Sum,
+    DateHistogram,
+    Count,
+    ReverseNested,
+    DateRange,
+)
 from fiqs.fields import FieldWithRanges, GroupedField
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
@@ -18,7 +25,8 @@ def test_count(elasticsearch_sale):
     assert get_search().count() == 500
 
 
-@pytest.mark.docker  # See https://github.com/elastic/elasticsearch/issues/23776
+# See https://github.com/elastic/elasticsearch/issues/23776
+@pytest.mark.docker
 def test_offset_date_histogram(elasticsearch_sale):
     start = datetime(2016, 2, 1, 6)
     end = start + timedelta(days=2, hours=2)
@@ -47,7 +55,8 @@ def test_offset_date_histogram(elasticsearch_sale):
     aggregations = result._d_['aggregations']
     buckets = aggregations['timestamp']['buckets']
 
-    keys = [datetime.utcfromtimestamp(bucket['key'] / 1000) for bucket in buckets]
+    keys = [
+        datetime.utcfromtimestamp(bucket['key'] / 1000) for bucket in buckets]
     expected_keys = [
         start,
         start + timedelta(days=1),
@@ -617,4 +626,5 @@ def test_write_filter_aggregation_search_outputs(elasticsearch_sale):
         'product_type_1',
         a,
     )
-    write_output(search, 'nb_sales_by_product_type_by_part_id_filter_product_type_1')
+    write_output(
+        search, 'nb_sales_by_product_type_by_part_id_filter_product_type_1')

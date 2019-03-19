@@ -7,7 +7,12 @@ import pytest
 from fiqs import fields
 from fiqs.exceptions import FieldError
 from fiqs.models import Model
-from fiqs.testing.models import Sale, SaleWithProducts, SaleWithParts, SaleWithoutProducts
+from fiqs.testing.models import (
+    Sale,
+    SaleWithProducts,
+    SaleWithParts,
+    SaleWithoutProducts,
+)
 
 
 EXPECTED_MAPPING = {
@@ -47,8 +52,10 @@ def test_mapping_from_model():
 
 def test_mapping_from_model_child_class():
     mapping_without_parts = copy.deepcopy(EXPECTED_MAPPING)
-    mapping_without_parts['sale']['properties']['products']['properties'].pop('parts')
-    mapping_without_parts['sale_with_products'] = mapping_without_parts.pop('sale')
+    mapping_without_parts[
+        'sale']['properties']['products']['properties'].pop('parts')
+    mapping_without_parts[
+        'sale_with_products'] = mapping_without_parts.pop('sale')
     assert SaleWithProducts.get_mapping().to_dict() == mapping_without_parts
 
     mapping_with_parts = copy.deepcopy(EXPECTED_MAPPING)

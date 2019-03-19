@@ -848,9 +848,13 @@ def test_computed_automatically_added():
     search.aggs.bucket(
         'shop_id', 'terms', field='shop_id',
     ).metric(
-        str(Sum(TrafficCount.incoming_traffic)), 'sum', field='incoming_traffic',
+        str(Sum(TrafficCount.incoming_traffic)),
+        'sum',
+        field='incoming_traffic',
     ).metric(
-        str(Sum(TrafficCount.outgoing_traffic)), 'sum', field='outgoing_traffic',
+        str(Sum(TrafficCount.outgoing_traffic)),
+        'sum',
+        field='outgoing_traffic',
     )
 
     fquery = FQuery(get_search()).values(
@@ -990,6 +994,7 @@ def test_filters_aggregation_multiple_aggregations():
     fsearch = fquery._configure_search()
 
     assert fsearch.to_dict() == search.to_dict()
+
 
 ###################
 # Flatten results #
@@ -1232,9 +1237,11 @@ def test_reverse_nested():
         assert str(ReverseNested(Sale, Count(Sale))) in line
         assert type(line[str(ReverseNested(Sale, Count(Sale)))]) == int
         assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
-        assert type(line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
+        assert type(
+            line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
         assert str(ReverseNested(Sale, total_sales=Sum(Sale.price))) in line
-        assert type(line[str(ReverseNested(Sale, total_sales=Sum(Sale.price)))]) == int
+        assert type(
+            line[str(ReverseNested(Sale, total_sales=Sum(Sale.price)))]) == int
 
 
 def test_reverse_nested_2():
@@ -1262,7 +1269,8 @@ def test_reverse_nested_2():
         assert type(line[str(ReverseNested(Sale, Count(Sale)))]) == int
         # Reverse nested metric is present
         assert str(ReverseNested(Sale, avg_sales=Avg(Sale.price))) in line
-        assert type(line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
+        assert type(
+            line[str(ReverseNested(Sale, avg_sales=Avg(Sale.price)))]) == float
         # Standard metric is present
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
@@ -1477,6 +1485,7 @@ def test_flatten_result_grouped_field_with_metric():
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
         assert type(line['shop_id']) == six.text_type
+
 
 ########################
 # Fill missing buckets #
@@ -1804,7 +1813,8 @@ def test_fill_missing_buckets_nested():
 
     result = load_output('avg_part_price_by_product_by_part')
     # We remove one part bucket in the first product bucket
-    product_bucket = result['aggregations']['products']['product_id']['buckets'][0]
+    product_bucket = result[
+        'aggregations']['products']['product_id']['buckets'][0]
     part_id_buckets = [
         b for b in product_bucket['parts']['part_id']['buckets']
         if b['key'] != 'part_1'
@@ -1835,12 +1845,13 @@ def test_fill_missing_buckets_reverse_nested_doc_count():
     fquery._configure_search()
 
     result = load_output('nb_sales_by_product_type')
-    product_type_buckets = result['aggregations']['products']['product_type']['buckets']
+    product_type_buckets = result[
+        'aggregations']['products']['product_type']['buckets']
     product_type_buckets = [
         b for b in product_type_buckets
         if b['key'] != 'product_type_0'
     ]
-    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets
+    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets  # noqa
     lines = fquery._flatten_result(result)
 
     assert len(lines) == 4
@@ -1876,12 +1887,13 @@ def test_fill_missing_buckets_reverse_nested():
     fquery._configure_search()
 
     result = load_output('total_and_avg_sales_by_product_type')
-    product_type_buckets = result['aggregations']['products']['product_type']['buckets']
+    product_type_buckets = result[
+        'aggregations']['products']['product_type']['buckets']
     product_type_buckets = [
         b for b in product_type_buckets
         if b['key'] != 'product_type_0'
     ]
-    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets
+    result['aggregations']['products']['product_type']['buckets'] = product_type_buckets  # noqa
     lines = fquery._flatten_result(result)
 
     assert len(lines) == 4
@@ -1963,7 +1975,8 @@ def test_fill_missing_buckets_date_range_multiple_group_by():
 
     result = load_output('nb_sales_by_payment_type_by_date_range')
     payment_type_buckets = result['aggregations']['payment_type']['buckets']
-    payment_type_buckets = [b for b in payment_type_buckets if b['key'] != 'wire_transfer']
+    payment_type_buckets = [
+        b for b in payment_type_buckets if b['key'] != 'wire_transfer']
     result['aggregations']['payment_type']['buckets'] = payment_type_buckets
 
     lines = fquery._flatten_result(result)
@@ -1999,7 +2012,8 @@ def test_fill_missing_buckets_date_range_multiple_group_by_2():
 
     result = load_output('nb_sales_by_date_range_by_payment_type')
     timestamp_buckets = result['aggregations']['timestamp']['buckets']
-    timestamp_buckets = [b for b in timestamp_buckets if b['key'] != 'second_half']
+    timestamp_buckets = [
+        b for b in timestamp_buckets if b['key'] != 'second_half']
     result['aggregations']['timestamp']['buckets'] = timestamp_buckets
 
     lines = fquery._flatten_result(result)
@@ -2027,7 +2041,8 @@ def test_fill_missing_buckets_grouped_field():
 
     result = load_output('nb_sales_by_payment_type_by_grouped_shop')
     payment_type_buckets = result['aggregations']['payment_type']['buckets']
-    payment_type_buckets = [b for b in payment_type_buckets if b['key'] != 'wire_transfer']
+    payment_type_buckets = [
+        b for b in payment_type_buckets if b['key'] != 'wire_transfer']
     result['aggregations']['payment_type']['buckets'] = payment_type_buckets
 
     lines = fquery._flatten_result(result)

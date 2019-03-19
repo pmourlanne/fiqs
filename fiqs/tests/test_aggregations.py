@@ -25,12 +25,16 @@ def test_date_histogram_choice_keys_day_intervals():
     expected_start = start.replace(hour=0)
 
     date_histogram = get_date_histogram(min=start, max=end, interval='1d')
-    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    expected_keys = [
+        expected_start + timedelta(days=i)
+        for i in range(0, nb_days, delta_days)]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
 
     date_histogram = get_date_histogram(min=start, max=end, interval='day')
-    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    expected_keys = [
+        expected_start + timedelta(days=i)
+        for i in range(0, nb_days, delta_days)]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
 
@@ -44,7 +48,9 @@ def test_date_histogram_choice_keys_day_intervals_2():
     expected_start = datetime(2015, 12, 31)
 
     date_histogram = get_date_histogram(min=start, max=end, interval='2d')
-    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    expected_keys = [
+        expected_start + timedelta(days=i)
+        for i in range(0, nb_days, delta_days)]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
 
@@ -57,8 +63,11 @@ def test_date_histogram_choice_keys_day_intervals_offset():
 
     expected_start = start
 
-    date_histogram = get_date_histogram(min=start, max=end, interval='1d', offset='+6h')
-    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    date_histogram = get_date_histogram(
+        min=start, max=end, interval='1d', offset='+6h')
+    expected_keys = [
+        expected_start + timedelta(days=i)
+        for i in range(0, nb_days, delta_days)]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
 
@@ -71,8 +80,11 @@ def test_date_histogram_choice_keys_day_intervals_negative_offset():
 
     expected_start = start - timedelta(hours=6)
 
-    date_histogram = get_date_histogram(min=start, max=end, interval='1d', offset='-6h')
-    expected_keys = [expected_start + timedelta(days=i) for i in range(0, nb_days, delta_days)]
+    date_histogram = get_date_histogram(
+        min=start, max=end, interval='1d', offset='-6h')
+    expected_keys = [
+        expected_start + timedelta(days=i)
+        for i in range(0, nb_days, delta_days)]
     keys = date_histogram.choice_keys()
     assert expected_keys == keys
 
@@ -98,7 +110,8 @@ def test_date_histogram_choice_keys_month_intervals_offset():
     start = datetime(2016, 1, 1, 6)
     end = datetime(2016, 6, 1, 6)
 
-    date_histogram = get_date_histogram(min=start, max=end, interval='2M', offset='+6h')
+    date_histogram = get_date_histogram(
+        min=start, max=end, interval='2M', offset='+6h')
     expected_keys = [
         datetime(2016, 1, 1, 6),
         datetime(2016, 3, 1, 6),
