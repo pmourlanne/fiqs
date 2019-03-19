@@ -3,6 +3,7 @@
 *.mo
 .cache
 .eggs/
+.idea/
 build/*
 dist/*
 .project
