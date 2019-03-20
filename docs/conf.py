@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'fiqs'
-copyright = u'2016, Pierre Mourlanne'
+copyright = u'2019, Pierre Mourlanne'
 author = u'Pierre Mourlanne'
 
 # The version info for the project you're documenting, acts as replacement for
