@@ -4,14 +4,11 @@ import json
 import os
 import time
 
+import pytest
 from elasticsearch.helpers import bulk
-
 from elasticsearch_dsl import Mapping, Nested
 
-import pytest
-
 from fiqs.testing.utils import get_client
-
 
 SALE_INDEX_NAME = 'test_sale'
 TRAFFIC_INDEX_NAME = 'test_traffic'

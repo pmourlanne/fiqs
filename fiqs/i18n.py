@@ -4,7 +4,6 @@ import gettext
 import os
 import sys
 
-
 if sys.version_info[0] >= 3:
     _ = gettext.gettext
 else:

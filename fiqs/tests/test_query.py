@@ -7,28 +7,27 @@ import pytest
 import six
 
 from fiqs.aggregations import (
-    Sum,
-    Count,
-    Avg,
-    DateHistogram,
     Addition,
-    Ratio,
-    Subtraction,
-    ReverseNested,
+    Avg,
     Cardinality,
+    Count,
+    DateHistogram,
     DateRange,
+    Ratio,
+    ReverseNested,
+    Subtraction,
+    Sum,
 )
 from fiqs.exceptions import ConfigurationError
 from fiqs.fields import (
-    IntegerField,
     DataExtendedField,
     FieldWithChoices,
     FieldWithRanges,
     GroupedField,
+    IntegerField,
 )
 from fiqs.models import Model
 from fiqs.query import FQuery
-
 from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
 from fiqs.tests.conftest import load_output

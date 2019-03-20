@@ -4,11 +4,10 @@ import json
 import random
 
 from fiqs.testing.gen_data import (
+    random_shop_id,
     random_string,
     random_timestamp,
-    random_shop_id,
 )
-
 
 PRODUCT_TYPES = ['product_type_{}'.format(i) for i in range(5)]
 PRODUCT_IDS = ['product_{}'.format(random_string(10)) for _ in range(50)]

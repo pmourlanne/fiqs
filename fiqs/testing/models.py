@@ -3,7 +3,6 @@
 from fiqs import fields
 from fiqs.models import Model
 
-
 PAYMENT_TYPES = [
     'wire_transfer',
     'cash',

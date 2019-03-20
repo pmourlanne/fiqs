@@ -9,11 +9,10 @@ from fiqs.exceptions import FieldError
 from fiqs.models import Model
 from fiqs.testing.models import (
     Sale,
-    SaleWithProducts,
-    SaleWithParts,
     SaleWithoutProducts,
+    SaleWithParts,
+    SaleWithProducts,
 )
-
 
 EXPECTED_MAPPING = {
         'sale': {

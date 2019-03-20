@@ -3,7 +3,7 @@
 import json
 import random
 
-from fiqs.testing.gen_data import random_timestamp, random_shop_id
+from fiqs.testing.gen_data import random_shop_id, random_timestamp
 
 
 def gen_traffic_data(size):

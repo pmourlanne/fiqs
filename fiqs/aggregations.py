@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from collections import OrderedDict
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 import six
 

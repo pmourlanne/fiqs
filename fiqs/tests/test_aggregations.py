@@ -3,7 +3,6 @@
 from datetime import datetime, timedelta
 
 from fiqs.aggregations import DateHistogram
-
 from fiqs.testing.models import Sale
 
 

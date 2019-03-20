@@ -7,7 +7,6 @@ from datetime import datetime
 
 from faker import Factory
 
-
 fake = Factory.create()
 
 

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from six import with_metaclass
-
 from elasticsearch_dsl import Mapping, Nested
+from six import with_metaclass
 
 from fiqs.exceptions import FieldError
 from fiqs.fields import Field, NestedField

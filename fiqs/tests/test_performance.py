@@ -5,11 +5,10 @@ from datetime import datetime
 import pytest
 
 from fiqs.aggregations import Count, DateHistogram
-from fiqs.tests.conftest import write_fquery_output, load_output
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale
 from fiqs.testing.utils import get_search
-
+from fiqs.tests.conftest import load_output, write_fquery_output
 
 start = datetime(2016, 1, 1)
 end = datetime(2016, 1, 31)

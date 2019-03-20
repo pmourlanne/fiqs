@@ -7,17 +7,17 @@ from elasticsearch_dsl import A
 
 from fiqs.aggregations import (
     Avg,
-    Sum,
-    DateHistogram,
     Count,
-    ReverseNested,
+    DateHistogram,
     DateRange,
+    ReverseNested,
+    Sum,
 )
 from fiqs.fields import FieldWithRanges, GroupedField
 from fiqs.query import FQuery
 from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
-from fiqs.tests.conftest import write_output, write_fquery_output
+from fiqs.tests.conftest import write_fquery_output, write_output
 
 
 @pytest.mark.docker
