@@ -13,12 +13,13 @@ from fiqs.aggregations import (
     Count,
     DateHistogram,
     DateRange,
+    Histogram,
     Ratio,
     ReverseNested,
     Subtraction,
     Sum,
 )
-from fiqs.exceptions import ConfigurationError
+from fiqs.exceptions import ConfigurationError, MissingParameterException
 from fiqs.fields import (
     DataExtendedField,
     FieldWithChoices,
@@ -159,6 +160,76 @@ def test_two_aggregations_two_metrics():
     fsearch = fquery._configure_search()
 
     assert search.to_dict() == fsearch.to_dict()
+
+
+@pytest.mark.parametrize('hmin,hmax', [
+    (0, 1000),
+    (None, None),
+])
+def test_histogram(hmin, hmax):
+    histogram_params = {
+        'field': 'price',
+        'interval': 100,
+        'min_doc_count': 0,
+    }
+    if hmin is not None:
+        histogram_params.setdefault('extended_bounds', {})
+        histogram_params['extended_bounds']['min'] = hmin
+    if hmax is not None:
+        histogram_params.setdefault('extended_bounds', {})
+        histogram_params['extended_bounds']['max'] = hmax
+
+    search = get_search()
+    search.aggs.bucket(
+        'price', 'histogram', **histogram_params
+    ).metric(
+        'total_sales', 'sum', field='price',
+    )
+
+    histogram_params = {
+        'interval': 100,
+    }
+    if hmin is not None:
+        histogram_params['min'] = hmin
+    if hmax is not None:
+        histogram_params['max'] = hmax
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            **histogram_params
+        ),
+    )
+    fsearch = fquery._configure_search()
+
+    assert search.to_dict() == fsearch.to_dict()
+
+
+@pytest.mark.parametrize('hmin,hmax', [
+    (None, 1000),
+    (100, None),
+])
+def test_histogram_incomplete_extended_bounds(hmin, hmax):
+    histogram_params = {
+        'interval': 100,
+    }
+    if hmin is not None:
+        histogram_params['min'] = hmin
+    if hmax is not None:
+        histogram_params['max'] = hmax
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            **histogram_params
+        ),
+    )
+    with pytest.raises(MissingParameterException):
+        fquery._configure_search()
 
 
 def test_date_histogram():
@@ -1079,6 +1150,36 @@ def test_flatten_result_cast_timestamp():
         assert type(line['total_sales']) == int
 
 
+def test_flatten_result_histogram():
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            interval=100,
+        ),
+    )
+
+    result = load_output('total_sales_by_price_histogram')
+    lines = fquery._flatten_result(result)
+
+    assert len(lines) == 11  # Prices go from 0 to 1000
+
+    for line in lines:
+        # Doc count is present
+        assert 'doc_count' in line
+        assert type(line['doc_count']) == int
+        # Aggregation and metric are present
+        assert 'price' in line
+        assert type(line['price']) == int
+        assert 'total_sales' in line
+        assert type(line['total_sales']) == int
+
+    # All price ranges are present
+    assert sorted(
+        [line['price'] for line in lines]) == list(range(0, 1100, 100))
+
+
 def test_computed_field():
     computed_field = Addition(
         Sum(TrafficCount.incoming_traffic),
@@ -1668,6 +1769,48 @@ def test_fill_missing_buckets_values_in_other_agg():
         'doc_count': 0,
         'payment_type': 'wire_transfer',
     }
+
+
+def test_fill_missing_buckets_histogram_nothing_to_do():
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            interval=100,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_by_price_histogram')
+
+    lines = fquery._flatten_result(result)
+    assert len(lines) == 11
+    lines = fquery._add_missing_lines(lines)
+    assert len(lines) == 11
+
+
+def test_fill_missing_buckets_histogram():
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            interval=100,
+            # We force a range where there are no buckets
+            min=0,
+            max=1500,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_by_price_histogram')
+
+    lines = fquery._flatten_result(result)
+    lines = fquery._add_missing_lines(lines)
+    # No missing lines are added since when specifying extended_bounds
+    # in ES, ES automatically adds empty buckets where needed
+    assert len(lines) == 11
 
 
 def test_fill_missing_buckets_range_nothing_to_do():

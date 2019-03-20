@@ -10,6 +10,7 @@ from fiqs.aggregations import (
     Count,
     DateHistogram,
     DateRange,
+    Histogram,
     ReverseNested,
     Sum,
 )
@@ -316,6 +317,22 @@ def test_total_sales_by_payment_type_by_shop(elasticsearch_sale):
             Sale.shop_id,
         ),
         'total_sales_by_payment_type_by_shop',
+    )
+
+
+@pytest.mark.docker
+def test_total_sales_by_price_histogram(elasticsearch_sale):
+    # Total sales by price histogram
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            Histogram(
+                Sale.price,
+                interval=100,
+            ),
+        ),
+        'total_sales_by_price_histogram',
     )
 
 

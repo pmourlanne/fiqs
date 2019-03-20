@@ -105,6 +105,12 @@ class Histogram(Aggregate):
             'min_doc_count': 0,
         })
 
+        if 'min' in self.params and 'max' not in self.params:
+            raise MissingParameterException('cannot give min without max')
+
+        if 'max' in self.params and 'min' not in self.params:
+            raise MissingParameterException('cannot give max without min')
+
         if 'min' in self.params and 'max' in self.params:
             self.min = self.params.pop('min')
             self.max = self.params.pop('max')

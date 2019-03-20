@@ -109,6 +109,30 @@ Sum
 
 Used for the Elasticsearch `sum aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics-sum-aggregation.html>`_
 
+Histogram
+^^^^^^^^^
+
+Used for the Elasticsearch `histogram aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-histogram-aggregation.html>`_
+This aggregation requires the `interval` parameter. It also accepts `max` and `min` parameters (both need to be specified) that acts as extended bounds::
+
+    from fiqs.aggregation import Histogram
+
+    from .models import Sale
+
+    FQuery(search).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        Histogram(
+            Sale.price,
+            # Mandatory
+            interval=100,
+            # Optional together:
+            min=0,
+            max=500,
+        )
+    )
+
+
 Operations
 ^^^^^^^^^^
 
