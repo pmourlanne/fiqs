@@ -12,11 +12,6 @@ min and max are required for DateHistogram?
 Write documentation for Histogram, DateHistogram and DateRange
 Improve behavior with filter aggregation
 
-ES fixture should be session scoped
-Split ES tests
-ES tests crash?
-ES tests re-generate?
-
 ##########
 # Fields #
 ##########

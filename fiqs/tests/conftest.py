@@ -119,7 +119,7 @@ def delete_traffic_index(client):
     delete_index(client, TRAFFIC_INDEX_NAME)
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def elasticsearch_sale(request):
     client = get_client()
     insert_sale_documents(client)
@@ -130,7 +130,7 @@ def elasticsearch_sale(request):
     return client
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def elasticsearch_traffic(request):
     client = get_client()
     insert_traffic_documents(client)
@@ -157,7 +157,6 @@ def write_output(search, name):
             f,
             indent=4,
             ensure_ascii=False,
-            encoding='utf-8',
             sort_keys=True,
         )
 
@@ -175,7 +174,6 @@ def write_fquery_output(fquery, name):
             f,
             indent=4,
             ensure_ascii=False,
-            encoding='utf-8',
             sort_keys=True,
         )
 

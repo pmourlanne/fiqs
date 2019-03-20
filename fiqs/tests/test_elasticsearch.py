@@ -66,7 +66,7 @@ def test_offset_date_histogram(elasticsearch_sale):
 
 
 @pytest.mark.docker
-def test_write_traffic_search_outputs(elasticsearch_traffic):
+def test_total_in_traffic_and_total_out_traffic(elasticsearch_traffic):
     # Total in traffic and out traffic
     write_fquery_output(
         FQuery(get_search()).values(
@@ -76,6 +76,9 @@ def test_write_traffic_search_outputs(elasticsearch_traffic):
         'total_in_traffic_and_total_out_traffic',
     )
 
+
+@pytest.mark.docker
+def test_total_in_traffic_and_total_out_traffic_by_shop(elasticsearch_traffic):
     # Total in traffic and out traffic by shop id
     write_fquery_output(
         FQuery(get_search()).values(
@@ -89,7 +92,7 @@ def test_write_traffic_search_outputs(elasticsearch_traffic):
 
 
 @pytest.mark.docker
-def test_write_nested_search_output(elasticsearch_sale):
+def test_avg_product_price_by_product_type(elasticsearch_sale):
     # Average product price by product type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -100,6 +103,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_product_price_by_product_type',
     )
 
+
+@pytest.mark.docker
+def test_avg_part_price_by_part(elasticsearch_sale):
     # Average part price by part
     write_fquery_output(
         FQuery(get_search()).values(
@@ -110,6 +116,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_part_price_by_part',
     )
 
+
+@pytest.mark.docker
+def test_avg_part_price_by_product(elasticsearch_sale):
     # Average part price by product
     write_fquery_output(
         FQuery(get_search()).values(
@@ -121,6 +130,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_part_price_by_product',
     )
 
+
+@pytest.mark.docker
+def test_avg_part_price_by_product_by_part(elasticsearch_sale):
     # Average part price by product by part
     write_fquery_output(
         FQuery(get_search()).values(
@@ -132,6 +144,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_part_price_by_product_by_part',
     )
 
+
+@pytest.mark.docker
+def test_avg_product_price_by_shop_by_product_type(elasticsearch_sale):
     # Average product price by shop by product
     write_fquery_output(
         FQuery(get_search()).values(
@@ -143,6 +158,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_product_price_by_shop_by_product_type',
     )
 
+
+@pytest.mark.docker
+def test_avg_part_price_by_shop_range_by_part_id(elasticsearch_sale):
     # Average part price by shop range by part id
     ranges = [{
         'from': 1,
@@ -162,6 +180,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'avg_part_price_by_shop_range_by_part_id',
     )
 
+
+@pytest.mark.docker
+def test_avg_part_price_by_product_and_by_part(elasticsearch_sale):
     # Average part price by product and by part
     # This type of query is not possible with FQuery
     search = get_search()
@@ -184,6 +205,9 @@ def test_write_nested_search_output(elasticsearch_sale):
     )
     write_output(search, 'avg_part_price_by_product_and_by_part')
 
+
+@pytest.mark.docker
+def test_nb_sales_by_product_type(elasticsearch_sale):
     # Nb sales by product_type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -197,6 +221,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'nb_sales_by_product_type',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_product_type_by_part_id(elasticsearch_sale):
     # Nb sales by product type by part_id
     write_fquery_output(
         FQuery(get_search()).values(
@@ -211,6 +238,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'nb_sales_by_product_type_by_part_id',
     )
 
+
+@pytest.mark.docker
+def test_total_and_avg_sales_by_product_type(elasticsearch_sale):
     # Average sale price by product type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -225,6 +255,9 @@ def test_write_nested_search_output(elasticsearch_sale):
         'total_and_avg_sales_by_product_type',
     )
 
+
+@pytest.mark.docker
+def test_avg_product_price_and_avg_sales_by_product_type(elasticsearch_sale):
     # Average sale price and average product price by product type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -241,10 +274,13 @@ def test_write_nested_search_output(elasticsearch_sale):
 
 
 @pytest.mark.docker
-def test_write_search_outputs(elasticsearch_sale):
+def test_no_aggregate_no_metric(elasticsearch_sale):
     # Nothing :o
     write_output(get_search(), 'no_aggregate_no_metric')
 
+
+@pytest.mark.docker
+def test_total_sales_by_shop(elasticsearch_sale):
     # Total sales by shop
     write_fquery_output(
         FQuery(get_search()).values(
@@ -255,6 +291,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_shop',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_payment_type(elasticsearch_sale):
     # Total sales by payment type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -265,6 +304,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_payment_type',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_payment_type_by_shop(elasticsearch_sale):
     # Total sales by shop by payment type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -276,6 +318,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_payment_type_by_shop',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_day_by_day(elasticsearch_sale):
     # Total sales day by day
     write_fquery_output(
         FQuery(get_search()).values(
@@ -289,6 +334,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_day_by_day',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_shop(elasticsearch_sale):
     # Number of sales by shop
     write_fquery_output(
         FQuery(get_search()).values(
@@ -299,6 +347,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_shop',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_day_by_day_by_shop_and_by_payment(elasticsearch_sale):
     # Total sales day by day, by shop and by payment type
     # This type of query is not possible with FQuery
     search = get_search()
@@ -317,6 +368,9 @@ def test_write_search_outputs(elasticsearch_sale):
     )
     write_output(search, 'total_sales_day_by_day_by_shop_and_by_payment')
 
+
+@pytest.mark.docker
+def test_total_and_avg_sales_by_shop(elasticsearch_sale):
     # Total sales and average sales by shop
     write_fquery_output(
         FQuery(get_search()).values(
@@ -328,6 +382,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_and_avg_sales_by_shop',
     )
 
+
+@pytest.mark.docker
+def test_total_sales(elasticsearch_sale):
     # Total sales, no aggregations
     write_fquery_output(
         FQuery(get_search()).values(
@@ -336,6 +393,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_and_avg_sales(elasticsearch_sale):
     # Total sales and avg sales, no aggregations
     write_fquery_output(
         FQuery(get_search()).values(
@@ -345,6 +405,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_and_avg_sales',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_shop_and_by_payment(elasticsearch_sale):
     # Total sales by shop and by payment type
     # This type of query is not possible with FQuery
     search = get_search()
@@ -360,6 +423,9 @@ def test_write_search_outputs(elasticsearch_sale):
     )
     write_output(search, 'total_sales_by_shop_and_by_payment')
 
+
+@pytest.mark.docker
+def test_total_sales_by_payment_type_by_shop_range(elasticsearch_sale):
     # Total sales by payment by shop range
     ranges = [[1, 5], [5, 11], [11, 15]]
     write_fquery_output(
@@ -372,6 +438,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_payment_type_by_shop_range',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_shop_range_by_payment_type(elasticsearch_sale):
     # Total sales by shop range by payment_type
     ranges = [[1, 5], [5, 11], [11, 15]]
     write_fquery_output(
@@ -384,6 +453,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_shop_range_by_payment_type',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_shop_range(elasticsearch_sale):
     # Total sales by shop range
     ranges = [{
         'from': 1,
@@ -402,6 +474,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_shop_range',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_shop_limited_size(elasticsearch_sale):
     # Nb sales by shop limited size
     write_fquery_output(
         FQuery(get_search(), default_size=2).values(
@@ -412,6 +487,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_shop_limited_size',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_shop_by_payment_type_limited_size(elasticsearch_sale):
     # Nb sales by shop by payment type limited size
     write_fquery_output(
         FQuery(get_search(), default_size=2).values(
@@ -423,6 +501,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_shop_by_payment_type_limited_size',
     )
 
+
+@pytest.mark.docker
+def test_total_sales_by_shop_limited_size(elasticsearch_sale):
     # Total sales by shop limited size
     write_fquery_output(
         FQuery(get_search(), default_size=2).values(
@@ -433,8 +514,15 @@ def test_write_search_outputs(elasticsearch_sale):
         'total_sales_by_shop_limited_size',
     )
 
-    # Nb sales by date range with keys
-    ranges_with_keys = [
+
+@pytest.mark.docker
+def test_alo(elasticsearch_sale):
+    pass
+
+
+@pytest.fixture
+def date_ranges_with_keys():
+    return [
         {
             'from': datetime(2016, 1, 1),
             'to': datetime(2016, 1, 15),
@@ -446,18 +534,26 @@ def test_write_search_outputs(elasticsearch_sale):
             'key': 'second_half',
         },
     ]
+
+
+@pytest.mark.docker
+def test_nb_sales_by_date_range_with_keys(elasticsearch_sale,
+                                          date_ranges_with_keys):
     write_fquery_output(
         FQuery(get_search()).values(
             Count(Sale),
         ).group_by(
             DateRange(
                 Sale.timestamp,
-                ranges=ranges_with_keys,
+                ranges=date_ranges_with_keys,
             ),
         ),
         'nb_sales_by_date_range_with_keys',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_date_range_without_keys(elasticsearch_sale):
     # Nb sales by date range without keys
     ranges_without_keys = [
         {
@@ -481,6 +577,10 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_date_range_without_keys',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_date_range_by_payment_type(elasticsearch_sale,
+                                                date_ranges_with_keys):
     # Nb sales by date range by payment type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -488,13 +588,17 @@ def test_write_search_outputs(elasticsearch_sale):
         ).group_by(
             DateRange(
                 Sale.timestamp,
-                ranges=ranges_with_keys,
+                ranges=date_ranges_with_keys,
             ),
             Sale.payment_type,
         ),
         'nb_sales_by_date_range_by_payment_type',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_payment_type_by_date_range(elasticsearch_sale,
+                                                date_ranges_with_keys):
     # Nb sales by payment type by date range
     write_fquery_output(
         FQuery(get_search()).values(
@@ -503,17 +607,24 @@ def test_write_search_outputs(elasticsearch_sale):
             Sale.payment_type,
             DateRange(
                 Sale.timestamp,
-                ranges=ranges_with_keys,
+                ranges=date_ranges_with_keys,
             ),
         ),
         'nb_sales_by_payment_type_by_date_range',
     )
 
-    # Nb sales by grouped shop id
-    shops_by_group = {
-        'group_a': range(1, 6),
-        'group_b': range(6, 11),
+
+@pytest.fixture
+def shops_by_group():
+    return {
+        'group_a': list(range(1, 6)),
+        'group_b': list(range(6, 11)),
     }
+
+
+@pytest.mark.docker
+def test_nb_sales_by_grouped_shop(elasticsearch_sale, shops_by_group):
+    # Nb sales by grouped shop id
     write_fquery_output(
         FQuery(get_search()).values(
             Count(Sale),
@@ -526,6 +637,10 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_grouped_shop',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_grouped_shop_by_payment_type(elasticsearch_sale,
+                                                  shops_by_group):
     # Nb sales by grouped shop id by payment type
     write_fquery_output(
         FQuery(get_search()).values(
@@ -540,6 +655,10 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_grouped_shop_by_payment_type',
     )
 
+
+@pytest.mark.docker
+def test_nb_sales_by_payment_type_by_grouped_shop(elasticsearch_sale,
+                                                  shops_by_group):
     # Nb sales by payment type by grouped shop id
     write_fquery_output(
         FQuery(get_search()).values(
@@ -554,6 +673,9 @@ def test_write_search_outputs(elasticsearch_sale):
         'nb_sales_by_payment_type_by_grouped_shop',
     )
 
+
+@pytest.mark.docker
+def test_avg_sales_by_grouped_shop(elasticsearch_sale, shops_by_group):
     # Avg price by grouped shop id
     write_fquery_output(
         FQuery(get_search()).values(
@@ -568,10 +690,9 @@ def test_write_search_outputs(elasticsearch_sale):
     )
 
 
+# All these filter tests still use elasticsearch_dsl (for the time being?)
 @pytest.mark.docker
-def test_write_filter_aggregation_search_outputs(elasticsearch_sale):
-    # All these still use elasticsearch_dsl (for the time being?)
-
+def test_avg_price_filter_shop_id_1(elasticsearch_sale):
     # Avg price for shop_id 1
     a = A('filter', term={'shop_id': 1})
     a.bucket(
@@ -586,6 +707,9 @@ def test_write_filter_aggregation_search_outputs(elasticsearch_sale):
     )
     write_output(search, 'avg_price_filter_shop_id_1')
 
+
+@pytest.mark.docker
+def test_nb_sales_by_product_type_filter_product_type_1(elasticsearch_sale):
     # Number of sales, by product type, for product_type_1
     a = A('filter', term={'products.product_type': 'product_type_1'})
     a.bucket(
@@ -603,6 +727,10 @@ def test_write_filter_aggregation_search_outputs(elasticsearch_sale):
     )
     write_output(search, 'nb_sales_by_product_type_filter_product_type_1')
 
+
+@pytest.mark.docker
+def test_nb_sales_by_product_type_by_part_id_filter_product_type_1(
+        elasticsearch_sale):
     # Number of sales, by product type, by part id, for product_type_1
     a = A('filter', term={'products.product_type': 'product_type_1'})
     a.bucket(
