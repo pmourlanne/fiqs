@@ -85,7 +85,7 @@ class FQuery(object):
             )
 
             if fill_missing_buckets:
-                lines = self._add_missing_lines(result, lines)
+                lines = self._add_missing_lines(lines)
 
             return lines
         else:
@@ -274,8 +274,8 @@ class FQuery(object):
                 except KeyError:
                     pass
 
-    def _add_missing_lines(self, result, lines):
-        enums = self._get_field_enums(result, lines)
+    def _add_missing_lines(self, lines):
+        enums = self._get_field_enums(lines)
 
         keys = list(product(*enums)) if enums else []
         if len(keys) == len(lines):
@@ -303,7 +303,7 @@ class FQuery(object):
 
         return lines
 
-    def _get_field_enums(self, result, lines):
+    def _get_field_enums(self, lines):
         enums = []
 
         for field in self._group_by:
