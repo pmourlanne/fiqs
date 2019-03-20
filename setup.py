@@ -27,6 +27,9 @@ tests_require = [
     'Faker==0.7.3',
     'pytest==4.3.1',
     'pytest-cov==2.6.1',
+    'sh==1.12.14',
+    'isort==4.3.15',
+    'flake8==3.7.7',
 ]
 
 
@@ -41,7 +44,8 @@ class Sdist(sdist):
 
 setup(
     name='fiqs',
-    description="Python client for Elasticsearch built on top of elasticsearch-dsl",
+    description="Python client for Elasticsearch "
+                "built on top of elasticsearch-dsl",
     license="MIT License",
     url="https://github.com/pmourlanne/fiqs",
     long_description=long_description,

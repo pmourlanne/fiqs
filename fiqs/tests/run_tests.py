@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
 import sys
@@ -12,6 +11,7 @@ def run_all(argv=None):
         argv = [
             '--cov', 'fiqs', '--verbose',
             '--junitxml', 'junit.xml', '--cov-report', 'xml',
+            '--run-lint',
         ]
     else:
         argv = argv[1:]

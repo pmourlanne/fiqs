@@ -23,6 +23,18 @@ SALE_DOC_TYPE = 'sale'
 TRAFFIC_DOC_TYPE = 'traffic_count'
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-lint", action="store_true", default=False,
+        help="Run linter tests, defaults to False",
+    )
+
+
+@pytest.fixture
+def run_lint(request):
+    return request.config.getoption("--run-lint")
+
+
 def sale_mapping():
     m = Mapping(SALE_DOC_TYPE)
 
