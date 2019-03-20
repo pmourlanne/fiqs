@@ -132,6 +132,27 @@ This aggregation requires the `interval` parameter. It also accepts `max` and `m
         )
     )
 
+DateHistogram
+^^^^^^^^^^^^^
+
+Used for the Elasticsearch `date histogram aggregation <https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html>`_
+This aggregation behaves like the Histogram aggregation. Intervals need to follow Elasticsearch syntax::
+
+    from fiqs.aggregation import DateHistogram
+
+    from .models import Sale
+
+    FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1d',
+            min=datetime(2016, 1, 1),
+            max=datetime(2016, 1, 31),
+        ),
+    )
+
 
 Operations
 ^^^^^^^^^^
