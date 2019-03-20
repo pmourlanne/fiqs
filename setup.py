@@ -28,8 +28,6 @@ tests_require = [
     'pytest==4.3.1',
     'pytest-cov==2.6.1',
     'sh==1.12.14',
-    'isort==4.3.15',
-    'flake8==3.7.7',
 ]
 
 
