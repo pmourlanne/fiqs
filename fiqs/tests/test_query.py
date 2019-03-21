@@ -1871,6 +1871,54 @@ def test_fill_missing_buckets_date_histogram(pretty_period, interval,
     assert len(lines) == nb_lines
 
 
+def test_fill_missing_buckets_date_histogram_multiple_days():
+    start = datetime(2015, 12, 1)
+    end = datetime(2016, 1, 31)
+
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='4d',
+            min=start,
+            max=end,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_every_four_days')
+
+    lines = fquery._flatten_result(result)
+    lines = fquery._add_missing_lines(lines)
+    assert len(lines) == 16
+
+
+@pytest.mark.parametrize('start,end,nb_lines', [
+    (datetime(2016, 1, 1), datetime(2016, 1, 31), 31),
+    (datetime(2015, 12, 1), datetime(2016, 1, 31), 61),
+])
+def test_fill_missing_buckets_date_histogram_offset(start, end, nb_lines):
+    fquery = FQuery(get_search()).values(
+        total_sales=Sum(Sale.price),
+    ).group_by(
+        DateHistogram(
+            Sale.timestamp,
+            interval='1d',
+            offset='+8h',
+            min=start,
+            max=end,
+        ),
+    )
+    fquery._configure_search()
+
+    result = load_output('total_sales_by_day_offset_8hours')
+
+    lines = fquery._flatten_result(result)
+    lines = fquery._add_missing_lines(lines)
+    assert len(lines) == nb_lines
+
+
 def test_fill_missing_buckets_ranges():
     ranges = [[1, 5], [5, 11], [11, 15]]
     search = get_search()

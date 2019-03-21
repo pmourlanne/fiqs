@@ -300,6 +300,37 @@ def test_total_sales_by_period(elasticsearch_sale, interval, pretty_period):
     )
 
 
+def test_total_sales_by_day_offset(elasticsearch_sale):
+    # Total sales by day, with offset
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            DateHistogram(
+                Sale.timestamp,
+                interval='1d',
+                offset='+8h',
+            ),
+        ),
+        'total_sales_by_day_offset_8hours',
+    )
+
+
+def test_total_sales_every_four_days(elasticsearch_sale):
+    # Total sales every four days
+    write_fquery_output(
+        FQuery(get_search()).values(
+            total_sales=Sum(Sale.price),
+        ).group_by(
+            DateHistogram(
+                Sale.timestamp,
+                interval='4d',
+            ),
+        ),
+        'total_sales_every_four_days',
+    )
+
+
 def test_nb_sales_by_shop(elasticsearch_sale):
     # Number of sales by shop
     write_fquery_output(
