@@ -1813,88 +1813,62 @@ def test_fill_missing_buckets_histogram():
     assert len(lines) == 11
 
 
-def test_fill_missing_buckets_range_nothing_to_do():
+@pytest.mark.parametrize('pretty_period,interval,nb_lines', [
+    ('day', '1d', 31),
+    ('week', '1w', 5),
+    ('month', '1M', 2),
+    ('year', '1y', 2),
+])
+def test_fill_missing_buckets_date_histogram_nothing_to_do(
+        pretty_period, interval, nb_lines):
     search = get_search()
     fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
             Sale.timestamp,
-            interval='1d',
+            interval=interval,
             min=datetime(2016, 1, 1),
             max=datetime(2016, 1, 31),
         ),
     )
     fquery._configure_search()
 
-    result = load_output('total_sales_day_by_day')
+    result = load_output(
+        'total_sales_{}_by_{}'.format(pretty_period, pretty_period))
 
     lines = fquery._flatten_result(result)
     lines = fquery._add_missing_lines(lines)
-    assert len(lines) == 31
+    assert len(lines) == nb_lines
 
 
-def test_fill_missing_buckets_date_histogram():
+@pytest.mark.parametrize('pretty_period,interval,start,end,nb_lines', [
+    ('day', '1d', datetime(2015, 12, 1), datetime(2016, 1, 31), 62),
+    ('week', '1w', datetime(2015, 12, 1), datetime(2016, 1, 31), 9),
+    ('month', '1M', datetime(2015, 12, 1), datetime(2016, 6, 1), 7),
+    ('year', '1y', datetime(2012, 1, 1), datetime(2016, 1, 31), 5),
+])
+def test_fill_missing_buckets_date_histogram(pretty_period, interval,
+                                             start, end, nb_lines):
     search = get_search()
     fquery = FQuery(search).values(
         total_sales=Sum(Sale.price),
     ).group_by(
         DateHistogram(
             Sale.timestamp,
-            interval='1d',
-            min=datetime(2015, 12, 1),
-            max=datetime(2016, 1, 31),
+            interval=interval,
+            min=start,
+            max=end,
         ),
     )
     fquery._configure_search()
 
-    result = load_output('total_sales_day_by_day')
+    result = load_output(
+        'total_sales_{}_by_{}'.format(pretty_period, pretty_period))
 
     lines = fquery._flatten_result(result)
     lines = fquery._add_missing_lines(lines)
-    assert len(lines) == 62
-
-
-def test_fill_missing_buckets_date_histogram_month_nothing_to_do():
-    search = get_search()
-    fquery = FQuery(search).values(
-        total_sales=Sum(Sale.price),
-    ).group_by(
-        DateHistogram(
-            Sale.timestamp,
-            interval='1M',
-            min=datetime(2016, 1, 1),
-            max=datetime(2016, 1, 31),
-        ),
-    )
-    fquery._configure_search()
-
-    result = load_output('total_sales_month_by_month')
-
-    lines = fquery._flatten_result(result)
-    lines = fquery._add_missing_lines(lines)
-    assert len(lines) == 2
-
-
-def test_fill_missing_buckets_date_histogram_month():
-    search = get_search()
-    fquery = FQuery(search).values(
-        total_sales=Sum(Sale.price),
-    ).group_by(
-        DateHistogram(
-            Sale.timestamp,
-            interval='1M',
-            min=datetime(2015, 12, 1),
-            max=datetime(2016, 6, 1),
-        ),
-    )
-    fquery._configure_search()
-
-    result = load_output('total_sales_month_by_month')
-
-    lines = fquery._flatten_result(result)
-    lines = fquery._add_missing_lines(lines)
-    assert len(lines) == 7
+    assert len(lines) == nb_lines
 
 
 def test_fill_missing_buckets_ranges():

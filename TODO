@@ -3,7 +3,8 @@ Sample application with front-end?
 units for fields?
 Move doc_type into Meta subclass?
 Different documentation for different major versions
-DateHistogram: handle remaining intervals in choice keys (year, week)
+DateHistogram: handle remaining offsets: year, month, week
+DateHistogram: add tests where interval is >1 unit (`4d` etc.)
 ReverseNested: Internal API should be closer to FQuery than to Metric?
 GroupedField: Possibility to change the name?
 GroupedField: Cast group name when appropriate?

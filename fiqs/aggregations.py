@@ -151,13 +151,26 @@ def is_interval_standard(interval):
     return False
 
 
+def is_interval_yearly(interval):
+    # Naive approach
+    return interval.endswith('y')
+
+
 def is_interval_monthly(interval):
     # Naive approach
     return interval.endswith('M')
 
 
+def is_interval_weekly(interval):
+    # Naive approach
+    return interval.endswith('w')
+
+
 def is_interval_handled(interval):
-    return is_interval_standard(interval) or is_interval_monthly(interval)
+    return is_interval_standard(interval) or\
+           is_interval_weekly(interval) or\
+           is_interval_monthly(interval) or\
+           is_interval_yearly(interval)
 
 
 def get_timedelta_from_interval(interval):
@@ -203,8 +216,29 @@ def get_rounded_date_from_interval(d, interval):
         return get_rounded_date_from_timedelta(
             d, get_timedelta_from_interval(interval))
 
+    if is_interval_weekly(interval):
+        # Weekly intervals start on Monday
+        rounded_date = d.replace(
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+        )
+        rounded_date -= timedelta(days=rounded_date.weekday())
+        return rounded_date
+
     if is_interval_monthly(interval):
         return d.replace(
+            day=1,
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+        )
+
+    if is_interval_yearly(interval):
+        return d.replace(
+            month=1,
             day=1,
             hour=0,
             minute=0,
@@ -227,6 +261,35 @@ def get_rounded_date_from_timedelta(d, delta):
 class DateHistogram(Histogram):
     ref = 'date_histogram'
 
+    def choice_keys(self):
+        if not hasattr(self, 'min') or not hasattr(self, 'max'):
+            return None
+
+        if not is_interval_handled(self.interval):
+            return None
+
+        start = get_rounded_date_from_interval(self.min, self.interval)
+        agg_params = self.agg_params()
+        if 'offset' in agg_params:
+            start = get_offset_date(start, agg_params['offset'])
+
+        end = self.max
+
+        if is_interval_standard(self.interval):
+            return self._choice_keys_standard(start, end, self.interval)
+
+        elif is_interval_yearly(self.interval):
+            return self._choice_keys_yearly(start, end, self.interval)
+
+        elif is_interval_monthly(self.interval):
+            return self._choice_keys_monthly(start, end, self.interval)
+
+        elif is_interval_weekly(self.interval):
+            return self._choice_keys_weekly(start, end, self.interval)
+
+        else:
+            return None
+
     def _choice_keys_standard(self, start, end, interval):
         delta = get_timedelta_from_interval(self.interval)
 
@@ -235,6 +298,24 @@ class DateHistogram(Histogram):
         while current <= end:
             choice_keys.append(current)
             current += delta
+
+        return choice_keys
+
+    def _choice_keys_yearly(self, start, end, interval):
+        nb_years = int(interval.rstrip('y'))
+
+        choice_keys = []
+        current = start
+        while current <= end:
+            choice_keys.append(current)
+
+            next_ = current
+            for i in range(nb_years):
+                # 370 days to be sure to change year
+                next_ = next_ + timedelta(days=370)
+                next_ = next_.replace(day=current.day, month=current.month)
+
+            current = next_
 
         return choice_keys
 
@@ -256,28 +337,18 @@ class DateHistogram(Histogram):
 
         return choice_keys
 
-    def choice_keys(self):
-        if not hasattr(self, 'min') or not hasattr(self, 'max'):
-            return None
+    def _choice_keys_weekly(self, start, end, interval):
+        nb_weeks = int(interval.rstrip('w'))
 
-        if not is_interval_handled(self.interval):
-            return None
+        choice_keys = []
+        current = start
+        while current <= end:
+            choice_keys.append(current)
 
-        start = get_rounded_date_from_interval(self.min, self.interval)
-        agg_params = self.agg_params()
-        if 'offset' in agg_params:
-            start = get_offset_date(start, agg_params['offset'])
+            # I'm assuming weeks are always seven days long (?)
+            current += timedelta(days=7 * nb_weeks)
 
-        end = self.max
-
-        if is_interval_standard(self.interval):
-            return self._choice_keys_standard(start, end, self.interval)
-
-        elif is_interval_monthly(self.interval):
-            return self._choice_keys_monthly(start, end, self.interval)
-
-        else:
-            return None
+        return choice_keys
 
 
 class DateRange(Aggregate):
