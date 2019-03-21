@@ -20,7 +20,6 @@ from fiqs.testing.models import Sale, TrafficCount
 from fiqs.testing.utils import get_search
 from fiqs.tests.conftest import write_fquery_output, write_output
 
-
 pytestmark = pytest.mark.docker
 
 
