@@ -319,18 +319,24 @@ def test_total_sales_by_price_histogram(elasticsearch_sale):
     )
 
 
-def test_total_sales_day_by_day(elasticsearch_sale):
-    # Total sales day by day
+@pytest.mark.parametrize('interval,pretty_period', [
+    ('1d', 'day'),
+    ('1w', 'week'),
+    ('1M', 'month'),
+    ('1y', 'year'),
+])
+def test_total_sales_by_period(elasticsearch_sale, interval, pretty_period):
+    # Total sales period by period
     write_fquery_output(
         FQuery(get_search()).values(
             total_sales=Sum(Sale.price),
         ).group_by(
             DateHistogram(
                 Sale.timestamp,
-                interval='1d',
+                interval=interval,
             ),
         ),
-        'total_sales_day_by_day',
+        'total_sales_{}_by_{}'.format(pretty_period, pretty_period),
     )
 
 
