@@ -99,7 +99,7 @@ Contributing
 
 The fiqs project is hosted on [Github](<https://github.com/pmourlanne/fiqs>)
 
-To run the tests on your machine use this command: ``python setup.py test`` Some tests are used to generate results output from Elasticsearch. To run them you will need to run a docker container on your machine: ``docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:5.x.x`` and then run ``py.test -k docker``.
+To run the tests on your machine use this command: ``python setup.py test`` Some tests are used to generate results output from Elasticsearch. To run them you will need to run a docker container on your machine: ``docker run -d -p 8200:9200 -p 8300:9300 elasticsearch:6.x.x`` and then run ``py.test -k docker``.
 
 
 License

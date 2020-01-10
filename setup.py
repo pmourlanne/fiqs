@@ -16,16 +16,16 @@ f.close()
 
 
 install_requires = [
-    'elasticsearch>=5.0.0,<6.0.0',
-    'elasticsearch-dsl>=5.0.0,<6.0.0',
+    'elasticsearch>=6.0.0,<7.0.0',
+    'elasticsearch-dsl>=6.0.0,<7.0.0',
 ]
 setup_requires = [
     'Babel>=2.3.4',
 ]
 tests_require = [
     'Faker==0.7.3',
-    'pytest==4.3.1',
-    'pytest-cov==2.6.1',
+    'pytest==5.3.2',
+    'pytest-cov==2.8.1',
     'sh==1.12.14',
 ]
 
