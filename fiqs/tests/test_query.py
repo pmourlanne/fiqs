@@ -4,7 +4,6 @@ from collections import Counter
 from datetime import datetime
 
 import pytest
-import six
 
 from fiqs.aggregations import (
     Addition,
@@ -1458,7 +1457,7 @@ def test_date_range_with_keys():
         assert type(line['doc_count']) == int
         # Group by is present
         assert 'timestamp' in line
-        assert type(line['timestamp']) == six.text_type
+        assert type(line['timestamp']) == str
 
     assert [l['timestamp'] for l in lines] == ['first_half', 'second_half']
 
@@ -1493,7 +1492,7 @@ def test_date_range_without_keys():
         assert type(line['doc_count']) == int
         # Group by is present
         assert 'timestamp' in line
-        assert type(line['timestamp']) == six.text_type
+        assert type(line['timestamp']) == str
 
 
 def test_flatten_result_grouped_field():
@@ -1521,7 +1520,7 @@ def test_flatten_result_grouped_field():
         # Group by is present
         assert 'shop_id' in line
         # But was not casted to int
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
 
 
 def test_flatten_result_grouped_field_multiple_aggregations():
@@ -1550,10 +1549,10 @@ def test_flatten_result_grouped_field_multiple_aggregations():
         # Shop aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
         # Payment type aggregation is present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
 
 def test_flatten_result_grouped_field_with_metric():
@@ -1584,7 +1583,7 @@ def test_flatten_result_grouped_field_with_metric():
         # Shop aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
 
 
 ########################

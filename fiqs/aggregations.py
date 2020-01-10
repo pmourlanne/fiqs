@@ -3,8 +3,6 @@
 from collections import OrderedDict
 from datetime import datetime, timedelta
 
-import six
-
 from fiqs.exceptions import MissingParameterException
 from fiqs.fields import Field
 from fiqs.models import Model
@@ -391,8 +389,7 @@ class ReverseNested(Metric):
                  *expressions, **named_expressions):
 
         # /!\ named_expressions may not be correctly ordered
-        if isinstance(path_or_field_or_model, six.text_type)\
-                or isinstance(path_or_field_or_model, str):
+        if isinstance(path_or_field_or_model, str):
             self.path = path_or_field_or_model or 'root'
 
         elif isinstance(path_or_field_or_model, Field):

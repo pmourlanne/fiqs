@@ -3,8 +3,6 @@
 from collections import OrderedDict
 from itertools import product
 
-from six import text_type as unicode
-
 from fiqs import flatten_result
 from fiqs.aggregations import Aggregate, ReverseNested
 from fiqs.exceptions import ConfigurationError
@@ -286,14 +284,14 @@ class FQuery(object):
         # it won't change the type of keys in lines
         treated_hashes = [
             u','.join(
-                [unicode(line[key]) for key in group_by_keys_without_nested])
+                [str(line[key]) for key in group_by_keys_without_nested])
             for line in lines
         ]
         treated_hashes = set(treated_hashes)
         missing_keys = [
             key
             for key in keys
-            if u','.join([unicode(k) for k in key]) not in treated_hashes
+            if u','.join([str(k) for k in key]) not in treated_hashes
         ]
 
         lines += self._create_missing_lines(
