@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import six
 
 from fiqs import flatten_result
 from fiqs.tests.conftest import load_output
@@ -69,7 +68,7 @@ def test_total_sales_by_payment_type():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
         assert 'total_sales' in line
         assert type(line['total_sales']) == float
 
@@ -85,7 +84,7 @@ def test_total_sales_by_payment_type_by_shop():
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
         assert 'shop_id' in line
         assert type(line['shop_id']) == int
         assert 'total_sales' in line
@@ -141,7 +140,7 @@ def test_total_sales_day_by_day_by_shop_and_by_payment():
         if 'shop_id' in line:
             assert type(line['shop_id']) == int
         elif 'payment_type' in line:
-            assert type(line['payment_type']) == six.text_type
+            assert type(line['payment_type']) == str
 
     # Documents are counted once in the payment
     # aggregations, once in the shop aggregation
@@ -190,7 +189,7 @@ def test_total_sales_by_shop_and_by_payment():
         if 'shop_id' in line:
             assert type(line['shop_id']) == int
         elif 'payment_type' in line:
-            assert type(line['payment_type']) == six.text_type
+            assert type(line['payment_type']) == str
 
     # There are 3 payment lines, sorted by doc_count
     payment_lines = [l for l in lines if 'payment_type' in l]
@@ -249,9 +248,9 @@ def test_total_sales_by_payment_type_by_shop_range():
         assert type(line['total_sales']) == float
         # Both group by are present
         assert 'shop_id' in line
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
     # Three lines for each payment type
     for payment_type in ['cash', 'wire_transfer', 'store_credit', ]:
@@ -277,7 +276,7 @@ def test_total_sales_by_shop_range():
         assert type(line['total_sales']) == float
         # Group by is present
         assert 'shop_id' in line
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
 
     range_keys = ['1 - 5', '5+']
     assert sorted([l['shop_id'] for l in lines]) == range_keys
@@ -295,10 +294,10 @@ def test_nb_sales_by_payment_type_by_date_range():
         assert type(line['doc_count']) == int
         # Date range is present
         assert 'timestamp' in line
-        assert type(line['timestamp']) == six.text_type
+        assert type(line['timestamp']) == str
         # Payment type is present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
 
 def test_nb_sales_by_date_range_by_payment_type():
@@ -313,10 +312,10 @@ def test_nb_sales_by_date_range_by_payment_type():
         assert type(line['doc_count']) == int
         # Date range is present
         assert 'timestamp' in line
-        assert type(line['timestamp']) == six.text_type
+        assert type(line['timestamp']) == str
         # Payment type is present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
 
 def test_nb_sales_by_shop_limited_size_add_others_line():
@@ -356,7 +355,7 @@ def test_nb_sales_by_shop_by_payment_type_limited_size_add_others_line():
         assert 'shop_id' in line
         assert type(line['shop_id']) == int
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
     other_shops_line = [l for l in lines if 'payment_type' not in l]
     assert len(other_shops_line) == 1
@@ -1368,7 +1367,7 @@ def test_avg_product_price_by_product_type():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
 
@@ -1388,7 +1387,7 @@ def test_avg_part_price_by_part():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'part_id' in line
-        assert type(line['part_id']) == six.text_type
+        assert type(line['part_id']) == str
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -1408,7 +1407,7 @@ def test_avg_part_price_by_product():
         assert type(line['doc_count']) == int
         # Aggregation and metric are present
         assert 'product_id' in line
-        assert type(line['product_id']) == six.text_type
+        assert type(line['product_id']) == str
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -1425,9 +1424,9 @@ def test_avg_part_price_by_product_by_part():
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
         assert 'product_id' in line
-        assert type(line['product_id']) == six.text_type
+        assert type(line['product_id']) == str
         assert 'part_id' in line
-        assert type(line['part_id']) == six.text_type
+        assert type(line['part_id']) == str
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -1446,7 +1445,7 @@ def test_avg_product_price_by_shop_by_product_type():
         assert 'shop_id' in line
         assert type(line['shop_id']) == int
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         assert 'avg_product_price' in line
         assert type(line['avg_product_price']) == float
 
@@ -1463,9 +1462,9 @@ def test_avg_part_price_by_shop_range_by_part_id():
         assert type(line['doc_count']) == int
         # Both aggregations and metric are present
         assert 'shop_id' in line
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
         assert 'part_id' in line
-        assert type(line['part_id']) == six.text_type
+        assert type(line['part_id']) == str
         assert 'avg_part_price' in line
         assert type(line['avg_part_price']) == float
 
@@ -1488,9 +1487,9 @@ def test_avg_part_price_by_product_and_by_part():
         assert ('product_id' in line and 'part_id' not in line)\
             or ('part_id' in line and 'product_id' not in line)
         if 'product_id' in line:
-            assert type(line['product_id']) == six.text_type
+            assert type(line['product_id']) == str
         elif 'part_id' in line:
-            assert type(line['part_id']) == six.text_type
+            assert type(line['part_id']) == str
 
     # 10 payment lines, sorted by doc_count
     product_lines = [l for l in lines if 'product_id' in l]
@@ -1520,7 +1519,7 @@ def test_nb_sales_by_product_type():
         assert type(line['doc_count']) == int
         # Group by is present
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         # Reverse nested doc count is present
         assert 'reverse_nested_root__doc_count' in line
         assert type(line['reverse_nested_root__doc_count']) == int
@@ -1536,9 +1535,9 @@ def test_nb_sales_by_product_type_by_part_id():
         assert type(line['doc_count']) == int
         # Group by are present
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         assert 'part_id' in line
-        assert type(line['part_id']) == six.text_type
+        assert type(line['part_id']) == str
         # Reverse nested doc count is present
         assert 'reverse_nested_root__doc_count' in line
         assert type(line['reverse_nested_root__doc_count']) == int
@@ -1554,7 +1553,7 @@ def test_total_and_avg_sales_by_product_type():
         assert type(line['doc_count']) == int
         # Group by is present
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         # Reverse nested doc count is present
         assert 'reverse_nested_root__doc_count' in line
         assert type(line['reverse_nested_root__doc_count']) == int
@@ -1576,7 +1575,7 @@ def test_avg_product_price_and_avg_sales_by_product_type():
         assert type(line['doc_count']) == int
         # Group by is present
         assert 'product_type' in line
-        assert type(line['product_type']) == six.text_type
+        assert type(line['product_type']) == str
         # Reverse nested doc count is present
         assert 'reverse_nested_root__doc_count' in line
         assert type(line['reverse_nested_root__doc_count']) == int
@@ -1621,7 +1620,7 @@ def test_nb_sales_by_grouped_shop():
         # Aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
 
     # Two groups of shop id
     assert sorted(
@@ -1644,10 +1643,10 @@ def test_nb_sales_by_grouped_shop_by_payment_type():
         # Shop aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
         # Payment type aggregation is present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
 
 def test_nb_sales_by_payment_type_by_grouped_shop():
@@ -1663,10 +1662,10 @@ def test_nb_sales_by_payment_type_by_grouped_shop():
         # Shop aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
         # Payment type aggregation is present
         assert 'payment_type' in line
-        assert type(line['payment_type']) == six.text_type
+        assert type(line['payment_type']) == str
 
 
 def test_avg_sales_by_grouped_shop():
@@ -1687,7 +1686,7 @@ def test_avg_sales_by_grouped_shop():
         # Shop aggregation is present
         assert 'shop_id' in line
         # Shop id was a string in the GroupedField
-        assert type(line['shop_id']) == six.text_type
+        assert type(line['shop_id']) == str
 
 
 @pytest.mark.xfail
@@ -1723,5 +1722,5 @@ def test_nb_sales_by_product_type_by_part_id_filter_product_type_1():
             'reverse_nested_root__doc_count',
         ])
         assert type(line['doc_count']) == int
-        assert type(line['part_id']) == six.text_type
+        assert type(line['part_id']) == str
         assert type(line['reverse_nested_root__doc_count']) == int
