@@ -831,7 +831,6 @@ def test_order_by():
                 }
             }
         },
-        'query': {'match_all': {}},
     }
 
     fquery = FQuery(get_search()).values(
@@ -864,7 +863,6 @@ def test_order_by_multiple_group_by():
                 'terms': {'field': 'shop_id'},
             },
         },
-        'query': {'match_all': {}}
     }
 
     fquery = FQuery(get_search()).values(
@@ -893,7 +891,6 @@ def test_order_by_field_with_choices():
                 }
             }
         },
-        'query': {'match_all': {}},
     }
 
     fquery = FQuery(get_search()).values(
