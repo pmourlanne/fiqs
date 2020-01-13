@@ -98,7 +98,7 @@ class Model(with_metaclass(ModelMetaClass, object)):
             properties[field.storage_field] = field.type
 
         # A first pass for deeply nested fields
-        # FIXME: This does not work with more than two levels of nested fields
+        # FIXME: Not confident this works for all nested configurations :o
         for field, properties in nested_properties.values():
             if not field.parent:
                 # First level nested field, ignore for now

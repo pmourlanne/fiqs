@@ -12,41 +12,59 @@ from fiqs.testing.models import (
     SaleWithoutProducts,
     SaleWithParts,
     SaleWithProducts,
+    SaleWithSubParts,
 )
 
 EXPECTED_MAPPING = {
-        'sale': {
-            'dynamic': 'strict',
-            'properties': {
-                'id': {'type': 'integer'},
-                'shop_id': {'type': 'integer'},
-                'client_id': {'type': 'keyword'},
-                'timestamp': {'type': 'date'},
-                'price': {'type': 'integer'},
-                'payment_type': {'type': 'keyword'},
-                'products': {
-                    'properties': {
-                        'product_id': {'type': 'keyword'},
-                        'product_price': {'type': 'integer'},
-                        'product_type': {'type': 'keyword'},
-                        'parts': {
-                            'properties': {
-                                'part_id': {'type': 'keyword'},
-                                'warehouse_id': {'type': 'keyword'},
-                                'part_price': {'type': 'integer'},
-                            },
-                            'type': 'nested',
+    'sale': {
+        'dynamic': 'strict',
+        'properties': {
+            'id': {'type': 'integer'},
+            'shop_id': {'type': 'integer'},
+            'client_id': {'type': 'keyword'},
+            'timestamp': {'type': 'date'},
+            'price': {'type': 'integer'},
+            'payment_type': {'type': 'keyword'},
+            'products': {
+                'properties': {
+                    'product_id': {'type': 'keyword'},
+                    'product_price': {'type': 'integer'},
+                    'product_type': {'type': 'keyword'},
+                    'parts': {
+                        'properties': {
+                            'part_id': {'type': 'keyword'},
+                            'warehouse_id': {'type': 'keyword'},
+                            'part_price': {'type': 'integer'},
                         },
+                        'type': 'nested',
                     },
-                    'type': 'nested',
                 },
+                'type': 'nested',
             },
         },
-    }
+    },
+}
 
 
 def test_mapping_from_model():
     assert Sale.get_mapping().to_dict() == EXPECTED_MAPPING
+
+
+def test_mapping_from_model_nested_three_levels():
+    mapping_with_subparts = copy.deepcopy(EXPECTED_MAPPING)
+    mapping_with_subparts['sale_with_subparts'] = mapping_with_subparts.pop('sale')
+
+    subparts_properties = {
+        'properties': {
+            'subpart_id': {'type': 'keyword'},
+        },
+        'type': 'nested',
+    }
+    mapping_with_subparts[
+        'sale_with_subparts']['properties']['products']['properties'][
+        'parts']['properties']['subparts'] = subparts_properties
+
+    assert SaleWithSubParts.get_mapping().to_dict() == mapping_with_subparts
 
 
 def test_mapping_from_model_child_class():

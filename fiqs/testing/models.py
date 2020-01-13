@@ -72,3 +72,10 @@ class SaleWithParts(SaleWithProducts):
     part_id = fields.KeywordField(parent='parts')
     warehouse_id = fields.KeywordField(parent='parts')
     part_price = fields.IntegerField(parent='parts')
+
+
+class SaleWithSubParts(Sale):
+    doc_type = 'sale_with_subparts'
+
+    subparts = fields.NestedField(parent='parts')
+    subpart_id = fields.KeywordField(parent='subparts')
