@@ -32,17 +32,16 @@ def sale_mapping():
     m.field('price', 'integer')
     m.field('payment_type', 'keyword')
 
-    products = Nested()
-    products.field('product_id', 'keyword')
-    products.field('product_type', 'keyword')
-    products.field('product_price', 'integer')
-
-    parts = Nested()
-    parts.field('part_id', 'keyword')
-    parts.field('warehouse_id', 'keyword')
-    parts.field('part_price', 'integer')
-
-    products.field('parts', parts)
+    products = Nested(properties={
+        'product_id': 'keyword',
+        'product_type': 'keyword',
+        'product_price': 'integer',
+        'parts': Nested(properties={
+            'part_id': 'keyword',
+            'warehouse_id': 'keyword',
+            'part_price': 'integer',
+        }),
+    })
     m.field('products', products)
 
     return m
@@ -83,7 +82,7 @@ def insert_documents(client, index_name, fixture_path, doc_type):
     for event in events:
         actions.append({
             '_index': index_name,
-            '_type': 'sale',
+            '_type': doc_type,
             '_source': event,
             '_id': event['id'],
         })
