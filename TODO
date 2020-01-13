@@ -8,7 +8,6 @@ GroupedField: Possibility to change the name?
 GroupedField: Cast group name when appropriate?
 Tests marked with xfail still
 Add test coverage
-ES6
 
 Improve behavior with filter aggregation
 
