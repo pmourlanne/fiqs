@@ -29,8 +29,9 @@ class ModelMetaClass(type):
         for p in parents:
             for field in p._fields:
                 if field.key in field_keys:
-                    msg = 'Field {} from class {} clashes with field ' +\
-                          'with the same name in base class {}'
+                    msg = (
+                        'Field {} from class {} clashes with field '
+                        'with the same name in base class {}')
                     msg = msg.format(field.key, klass, p)
                     raise FieldError(msg)
 
@@ -70,34 +71,48 @@ class Model(with_metaclass(ModelMetaClass, object)):
         m = Mapping(cls.get_doc_type())
         m.meta('dynamic', 'strict')
 
-        nested_mappings = {}
+        nested_properties = {}
         fields_to_nest = []
 
+        # First pass: treat "standard" fields and gather info for nested fields
         for field in cls._fields:
             if isinstance(field, NestedField):
-                nested_mappings[field.key] = (field, Nested())
+                nested_properties[field.key] = (field, {})
 
             if field.parent:
+                # Fields to nest, we'll deal with it later
                 fields_to_nest.append(field)
             else:
+                # "Standard" field, we're good to go
                 m.field(field.storage_field, field.type)
 
+        # We deal with nested fields now
         for field in fields_to_nest:
-            if field.parent not in nested_mappings:
+            # Sanity check
+            if field.parent not in nested_properties:
                 raise Exception(
                     'Nested field {} needs to be defined in {}'.format(
-                        field.parent, str(cls),
-                    )
-                )
+                        field.parent, str(cls)))
 
-            _, nested_mapping = nested_mappings[field.parent]
-            nested_mapping.field(field.storage_field, field.type)
+            _, properties = nested_properties[field.parent]
+            properties[field.storage_field] = field.type
 
-        for field, nested_mapping in nested_mappings.values():
+        # A first pass for deeply nested fields
+        # FIXME: This does not work with more than two levels of nested fields
+        for field, properties in nested_properties.values():
             if not field.parent:
-                m.field(field.key, nested_mapping)
-            else:
-                _, parent_mapping = nested_mappings[field.parent]
-                parent_mapping.field(field.key, nested_mapping)
+                # First level nested field, ignore for now
+                continue
+
+            _, parent_properties = nested_properties[field.parent]
+            parent_properties[field.key] = Nested(properties=properties)
+
+        # Final pass for first level nested fields
+        for field, properties in nested_properties.values():
+            if field.parent:
+                # Already dealt with deeply nested fields
+                continue
+
+            m.field(field.key, Nested(properties=properties))
 
         return m
