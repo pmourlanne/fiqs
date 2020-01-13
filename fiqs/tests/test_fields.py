@@ -52,7 +52,8 @@ def test_mapping_from_model():
 
 def test_mapping_from_model_nested_three_levels():
     mapping_with_subparts = copy.deepcopy(EXPECTED_MAPPING)
-    mapping_with_subparts['sale_with_subparts'] = mapping_with_subparts.pop('sale')
+    mapping_with_subparts[
+        'sale_with_subparts'] = mapping_with_subparts.pop('sale')
 
     subparts_properties = {
         'properties': {
