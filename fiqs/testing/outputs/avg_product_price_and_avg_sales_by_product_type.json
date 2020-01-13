@@ -1,1292 +1,1293 @@
 {
     "_shards": {
-        "failed": 0, 
-        "successful": 5, 
-        "total": 5
-    }, 
+        "failed": 0,
+        "skipped": 0,
+        "successful": 10,
+        "total": 10
+    },
     "aggregations": {
         "products": {
-            "doc_count": 1540, 
+            "doc_count": 1540,
             "product_type": {
                 "buckets": [
                     {
                         "avg_product_price": {
                             "value": 179.53889943074003
-                        }, 
-                        "doc_count": 527, 
-                        "key": "product_type_3", 
+                        },
+                        "doc_count": 527,
+                        "key": "product_type_3",
                         "reverse_nested_root": {
                             "avg_sales": {
                                 "value": 495.18674698795184
-                            }, 
+                            },
                             "doc_count": 332
                         }
-                    }, 
+                    },
                     {
                         "avg_product_price": {
                             "value": 159.18296529968455
-                        }, 
-                        "doc_count": 317, 
-                        "key": "product_type_2", 
+                        },
+                        "doc_count": 317,
+                        "key": "product_type_2",
                         "reverse_nested_root": {
                             "avg_sales": {
                                 "value": 518.0416666666666
-                            }, 
+                            },
                             "doc_count": 240
                         }
-                    }, 
+                    },
                     {
                         "avg_product_price": {
                             "value": 152.76785714285714
-                        }, 
-                        "doc_count": 280, 
-                        "key": "product_type_1", 
+                        },
+                        "doc_count": 280,
+                        "key": "product_type_1",
                         "reverse_nested_root": {
                             "avg_sales": {
                                 "value": 494.08962264150944
-                            }, 
+                            },
                             "doc_count": 212
                         }
-                    }, 
+                    },
                     {
                         "avg_product_price": {
                             "value": 161.97378277153558
-                        }, 
-                        "doc_count": 267, 
-                        "key": "product_type_4", 
+                        },
+                        "doc_count": 267,
+                        "key": "product_type_4",
                         "reverse_nested_root": {
                             "avg_sales": {
                                 "value": 488.07547169811323
-                            }, 
+                            },
                             "doc_count": 212
                         }
-                    }, 
+                    },
                     {
                         "avg_product_price": {
                             "value": 130.6778523489933
-                        }, 
-                        "doc_count": 149, 
-                        "key": "product_type_0", 
+                        },
+                        "doc_count": 149,
+                        "key": "product_type_0",
                         "reverse_nested_root": {
                             "avg_sales": {
                                 "value": 513.1832061068702
-                            }, 
+                            },
                             "doc_count": 131
                         }
                     }
-                ], 
-                "doc_count_error_upper_bound": 0, 
+                ],
+                "doc_count_error_upper_bound": 0,
                 "sum_other_doc_count": 0
             }
         }
-    }, 
+    },
     "hits": {
         "hits": [
             {
-                "_id": "14", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "14",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_G2KQSJMAL2", 
-                    "id": 14, 
-                    "payment_type": "wire_transfer", 
-                    "price": 525, 
+                    "client_id": "client_G2KQSJMAL2",
+                    "id": 14,
+                    "payment_type": "wire_transfer",
+                    "price": 525,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 11, 
+                                    "part_id": "part_4",
+                                    "part_price": 11,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 11, 
+                                    "part_id": "part_1",
+                                    "part_price": 11,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 11, 
+                                    "part_id": "part_10",
+                                    "part_price": 11,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_GLVXXAUKYE", 
-                            "product_price": 52, 
+                            ],
+                            "product_id": "product_GLVXXAUKYE",
+                            "product_price": 52,
                             "product_type": "product_type_1"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 4, 
+                                    "part_id": "part_9",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 4, 
+                                    "part_id": "part_5",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 4, 
+                                    "part_id": "part_7",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 4, 
+                                    "part_id": "part_9",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 4, 
+                                    "part_id": "part_6",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 4, 
+                                    "part_id": "part_5",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 4, 
+                                    "part_id": "part_8",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_9"
                                 }
-                            ], 
-                            "product_id": "product_PSW YMWYNT", 
-                            "product_price": 52, 
+                            ],
+                            "product_id": "product_PSW YMWYNT",
+                            "product_price": 52,
                             "product_type": "product_type_4"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 28, 
+                                    "part_id": "part_10",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 28, 
+                                    "part_id": "part_10",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 28, 
+                                    "part_id": "part_2",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 28, 
+                                    "part_id": "part_3",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 28, 
+                                    "part_id": "part_1",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 28, 
+                                    "part_id": "part_7",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 28, 
+                                    "part_id": "part_2",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 28, 
+                                    "part_id": "part_9",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 28, 
+                                    "part_id": "part_3",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 28, 
+                                    "part_id": "part_6",
+                                    "part_price": 28,
                                     "warehouse_id": "warehouse_3"
                                 }
-                            ], 
-                            "product_id": "product_RE7WX1BHL6", 
-                            "product_price": 421, 
+                            ],
+                            "product_id": "product_RE7WX1BHL6",
+                            "product_price": 421,
                             "product_type": "product_type_2"
                         }
-                    ], 
-                    "shop_id": 6, 
+                    ],
+                    "shop_id": 6,
                     "timestamp": 1452314017000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "19", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "19",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_SDIG3YXC11", 
-                    "id": 19, 
-                    "payment_type": "cash", 
-                    "price": 11, 
+                    "client_id": "client_SDIG3YXC11",
+                    "id": 19,
+                    "payment_type": "cash",
+                    "price": 11,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 0, 
+                                    "part_id": "part_7",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 0, 
+                                    "part_id": "part_7",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_2"
                                 }
-                            ], 
-                            "product_id": "product_8Y4N80PJ7V", 
-                            "product_price": 1, 
+                            ],
+                            "product_id": "product_8Y4N80PJ7V",
+                            "product_price": 1,
                             "product_type": "product_type_1"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 0, 
+                                    "part_id": "part_9",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_8"
                                 }
-                            ], 
-                            "product_id": "product_U7IR9P3T Y", 
-                            "product_price": 1, 
+                            ],
+                            "product_id": "product_U7IR9P3T Y",
+                            "product_price": 1,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 0, 
+                                    "part_id": "part_7",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 0, 
+                                    "part_id": "part_2",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_6"
                                 }
-                            ], 
-                            "product_id": "product_ WMDQUD90O", 
-                            "product_price": 1, 
+                            ],
+                            "product_id": "product_ WMDQUD90O",
+                            "product_price": 1,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 1, 
+                                    "part_id": "part_4",
+                                    "part_price": 1,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 1, 
+                                    "part_id": "part_10",
+                                    "part_price": 1,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 1, 
+                                    "part_id": "part_6",
+                                    "part_price": 1,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 1, 
+                                    "part_id": "part_7",
+                                    "part_price": 1,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 1, 
+                                    "part_id": "part_6",
+                                    "part_price": 1,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_8BLKSFU4YC", 
-                            "product_price": 8, 
+                            ],
+                            "product_id": "product_8BLKSFU4YC",
+                            "product_price": 8,
                             "product_type": "product_type_3"
                         }
-                    ], 
-                    "shop_id": 8, 
+                    ],
+                    "shop_id": 8,
                     "timestamp": 1452109924000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "22", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "22",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_9Y23QVR106", 
-                    "id": 22, 
-                    "payment_type": "store_credit", 
-                    "price": 596, 
+                    "client_id": "client_9Y23QVR106",
+                    "id": 22,
+                    "payment_type": "store_credit",
+                    "price": 596,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 3, 
+                                    "part_id": "part_8",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 3, 
+                                    "part_id": "part_2",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 3, 
+                                    "part_id": "part_4",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 3, 
+                                    "part_id": "part_7",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 3, 
+                                    "part_id": "part_4",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 3, 
+                                    "part_id": "part_9",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 3, 
+                                    "part_id": "part_1",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 3, 
+                                    "part_id": "part_9",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 3, 
+                                    "part_id": "part_3",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 3, 
+                                    "part_id": "part_2",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_6"
                                 }
-                            ], 
-                            "product_id": "product_U7IR9P3T Y", 
-                            "product_price": 59, 
+                            ],
+                            "product_id": "product_U7IR9P3T Y",
+                            "product_price": 59,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 7, 
+                                    "part_id": "part_7",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 7, 
+                                    "part_id": "part_2",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 7, 
+                                    "part_id": "part_8",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 7, 
+                                    "part_id": "part_4",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_8"
                                 }
-                            ], 
-                            "product_id": "product_7945J5QXDP", 
-                            "product_price": 59, 
+                            ],
+                            "product_id": "product_7945J5QXDP",
+                            "product_price": 59,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 4, 
+                                    "part_id": "part_4",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 4, 
+                                    "part_id": "part_3",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 4, 
+                                    "part_id": "part_5",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 4, 
+                                    "part_id": "part_10",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 4, 
+                                    "part_id": "part_2",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 4, 
+                                    "part_id": "part_9",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 4, 
+                                    "part_id": "part_8",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 4, 
+                                    "part_id": "part_6",
+                                    "part_price": 4,
                                     "warehouse_id": "warehouse_8"
                                 }
-                            ], 
-                            "product_id": "product_8BLKSFU4YC", 
-                            "product_price": 59, 
+                            ],
+                            "product_id": "product_8BLKSFU4YC",
+                            "product_price": 59,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 6, 
+                                    "part_id": "part_8",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 6, 
+                                    "part_id": "part_3",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 6, 
+                                    "part_id": "part_7",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 6, 
+                                    "part_id": "part_7",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 6, 
+                                    "part_id": "part_4",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 6, 
+                                    "part_id": "part_10",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_4"
                                 }
-                            ], 
-                            "product_id": "product_94M7YPRMEM", 
-                            "product_price": 59, 
+                            ],
+                            "product_id": "product_94M7YPRMEM",
+                            "product_price": 59,
                             "product_type": "product_type_1"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 48, 
+                                    "part_id": "part_2",
+                                    "part_price": 48,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 48, 
+                                    "part_id": "part_9",
+                                    "part_price": 48,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 48, 
+                                    "part_id": "part_7",
+                                    "part_price": 48,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 48, 
+                                    "part_id": "part_9",
+                                    "part_price": 48,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 48, 
+                                    "part_id": "part_2",
+                                    "part_price": 48,
                                     "warehouse_id": "warehouse_3"
                                 }
-                            ], 
-                            "product_id": "product_W6G9H0W2MH", 
-                            "product_price": 360, 
+                            ],
+                            "product_id": "product_W6G9H0W2MH",
+                            "product_price": 360,
                             "product_type": "product_type_2"
                         }
-                    ], 
-                    "shop_id": 1, 
+                    ],
+                    "shop_id": 1,
                     "timestamp": 1453045589000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "24", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "24",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_IQR86GZXAF", 
-                    "id": 24, 
-                    "payment_type": "store_credit", 
-                    "price": 48, 
+                    "client_id": "client_IQR86GZXAF",
+                    "id": 24,
+                    "payment_type": "store_credit",
+                    "price": 48,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 0, 
+                                    "part_id": "part_3",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 0, 
+                                    "part_id": "part_3",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 0, 
+                                    "part_id": "part_6",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 0, 
+                                    "part_id": "part_6",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 0, 
+                                    "part_id": "part_9",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 0, 
+                                    "part_id": "part_9",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 0, 
+                                    "part_id": "part_1",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_7"
                                 }
-                            ], 
-                            "product_id": "product_X68S5JGOBU", 
-                            "product_price": 4, 
+                            ],
+                            "product_id": "product_X68S5JGOBU",
+                            "product_price": 4,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 0, 
+                                    "part_id": "part_4",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 0, 
+                                    "part_id": "part_7",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 0, 
+                                    "part_id": "part_2",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 0, 
+                                    "part_id": "part_4",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 0, 
+                                    "part_id": "part_8",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_3"
                                 }
-                            ], 
-                            "product_id": "product_TF995FXEGM", 
-                            "product_price": 4, 
+                            ],
+                            "product_id": "product_TF995FXEGM",
+                            "product_price": 4,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 0, 
+                                    "part_id": "part_2",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 0, 
+                                    "part_id": "part_6",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_C2VSKFVRML", 
-                            "product_price": 4, 
+                            ],
+                            "product_id": "product_C2VSKFVRML",
+                            "product_price": 4,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 0, 
+                                    "part_id": "part_1",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 0, 
+                                    "part_id": "part_8",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 0, 
+                                    "part_id": "part_1",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 0, 
+                                    "part_id": "part_5",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 0, 
+                                    "part_id": "part_5",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 0, 
+                                    "part_id": "part_4",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 0, 
+                                    "part_id": "part_10",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 0, 
+                                    "part_id": "part_8",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 0, 
+                                    "part_id": "part_2",
+                                    "part_price": 0,
                                     "warehouse_id": "warehouse_7"
                                 }
-                            ], 
-                            "product_id": "product_G9VL DYZKT", 
-                            "product_price": 4, 
+                            ],
+                            "product_id": "product_G9VL DYZKT",
+                            "product_price": 4,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 3, 
+                                    "part_id": "part_10",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 3, 
+                                    "part_id": "part_1",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 3, 
+                                    "part_id": "part_8",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 3, 
+                                    "part_id": "part_6",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 3, 
+                                    "part_id": "part_3",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 3, 
+                                    "part_id": "part_2",
+                                    "part_price": 3,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_G9VL DYZKT", 
-                            "product_price": 32, 
+                            ],
+                            "product_id": "product_G9VL DYZKT",
+                            "product_price": 32,
                             "product_type": "product_type_2"
                         }
-                    ], 
-                    "shop_id": 4, 
+                    ],
+                    "shop_id": 4,
                     "timestamp": 1453586252000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "25", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "25",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_FYJU8E5UT1", 
-                    "id": 25, 
-                    "payment_type": "store_credit", 
-                    "price": 844, 
+                    "client_id": "client_FYJU8E5UT1",
+                    "id": 25,
+                    "payment_type": "store_credit",
+                    "price": 844,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 70, 
+                                    "part_id": "part_10",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 70, 
+                                    "part_id": "part_6",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 70, 
+                                    "part_id": "part_4",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 70, 
+                                    "part_id": "part_1",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 70, 
+                                    "part_id": "part_7",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 70, 
+                                    "part_id": "part_10",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 70, 
+                                    "part_id": "part_8",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 70, 
+                                    "part_id": "part_3",
+                                    "part_price": 70,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_X68S5JGOBU", 
-                            "product_price": 844, 
+                            ],
+                            "product_id": "product_X68S5JGOBU",
+                            "product_price": 844,
                             "product_type": "product_type_2"
                         }
-                    ], 
-                    "shop_id": 1, 
+                    ],
+                    "shop_id": 1,
                     "timestamp": 1454036708000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "26", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "26",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_T36UYZSO6W", 
-                    "id": 26, 
-                    "payment_type": "store_credit", 
-                    "price": 1000, 
+                    "client_id": "client_T36UYZSO6W",
+                    "id": 26,
+                    "payment_type": "store_credit",
+                    "price": 1000,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 333, 
+                                    "part_id": "part_3",
+                                    "part_price": 333,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 333, 
+                                    "part_id": "part_3",
+                                    "part_price": 333,
                                     "warehouse_id": "warehouse_10"
                                 }
-                            ], 
-                            "product_id": "product_CEAPW0ZD Z", 
-                            "product_price": 1000, 
+                            ],
+                            "product_id": "product_CEAPW0ZD Z",
+                            "product_price": 1000,
                             "product_type": "product_type_3"
                         }
-                    ], 
-                    "shop_id": 10, 
+                    ],
+                    "shop_id": 10,
                     "timestamp": 1452022609000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "29", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "29",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_3N6LX3KRAI", 
-                    "id": 29, 
-                    "payment_type": "cash", 
-                    "price": 821, 
+                    "client_id": "client_3N6LX3KRAI",
+                    "id": 29,
+                    "payment_type": "cash",
+                    "price": 821,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 27, 
+                                    "part_id": "part_5",
+                                    "part_price": 27,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 27, 
+                                    "part_id": "part_5",
+                                    "part_price": 27,
                                     "warehouse_id": "warehouse_3"
                                 }
-                            ], 
-                            "product_id": "product_G9VL DYZKT", 
-                            "product_price": 82, 
+                            ],
+                            "product_id": "product_G9VL DYZKT",
+                            "product_price": 82,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 7, 
+                                    "part_id": "part_1",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 7, 
+                                    "part_id": "part_2",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 7, 
+                                    "part_id": "part_4",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 7, 
+                                    "part_id": "part_1",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_3"
                                 }
-                            ], 
-                            "product_id": "product_I8ZKUFOYON", 
-                            "product_price": 82, 
+                            ],
+                            "product_id": "product_I8ZKUFOYON",
+                            "product_price": 82,
                             "product_type": "product_type_1"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 54, 
+                                    "part_id": "part_4",
+                                    "part_price": 54,
                                     "warehouse_id": "warehouse_2"
                                 }
-                            ], 
-                            "product_id": "product_2P6A21H1K7", 
-                            "product_price": 82, 
+                            ],
+                            "product_id": "product_2P6A21H1K7",
+                            "product_price": 82,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 6, 
+                                    "part_id": "part_6",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 6, 
+                                    "part_id": "part_6",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 6, 
+                                    "part_id": "part_7",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_5", 
-                                    "part_price": 6, 
+                                    "part_id": "part_5",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 6, 
+                                    "part_id": "part_1",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 6, 
+                                    "part_id": "part_8",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 6, 
+                                    "part_id": "part_9",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 6, 
+                                    "part_id": "part_6",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 6, 
+                                    "part_id": "part_4",
+                                    "part_price": 6,
                                     "warehouse_id": "warehouse_7"
                                 }
-                            ], 
-                            "product_id": "product_6VI5E5WXHP", 
-                            "product_price": 82, 
+                            ],
+                            "product_id": "product_6VI5E5WXHP",
+                            "product_price": 82,
                             "product_type": "product_type_3"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 36, 
+                                    "part_id": "part_8",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 36, 
+                                    "part_id": "part_10",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 36, 
+                                    "part_id": "part_6",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 36, 
+                                    "part_id": "part_9",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 36, 
+                                    "part_id": "part_6",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 36, 
+                                    "part_id": "part_2",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 36, 
+                                    "part_id": "part_2",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 36, 
+                                    "part_id": "part_1",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 36, 
+                                    "part_id": "part_6",
+                                    "part_price": 36,
                                     "warehouse_id": "warehouse_9"
                                 }
-                            ], 
-                            "product_id": "product_NQJZPQPGVW", 
-                            "product_price": 493, 
+                            ],
+                            "product_id": "product_NQJZPQPGVW",
+                            "product_price": 493,
                             "product_type": "product_type_4"
                         }
-                    ], 
-                    "shop_id": 6, 
+                    ],
+                    "shop_id": 6,
                     "timestamp": 1453980140000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "40", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "40",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_NGMOYMBQXA", 
-                    "id": 40, 
-                    "payment_type": "store_credit", 
-                    "price": 792, 
+                    "client_id": "client_NGMOYMBQXA",
+                    "id": 40,
+                    "payment_type": "store_credit",
+                    "price": 792,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 26, 
+                                    "part_id": "part_4",
+                                    "part_price": 26,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 26, 
+                                    "part_id": "part_6",
+                                    "part_price": 26,
                                     "warehouse_id": "warehouse_8"
                                 }
-                            ], 
-                            "product_id": "product_W6G9H0W2MH", 
-                            "product_price": 79, 
+                            ],
+                            "product_id": "product_W6G9H0W2MH",
+                            "product_price": 79,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 10, 
+                                    "part_id": "part_3",
+                                    "part_price": 10,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 10, 
+                                    "part_id": "part_2",
+                                    "part_price": 10,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 10, 
+                                    "part_id": "part_3",
+                                    "part_price": 10,
                                     "warehouse_id": "warehouse_1"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 10, 
+                                    "part_id": "part_2",
+                                    "part_price": 10,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 10, 
+                                    "part_id": "part_8",
+                                    "part_price": 10,
                                     "warehouse_id": "warehouse_2"
                                 }
-                            ], 
-                            "product_id": "product_AM7JA8F9MZ", 
-                            "product_price": 79, 
+                            ],
+                            "product_id": "product_AM7JA8F9MZ",
+                            "product_price": 79,
                             "product_type": "product_type_4"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 140, 
+                                    "part_id": "part_6",
+                                    "part_price": 140,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 140, 
+                                    "part_id": "part_4",
+                                    "part_price": 140,
                                     "warehouse_id": "warehouse_2"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 140, 
+                                    "part_id": "part_6",
+                                    "part_price": 140,
                                     "warehouse_id": "warehouse_6"
                                 }
-                            ], 
-                            "product_id": "product_JQ0JVW20PV", 
-                            "product_price": 634, 
+                            ],
+                            "product_id": "product_JQ0JVW20PV",
+                            "product_price": 634,
                             "product_type": "product_type_4"
                         }
-                    ], 
-                    "shop_id": 8, 
+                    ],
+                    "shop_id": 8,
                     "timestamp": 1453896601000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "41", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "41",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_ND1Y 1UK80", 
-                    "id": 41, 
-                    "payment_type": "wire_transfer", 
-                    "price": 921, 
+                    "client_id": "client_ND1Y 1UK80",
+                    "id": 41,
+                    "payment_type": "wire_transfer",
+                    "price": 921,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 7, 
+                                    "part_id": "part_8",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 7, 
+                                    "part_id": "part_9",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_3"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_7", 
-                                    "part_price": 7, 
+                                    "part_id": "part_7",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_4"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 7, 
+                                    "part_id": "part_6",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_1", 
-                                    "part_price": 7, 
+                                    "part_id": "part_1",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_5"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 7, 
+                                    "part_id": "part_2",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_5"
                                 }
-                            ], 
-                            "product_id": "product_BV5G46V4DK", 
-                            "product_price": 92, 
+                            ],
+                            "product_id": "product_BV5G46V4DK",
+                            "product_price": 92,
                             "product_type": "product_type_0"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 7, 
+                                    "part_id": "part_3",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_8"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_10", 
-                                    "part_price": 7, 
+                                    "part_id": "part_10",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_8", 
-                                    "part_price": 7, 
+                                    "part_id": "part_8",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_6"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 7, 
+                                    "part_id": "part_4",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 7, 
+                                    "part_id": "part_3",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_4", 
-                                    "part_price": 7, 
+                                    "part_id": "part_4",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_9"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 7, 
+                                    "part_id": "part_6",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_7"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_9", 
-                                    "part_price": 7, 
+                                    "part_id": "part_9",
+                                    "part_price": 7,
                                     "warehouse_id": "warehouse_10"
                                 }
-                            ], 
-                            "product_id": "product_G9VL DYZKT", 
-                            "product_price": 92, 
+                            ],
+                            "product_id": "product_G9VL DYZKT",
+                            "product_price": 92,
                             "product_type": "product_type_2"
-                        }, 
+                        },
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_6", 
-                                    "part_price": 491, 
+                                    "part_id": "part_6",
+                                    "part_price": 491,
                                     "warehouse_id": "warehouse_8"
                                 }
-                            ], 
-                            "product_id": "product_PSW YMWYNT", 
-                            "product_price": 737, 
+                            ],
+                            "product_id": "product_PSW YMWYNT",
+                            "product_price": 737,
                             "product_type": "product_type_4"
                         }
-                    ], 
-                    "shop_id": 8, 
+                    ],
+                    "shop_id": 8,
                     "timestamp": 1452535651000
-                }, 
+                },
                 "_type": "sale"
-            }, 
+            },
             {
-                "_id": "44", 
-                "_index": "test_sale", 
-                "_score": 1.0, 
+                "_id": "44",
+                "_index": "test_sale",
+                "_score": 1.0,
                 "_source": {
-                    "client_id": "client_7Q7X4EM8S5", 
-                    "id": 44, 
-                    "payment_type": "cash", 
-                    "price": 241, 
+                    "client_id": "client_7Q7X4EM8S5",
+                    "id": 44,
+                    "payment_type": "cash",
+                    "price": 241,
                     "products": [
                         {
                             "parts": [
                                 {
-                                    "part_id": "part_2", 
-                                    "part_price": 80, 
+                                    "part_id": "part_2",
+                                    "part_price": 80,
                                     "warehouse_id": "warehouse_10"
-                                }, 
+                                },
                                 {
-                                    "part_id": "part_3", 
-                                    "part_price": 80, 
+                                    "part_id": "part_3",
+                                    "part_price": 80,
                                     "warehouse_id": "warehouse_4"
                                 }
-                            ], 
-                            "product_id": "product_MECO0MY 8I", 
-                            "product_price": 241, 
+                            ],
+                            "product_id": "product_MECO0MY 8I",
+                            "product_price": 241,
                             "product_type": "product_type_4"
                         }
-                    ], 
-                    "shop_id": 10, 
+                    ],
+                    "shop_id": 10,
                     "timestamp": 1453793820000
-                }, 
+                },
                 "_type": "sale"
             }
-        ], 
-        "max_score": 1.0, 
-        "total": 500
-    }, 
+        ],
+        "max_score": 1.0,
+        "total": 1000
+    },
     "timed_out": false
 }

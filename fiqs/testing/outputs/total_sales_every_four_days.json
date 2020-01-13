@@ -2,14 +2,14 @@
     "_shards": {
         "failed": 0,
         "skipped": 0,
-        "successful": 5,
-        "total": 5
+        "successful": 10,
+        "total": 10
     },
     "aggregations": {
         "timestamp": {
             "buckets": [
                 {
-                    "doc_count": 55,
+                    "doc_count": 110,
                     "key": 1451520000000,
                     "key_as_string": "2015-12-31T00:00:00.000Z",
                     "total_sales": {
@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "doc_count": 65,
+                    "doc_count": 142,
                     "key": 1451865600000,
                     "key_as_string": "2016-01-04T00:00:00.000Z",
                     "total_sales": {
@@ -25,7 +25,7 @@
                     }
                 },
                 {
-                    "doc_count": 75,
+                    "doc_count": 139,
                     "key": 1452211200000,
                     "key_as_string": "2016-01-08T00:00:00.000Z",
                     "total_sales": {
@@ -33,7 +33,7 @@
                     }
                 },
                 {
-                    "doc_count": 58,
+                    "doc_count": 130,
                     "key": 1452556800000,
                     "key_as_string": "2016-01-12T00:00:00.000Z",
                     "total_sales": {
@@ -41,7 +41,7 @@
                     }
                 },
                 {
-                    "doc_count": 67,
+                    "doc_count": 129,
                     "key": 1452902400000,
                     "key_as_string": "2016-01-16T00:00:00.000Z",
                     "total_sales": {
@@ -49,7 +49,7 @@
                     }
                 },
                 {
-                    "doc_count": 66,
+                    "doc_count": 131,
                     "key": 1453248000000,
                     "key_as_string": "2016-01-20T00:00:00.000Z",
                     "total_sales": {
@@ -57,7 +57,7 @@
                     }
                 },
                 {
-                    "doc_count": 61,
+                    "doc_count": 121,
                     "key": 1453593600000,
                     "key_as_string": "2016-01-24T00:00:00.000Z",
                     "total_sales": {
@@ -65,7 +65,7 @@
                     }
                 },
                 {
-                    "doc_count": 53,
+                    "doc_count": 98,
                     "key": 1453939200000,
                     "key_as_string": "2016-01-28T00:00:00.000Z",
                     "total_sales": {
@@ -1281,7 +1281,7 @@
             }
         ],
         "max_score": 1.0,
-        "total": 500
+        "total": 1000
     },
     "timed_out": false
 }

@@ -2,14 +2,14 @@
     "_shards": {
         "failed": 0,
         "skipped": 0,
-        "successful": 5,
-        "total": 5
+        "successful": 10,
+        "total": 10
     },
     "aggregations": {
         "timestamp": {
             "buckets": [
                 {
-                    "doc_count": 7,
+                    "doc_count": 17,
                     "key": 1451548800000,
                     "key_as_string": "2015-12-31T08:00:00.000Z",
                     "total_sales": {
@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "doc_count": 27,
+                    "doc_count": 40,
                     "key": 1451635200000,
                     "key_as_string": "2016-01-01T08:00:00.000Z",
                     "total_sales": {
@@ -25,7 +25,7 @@
                     }
                 },
                 {
-                    "doc_count": 11,
+                    "doc_count": 33,
                     "key": 1451721600000,
                     "key_as_string": "2016-01-02T08:00:00.000Z",
                     "total_sales": {
@@ -33,7 +33,7 @@
                     }
                 },
                 {
-                    "doc_count": 18,
+                    "doc_count": 34,
                     "key": 1451808000000,
                     "key_as_string": "2016-01-03T08:00:00.000Z",
                     "total_sales": {
@@ -41,7 +41,7 @@
                     }
                 },
                 {
-                    "doc_count": 9,
+                    "doc_count": 30,
                     "key": 1451894400000,
                     "key_as_string": "2016-01-04T08:00:00.000Z",
                     "total_sales": {
@@ -49,7 +49,7 @@
                     }
                 },
                 {
-                    "doc_count": 23,
+                    "doc_count": 36,
                     "key": 1451980800000,
                     "key_as_string": "2016-01-05T08:00:00.000Z",
                     "total_sales": {
@@ -57,7 +57,7 @@
                     }
                 },
                 {
-                    "doc_count": 15,
+                    "doc_count": 38,
                     "key": 1452067200000,
                     "key_as_string": "2016-01-06T08:00:00.000Z",
                     "total_sales": {
@@ -65,7 +65,7 @@
                     }
                 },
                 {
-                    "doc_count": 16,
+                    "doc_count": 34,
                     "key": 1452153600000,
                     "key_as_string": "2016-01-07T08:00:00.000Z",
                     "total_sales": {
@@ -73,7 +73,7 @@
                     }
                 },
                 {
-                    "doc_count": 22,
+                    "doc_count": 39,
                     "key": 1452240000000,
                     "key_as_string": "2016-01-08T08:00:00.000Z",
                     "total_sales": {
@@ -81,7 +81,7 @@
                     }
                 },
                 {
-                    "doc_count": 27,
+                    "doc_count": 45,
                     "key": 1452326400000,
                     "key_as_string": "2016-01-09T08:00:00.000Z",
                     "total_sales": {
@@ -89,7 +89,7 @@
                     }
                 },
                 {
-                    "doc_count": 11,
+                    "doc_count": 28,
                     "key": 1452412800000,
                     "key_as_string": "2016-01-10T08:00:00.000Z",
                     "total_sales": {
@@ -97,7 +97,7 @@
                     }
                 },
                 {
-                    "doc_count": 11,
+                    "doc_count": 24,
                     "key": 1452499200000,
                     "key_as_string": "2016-01-11T08:00:00.000Z",
                     "total_sales": {
@@ -105,7 +105,7 @@
                     }
                 },
                 {
-                    "doc_count": 14,
+                    "doc_count": 34,
                     "key": 1452585600000,
                     "key_as_string": "2016-01-12T08:00:00.000Z",
                     "total_sales": {
@@ -113,7 +113,7 @@
                     }
                 },
                 {
-                    "doc_count": 15,
+                    "doc_count": 30,
                     "key": 1452672000000,
                     "key_as_string": "2016-01-13T08:00:00.000Z",
                     "total_sales": {
@@ -121,7 +121,7 @@
                     }
                 },
                 {
-                    "doc_count": 20,
+                    "doc_count": 36,
                     "key": 1452758400000,
                     "key_as_string": "2016-01-14T08:00:00.000Z",
                     "total_sales": {
@@ -129,7 +129,7 @@
                     }
                 },
                 {
-                    "doc_count": 13,
+                    "doc_count": 30,
                     "key": 1452844800000,
                     "key_as_string": "2016-01-15T08:00:00.000Z",
                     "total_sales": {
@@ -137,7 +137,7 @@
                     }
                 },
                 {
-                    "doc_count": 13,
+                    "doc_count": 25,
                     "key": 1452931200000,
                     "key_as_string": "2016-01-16T08:00:00.000Z",
                     "total_sales": {
@@ -145,7 +145,7 @@
                     }
                 },
                 {
-                    "doc_count": 19,
+                    "doc_count": 34,
                     "key": 1453017600000,
                     "key_as_string": "2016-01-17T08:00:00.000Z",
                     "total_sales": {
@@ -153,7 +153,7 @@
                     }
                 },
                 {
-                    "doc_count": 15,
+                    "doc_count": 34,
                     "key": 1453104000000,
                     "key_as_string": "2016-01-18T08:00:00.000Z",
                     "total_sales": {
@@ -161,7 +161,7 @@
                     }
                 },
                 {
-                    "doc_count": 17,
+                    "doc_count": 39,
                     "key": 1453190400000,
                     "key_as_string": "2016-01-19T08:00:00.000Z",
                     "total_sales": {
@@ -169,7 +169,7 @@
                     }
                 },
                 {
-                    "doc_count": 14,
+                    "doc_count": 30,
                     "key": 1453276800000,
                     "key_as_string": "2016-01-20T08:00:00.000Z",
                     "total_sales": {
@@ -177,7 +177,7 @@
                     }
                 },
                 {
-                    "doc_count": 18,
+                    "doc_count": 30,
                     "key": 1453363200000,
                     "key_as_string": "2016-01-21T08:00:00.000Z",
                     "total_sales": {
@@ -185,7 +185,7 @@
                     }
                 },
                 {
-                    "doc_count": 21,
+                    "doc_count": 37,
                     "key": 1453449600000,
                     "key_as_string": "2016-01-22T08:00:00.000Z",
                     "total_sales": {
@@ -193,7 +193,7 @@
                     }
                 },
                 {
-                    "doc_count": 13,
+                    "doc_count": 34,
                     "key": 1453536000000,
                     "key_as_string": "2016-01-23T08:00:00.000Z",
                     "total_sales": {
@@ -201,7 +201,7 @@
                     }
                 },
                 {
-                    "doc_count": 11,
+                    "doc_count": 25,
                     "key": 1453622400000,
                     "key_as_string": "2016-01-24T08:00:00.000Z",
                     "total_sales": {
@@ -209,7 +209,7 @@
                     }
                 },
                 {
-                    "doc_count": 12,
+                    "doc_count": 23,
                     "key": 1453708800000,
                     "key_as_string": "2016-01-25T08:00:00.000Z",
                     "total_sales": {
@@ -217,7 +217,7 @@
                     }
                 },
                 {
-                    "doc_count": 22,
+                    "doc_count": 45,
                     "key": 1453795200000,
                     "key_as_string": "2016-01-26T08:00:00.000Z",
                     "total_sales": {
@@ -225,7 +225,7 @@
                     }
                 },
                 {
-                    "doc_count": 14,
+                    "doc_count": 25,
                     "key": 1453881600000,
                     "key_as_string": "2016-01-27T08:00:00.000Z",
                     "total_sales": {
@@ -233,7 +233,7 @@
                     }
                 },
                 {
-                    "doc_count": 22,
+                    "doc_count": 39,
                     "key": 1453968000000,
                     "key_as_string": "2016-01-28T08:00:00.000Z",
                     "total_sales": {
@@ -241,7 +241,7 @@
                     }
                 },
                 {
-                    "doc_count": 13,
+                    "doc_count": 27,
                     "key": 1454054400000,
                     "key_as_string": "2016-01-29T08:00:00.000Z",
                     "total_sales": {
@@ -249,7 +249,7 @@
                     }
                 },
                 {
-                    "doc_count": 17,
+                    "doc_count": 25,
                     "key": 1454140800000,
                     "key_as_string": "2016-01-30T08:00:00.000Z",
                     "total_sales": {
@@ -1465,7 +1465,7 @@
             }
         ],
         "max_score": 1.0,
-        "total": 500
+        "total": 1000
     },
     "timed_out": false
 }

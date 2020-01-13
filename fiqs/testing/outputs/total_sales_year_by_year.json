@@ -2,14 +2,14 @@
     "_shards": {
         "failed": 0,
         "skipped": 0,
-        "successful": 5,
-        "total": 5
+        "successful": 10,
+        "total": 10
     },
     "aggregations": {
         "timestamp": {
             "buckets": [
                 {
-                    "doc_count": 2,
+                    "doc_count": 3,
                     "key": 1420070400000,
                     "key_as_string": "2015-01-01T00:00:00.000Z",
                     "total_sales": {
@@ -17,7 +17,7 @@
                     }
                 },
                 {
-                    "doc_count": 498,
+                    "doc_count": 997,
                     "key": 1451606400000,
                     "key_as_string": "2016-01-01T00:00:00.000Z",
                     "total_sales": {
@@ -1233,7 +1233,7 @@
             }
         ],
         "max_score": 1.0,
-        "total": 500
+        "total": 1000
     },
     "timed_out": false
 }

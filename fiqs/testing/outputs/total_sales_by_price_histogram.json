@@ -2,8 +2,8 @@
     "_shards": {
         "failed": 0,
         "skipped": 0,
-        "successful": 5,
-        "total": 5
+        "successful": 10,
+        "total": 10
     },
     "aggregations": {
         "price": {
@@ -1294,7 +1294,7 @@
             }
         ],
         "max_score": 1.0,
-        "total": 500
+        "total": 1000
     },
     "timed_out": false
 }
