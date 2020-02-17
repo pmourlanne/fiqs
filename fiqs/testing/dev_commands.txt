@@ -13,4 +13,6 @@ git push
 git push vx.x.x
 # Use twine
 pip install twine
+rm -r dist/
+python setup.py sdist
 twine upload dist/*

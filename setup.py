@@ -46,6 +46,7 @@ setup(
     license="MIT License",
     url="https://github.com/pmourlanne/fiqs",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     version=__versionstr__,
     author="Pierre Mourlanne",
     author_email="pmourlanne@gmail.com",
