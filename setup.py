@@ -24,7 +24,7 @@ setup_requires = [
 ]
 tests_require = [
     'Faker==0.7.3',
-    'pytest==5.3.2',
+    'pytest==9.0.3',
     'pytest-cov==2.8.1',
     'sh==1.12.14',
 ]
